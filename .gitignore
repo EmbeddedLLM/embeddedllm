@@ -1,0 +1,10 @@
+# Environment
+.env 
+phi3*.py
+test_phi3*
+
+# Python
+**/__pycache__
+**.egg-info
+
+scripts/*.ps1
