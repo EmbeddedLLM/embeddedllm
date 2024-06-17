@@ -1,0 +1,2 @@
+onnxruntime-directml~=1.18.0
+onnxruntime-genai-directml~=0.2.0

@@ -22,7 +22,7 @@ def onnx_generator_context(model, params):
             # Delete the generator to free the captured graph for the next generator, if graph capture is enabled
             del generator
 
-class embeddedllmEngine():
+class EmbeddedLLMEngine():
 
     def __init__(self, model_path):
         self.model_path = model_path
@@ -74,11 +74,12 @@ class embeddedllmEngine():
             return None
         return getattr(self.model_config, "sliding_window", None)
 
-    async def generate_stream(
+    async def generate(
         self,
         inputs: str,
         sampling_params: SamplingParams,
-        request_id: str
+        request_id: str,
+        stream: bool = True,
     ) -> AsyncIterator[RequestOutput]:
         """Generate outputs for a request.
 
@@ -103,88 +104,121 @@ class embeddedllmEngine():
 
         token_list: List[int] = []
         output_text: str = ""
-        with onnx_generator_context(self.model, params) as generator:
-            if RECORD_TIMING:
-                started_timestamp = time.time()
-                first_token_timestamp = 0
-                first = True
-                new_tokens = []
-            # try:
-            
-            while not generator.is_done():
-                # logger.debug("Compute Logits")
-                generator.compute_logits()
-                # logger.debug("Compute generate_next_token")
-                generator.generate_next_token()
+        if stream:
+            with onnx_generator_context(self.model, params) as generator:
                 if RECORD_TIMING:
-                    if first:
-                        first_token_timestamp = time.time()
-                        first = False
+                    started_timestamp = time.time()
+                    first_token_timestamp = 0
+                    first = True
+                    new_tokens = []
+                try:
+                    while not generator.is_done():
+                        # logger.debug("Compute Logits")
+                        generator.compute_logits()
+                        # logger.debug("Compute generate_next_token")
+                        generator.generate_next_token()
+                        if RECORD_TIMING:
+                            if first:
+                                first_token_timestamp = time.time()
+                                first = False
 
-                # new_token_list = generator.get_next_tokens()
-                # new_token = new_token_list[0]
-                token_list = generator.get_sequence(0)
-                new_token = token_list[-1]
-                output_text += self.onnx_tokenizer_stream.decode(new_token)
-                # logger.debug(self.onnx_tokenizer_stream.decode(new_token))
+                        # new_token_list = generator.get_next_tokens()
+                        # new_token = new_token_list[0]
+                        token_list = generator.get_sequence(0)
+                        new_token = token_list[-1]
+                        output_text += self.onnx_tokenizer_stream.decode(new_token)
+                        # logger.debug(self.onnx_tokenizer_stream.decode(new_token))
 
-                output = RequestOutput(
+                        output = RequestOutput(
+                            request_id=request_id,
+                            prompt=inputs,
+                            prompt_token_ids=input_tokens,
+                            finished=False,
+                            outputs=[CompletionOutput(
+                                index=0,
+                                text=output_text,
+                                token_ids=token_list,
+                                cumulative_logprob=-1.0,
+
+                            )]
+                        )
+                        yield output
+                        # logits = generator.get_output("logits")
+                        # print(logits)
+                        if RECORD_TIMING: new_tokens.append(new_token)
+
+                
+                    yield RequestOutput(
+                        request_id=request_id,
+                        prompt=inputs,
+                        prompt_token_ids=input_tokens,
+                        finished=True,
+                        outputs=[CompletionOutput(
+                            index=0,
+                            text=output_text,
+                            token_ids=token_list,
+                            cumulative_logprob=-1.0,
+                            finish_reason="stop")]
+                    )
+                    if RECORD_TIMING:
+                        prompt_time = first_token_timestamp - started_timestamp
+                        run_time = time.time() - first_token_timestamp
+                        logger.info(f"Prompt length: {len(input_tokens)}, New tokens: {len(new_tokens)}, Time to first: {(prompt_time):.2f}s, Prompt tokens per second: {len(input_tokens)/prompt_time:.2f} tps, New tokens per second: {len(new_tokens)/run_time:.2f} tps")
+
+
+                except Exception as e:
+                    logger.error(str(e))
+                    
+                    error_output = RequestOutput(
+                        prompt=inputs,
+                        prompt_token_ids=input_tokens,
+                        finished=True,
+                        request_id=request_id,
+                        outputs=[CompletionOutput(
+                            index=0,
+                            text=output_text,
+                            token_ids=token_list,
+                            cumulative_logprob=-1.0,
+                            finish_reason="error",
+                            stop_reason=str(e))]
+                    )
+                    yield error_output
+        else:
+            try:
+                token_list=self.model.generate(params)
+
+                output_text = self.onnx_tokenizer.decode(token_list[0])
+            
+                yield RequestOutput(
                     request_id=request_id,
                     prompt=inputs,
                     prompt_token_ids=input_tokens,
-                    finished=False,
+                    finished=True,
                     outputs=[CompletionOutput(
                         index=0,
                         text=output_text,
                         token_ids=token_list,
                         cumulative_logprob=-1.0,
-
-                    )]
+                        finish_reason="stop")]
                 )
-                yield output
-                # logits = generator.get_output("logits")
-                # print(logits)
-                if RECORD_TIMING: new_tokens.append(new_token)
-
-            
-            yield RequestOutput(
-                request_id=request_id,
-                prompt=inputs,
-                prompt_token_ids=input_tokens,
-                finished=True,
-                outputs=[CompletionOutput(
-                    index=0,
-                    text=output_text,
-                    token_ids=token_list,
-                    cumulative_logprob=-1.0,
-                    finish_reason="stop")]
-            )
-            if RECORD_TIMING:
-                prompt_time = first_token_timestamp - started_timestamp
-                run_time = time.time() - first_token_timestamp
-                logger.info(f"Prompt length: {len(input_tokens)}, New tokens: {len(new_tokens)}, Time to first: {(prompt_time):.2f}s, Prompt tokens per second: {len(input_tokens)/prompt_time:.2f} tps, New tokens per second: {len(new_tokens)/run_time:.2f} tps")
-
-
-            # except Exception as e:
-            #     logger.error(str(e))
                 
-            #     error_output = RequestOutput(
-            #         prompt=inputs,
-            #         prompt_token_ids=input_tokens,
-            #         finished=True,
-            #         request_id=request_id,
-            #         outputs=[CompletionOutput(
-            #             index=-1,
-            #             text='',
-            #             token_ids=[0],
-            #             cumulative_logprob=-1.0,
-            #             finish_reason="error",
-            #             stop_reason=str(e))]
-            #     )
-            #     yield error_output
-
-
-
+            except Exception as e:
+                logger.error(str(e))
+                
+                error_output = RequestOutput(
+                    prompt=inputs,
+                    prompt_token_ids=input_tokens,
+                    finished=True,
+                    request_id=request_id,
+                    outputs=[CompletionOutput(
+                        index=0,
+                        text=output_text,
+                        token_ids=token_list,
+                        cumulative_logprob=-1.0,
+                        finish_reason="error",
+                        stop_reason=str(e))]
+                )
+                yield error_output
     
 def _get_and_verify_max_len(
     hf_config: PretrainedConfig,

@@ -1,0 +1,13 @@
+
+huggingface-hub[cli]
+fastapi~=0.110.0
+gunicorn~=21.2.0
+loguru~=0.7.2
+numpy~=1.26.4
+pydantic-settings>=2.2.1
+pydantic~=2.6.3
+loguru
+openai
+torch
+transformers
+uvicorn

@@ -22,7 +22,7 @@ from embeddedllm.protocol import (  # noqa: E501
     CompletionRequest,
     ModelCard, ModelList,
     ModelPermission, RequestOutput, CompletionOutput)
-from embeddedllm.engine import embeddedllmEngine
+from embeddedllm.engine import EmbeddedLLMEngine
 from embeddedllm.utils import random_uuid
 
 from transformers import (AutoTokenizer, PreTrainedTokenizer,
@@ -52,7 +52,7 @@ class OpenAPIChatServer():
         self.model_path = model_path
         self.served_model_name = served_model_name
         self.response_role = response_role
-        self.engine = embeddedllmEngine(model_path)
+        self.engine = EmbeddedLLMEngine(model_path)
 
         self.tokenizer=self.engine.tokenizer
         self._load_chat_template(chat_template)
@@ -177,22 +177,22 @@ class OpenAPIChatServer():
             return self.create_error_response(str(e))
 
 
+        result_generator = self.engine.generate(
+                prompt, request.to_sampling_params(), request_id, stream=request.stream)
         # Streaming response
         if request.stream:
-            result_generator = self.engine.generate_stream(
-                    prompt, request.to_sampling_params(), request_id)
             # logger.debug("result_generator: " + str(result_generator) )
             return self.chat_completion_stream_generator(
                 request, result_generator, request_id, conversation)
         else:
-            raise NotImplementedError("Not Yet Implemented Error")
-            # try:
-            #     return await self.chat_completion_full_generator(
-            #         request, raw_request, result_generator, request_id,
-            #         conversation)
-            # except ValueError as e:
-            #     # TODO: Use a vllm-specific Validation Error
-            #     return self.create_error_response(str(e))
+            # raise NotImplementedError("Not Yet Implemented Error")
+            try:
+                return await self.chat_completion_full_generator(
+                    request, raw_request, result_generator, request_id,
+                    conversation)
+            except ValueError as e:
+                # TODO: Use a vllm-specific Validation Error
+                return self.create_error_response(str(e))
 
     async def chat_completion_stream_generator(
             self, request: ChatCompletionRequest,
@@ -361,6 +361,74 @@ class OpenAPIChatServer():
             yield f"data: {data}\n\n"
         # Send the final done message after all response.n are finished
         yield "data: [DONE]\n\n"            
+
+
+    async def chat_completion_full_generator(
+        self, request: ChatCompletionRequest, raw_request: Optional[Request],
+        result_generator: AsyncIterator[RequestOutput], request_id: str,
+        conversation: List[ConversationMessage]
+    ) -> Union[ErrorResponse, ChatCompletionResponse]:
+
+        model_name = self.served_model_name
+        created_time = int(time.time())
+        final_res: Optional[RequestOutput] = None
+
+        async for res in result_generator:
+            if raw_request is not None and await raw_request.is_disconnected():
+                # Abort the request if the client disconnects.
+                return self.create_error_response("Client disconnected")
+            final_res = res
+        assert final_res is not None
+
+        choices: List[ChatCompletionResponseChoice] = []
+
+        role = self.get_chat_request_role(request)
+        for output in final_res.outputs:
+            token_ids = output.token_ids
+            
+            if request.logprobs and request.top_logprobs is not None:
+                # @TODO: Add when ONNX support logits on DML
+                logprobs = None
+            else:
+                logprobs = None
+
+            message = ChatMessage(role=role, content=output.text)
+
+            choice_data = ChatCompletionResponseChoice(
+                index=output.index,
+                message=message,
+                logprobs=logprobs,
+                finish_reason=output.finish_reason,
+                stop_reason=output.stop_reason)
+            choices.append(choice_data)
+
+        if request.echo:
+            last_msg_content = ""
+            if conversation and conversation[-1].get(
+                    "content") and conversation[-1].get("role") == role:
+                last_msg_content = conversation[-1]["content"]
+
+            for choice in choices:
+                full_message = last_msg_content + choice.message.content
+                choice.message.content = full_message
+
+        num_prompt_tokens = len(final_res.prompt_token_ids)
+        num_generated_tokens = sum(
+            len(output.token_ids) for output in final_res.outputs)
+        usage = UsageInfo(
+            prompt_tokens=num_prompt_tokens,
+            completion_tokens=num_generated_tokens,
+            total_tokens=num_prompt_tokens + num_generated_tokens,
+        )
+        response = ChatCompletionResponse(
+            id=request_id,
+            created=created_time,
+            model=model_name,
+            choices=choices,
+            usage=usage,
+        )
+
+        return response
 
 
     def get_chat_request_role(self, request: ChatCompletionRequest) -> str:

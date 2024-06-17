@@ -28,7 +28,7 @@ from embeddedllm.protocol import (  # noqa: E501
     CompletionRequest,
     ModelCard, ModelList,
     ModelPermission, RequestOutput, CompletionOutput)
-from embeddedllm.engine import embeddedllmEngine
+from embeddedllm.engine import EmbeddedLLMEngine
 from embeddedllm.utils import random_uuid
 from embeddedllm.entrypoints.chat_server import OpenAPIChatServer
 
@@ -86,22 +86,22 @@ async def create_chat_completion(request: ChatCompletionRequest,
         return StreamingResponse(content=generator,
                                  media_type="text/event-stream")
     else:
-        return JSONResponse(content="Non-streaming Chat Generation Yet to be Implemented.",
-                            status_code=404)
-        # assert isinstance(generator, ChatCompletionResponse)
-        # return JSONResponse(content=generator.model_dump())
+        # return JSONResponse(content="Non-streaming Chat Generation Yet to be Implemented.",
+        #                     status_code=404)
+        assert isinstance(generator, ChatCompletionResponse)
+        return JSONResponse(content=generator.model_dump())
 
 if __name__ == "__main__":
     import uvicorn
     import os
 
-    # if os.name == "nt":
-    #     from multiprocessing import freeze_support
+    if os.name == "nt":
+        from multiprocessing import freeze_support
 
-    #     freeze_support()
-    #     print("The system is Windows.")
-    # else:
-    #     print("The system is not Windows.")
+        freeze_support()
+        print("The system is Windows.")
+    else:
+        print("The system is not Windows.")
 
     openai_chat_server = OpenAPIChatServer(
         config.model_path, 
