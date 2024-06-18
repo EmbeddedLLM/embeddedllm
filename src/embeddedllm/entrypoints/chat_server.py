@@ -120,17 +120,6 @@ class OpenAPIChatServer:
     ) -> ErrorResponse:
         return ErrorResponse(message=message, type=err_type, code=status_code.value)
 
-    async def _check_model(
-        self, request: Union[CompletionRequest, ChatCompletionRequest]
-    ) -> Optional[ErrorResponse]:
-        if request.model in [self.served_model_name]:
-            return None
-        return self.create_error_response(
-            message=f"The model `{request.model}` does not exist.",
-            err_type="NotFoundError",
-            status_code=HTTPStatus.NOT_FOUND,
-        )
-
     def _parse_chat_message_content_parts(
         self,
         role: str,

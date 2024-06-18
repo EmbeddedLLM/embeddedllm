@@ -1,4 +1,7 @@
 import httpx
+import os
+import base64
+import mimetypes
 
 from embeddedllm.protocol import (
     CustomChatCompletionMessageParam,
@@ -17,9 +20,6 @@ def chat_completion(url: str, payload: dict):
 
 # Example usage
 if __name__ == "__main__":
-    import os
-    import base64
-    import mimetypes
 
     current_file_path = os.path.abspath(__file__)
     IMAGE_PATH = os.path.join(os.path.dirname(current_file_path), "..", "images", "catdog.png")

@@ -1,5 +1,7 @@
 import asyncio
-
+import os
+import base64
+import mimetypes
 import httpx
 
 
@@ -18,12 +20,9 @@ async def stream_chat_completion(url: str, payload: dict):
 
 # Example usage
 if __name__ == "__main__":
-    import os
 
     current_file_path = os.path.abspath(__file__)
     IMAGE_PATH = os.path.join(os.path.dirname(current_file_path), "..", "images", "catdog.png")
-    import base64
-    import mimetypes
 
     # Function to encode the image and infer its MIME type
     def encode_image(image_path):

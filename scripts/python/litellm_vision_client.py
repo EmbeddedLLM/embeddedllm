@@ -1,7 +1,6 @@
 import litellm
 import base64
 import mimetypes
-
 import os
 
 current_file_path = os.path.abspath(__file__)

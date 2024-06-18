@@ -41,7 +41,7 @@ class EmbeddedLLMEngine:
         self.model_path = model_path
         self.model_config = AutoConfig.from_pretrained(self.model_path, trust_remote_code=True)
 
-        ## model_config is to find out the max length of the model
+        # model_config is to find out the max length of the model
         self.max_model_len = _get_and_verify_max_len(
             hf_config=self.model_config,
             max_model_len=None,
