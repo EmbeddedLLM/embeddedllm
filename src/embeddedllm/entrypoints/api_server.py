@@ -52,6 +52,7 @@ class Config(BaseSettings):
     uvicorn_log_level: str = 'info'
     served_model_name: str = 'phi3-mini-int4'
     model_path: str = None
+    vision: bool = False
 
 config = Config()
 
@@ -76,14 +77,20 @@ async def show_available_models():
 @app.post("/v1/chat/completions")
 async def create_chat_completion(request: ChatCompletionRequest,
                                  raw_request: Request):
+
+
     generator = await openai_chat_server.create_chat_completion(
         request, raw_request)
-    print(generator)
+    # print(generator)
     if isinstance(generator, ErrorResponse):
         return JSONResponse(content=generator.model_dump(),
                             status_code=generator.code)
     if request.stream:
-        return StreamingResponse(content=generator,
+        async def event_generator():
+            async for resp in generator:
+                yield resp
+        print("Return StreamingResponse")
+        return StreamingResponse(content=event_generator(),
                                  media_type="text/event-stream")
     else:
         # return JSONResponse(content="Non-streaming Chat Generation Yet to be Implemented.",
@@ -106,7 +113,8 @@ if __name__ == "__main__":
     openai_chat_server = OpenAPIChatServer(
         config.model_path, 
         served_model_name=config.served_model_name, 
-        response_role=config.response_role
+        response_role=config.response_role,
+        vision=config.vision
     )
     
     uvicorn.run(

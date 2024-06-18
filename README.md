@@ -16,7 +16,7 @@ Run local LLMs on iGPU and APU (AMD , Intel, and Qualcomm (Coming Soon))
 
 
 ## 🚀 Latest News
-- [2024/06] Support chat inference on iGPU and CPU.
+- [2024/06] Support chat inference on iGPU, APU and CPU.
 
 
 ## Supported Models (Quick Start)

@@ -18,7 +18,7 @@ def check_directml_support():
 # Run the check before proceeding with the setup
 check_directml_support()
 
-ELLM_TARGET_DEVICE='directml'
+ELLM_TARGET_DEVICE='cpu'
 
 def read_readme() -> str:
     """Read the README file if present."""
@@ -109,7 +109,7 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
-    install_requires=get_requirements(),
+    install_requires=get_requirements().extend(_read_requirements("requirements-common.txt")),
     # Add other metadata and dependencies as needed
     extras_require={
         'lint': _read_requirements("requirements-lint.txt"),

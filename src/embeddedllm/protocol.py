@@ -40,10 +40,10 @@ class CustomChatCompletionMessageParam(TypedDict, total=False):
     same role.
     """
 
-
-ChatCompletionMessageParam = Union[
-    openai.types.chat.ChatCompletionMessageParam,
-    CustomChatCompletionMessageParam]
+ChatCompletionMessageParam = CustomChatCompletionMessageParam
+# ChatCompletionMessageParam = Union[
+#     openai.types.chat.ChatCompletionMessageParam,
+#     CustomChatCompletionMessageParam]
 
 
 class OpenAIBaseModel(BaseModel):

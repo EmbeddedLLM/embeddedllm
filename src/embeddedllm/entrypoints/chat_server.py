@@ -1,3 +1,4 @@
+import os
 import codecs
 import time
 from http import HTTPStatus
@@ -5,9 +6,12 @@ from typing import (AsyncGenerator, AsyncIterator, Awaitable, Dict, Iterable,
                     List, Optional, Union)
 from typing import TypedDict, cast, final
 import json
+import numpy as np
+from PIL import Image
 
+import onnxruntime_genai as og
 from fastapi import Request
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from openai.types.chat import (ChatCompletionContentPartImageParam,
                                ChatCompletionContentPartTextParam)
@@ -23,12 +27,17 @@ from embeddedllm.protocol import (  # noqa: E501
     ModelCard, ModelList,
     ModelPermission, RequestOutput, CompletionOutput)
 from embeddedllm.engine import EmbeddedLLMEngine
-from embeddedllm.utils import random_uuid
+from tempfile import TemporaryDirectory
+from pathlib import Path
+from embeddedllm.inputs import PromptInputs, ImagePixelData
+from embeddedllm.utils import random_uuid, decode_base64
 
 from transformers import (AutoTokenizer, PreTrainedTokenizer,
                           PreTrainedTokenizerFast)
 
 from loguru import logger
+
+
 
 @final  # So that it should be compatible with Dict[str, str]
 class ConversationMessage(TypedDict):
@@ -39,6 +48,8 @@ class ConversationMessage(TypedDict):
 @dataclass(frozen=True)
 class ChatMessageParseResult:
     messages: List[ConversationMessage]
+    image_futures: List[ImagePixelData] = field(
+        default_factory=list)
 
 class OpenAPIChatServer():
 
@@ -47,12 +58,14 @@ class OpenAPIChatServer():
         model_path: str,
         served_model_name: str = '',
         response_role: str = 'assistant',
-        chat_template: Optional[str] = None
+        chat_template: Optional[str] = None,
+        vision: Optional[bool] = False
     ):
         self.model_path = model_path
         self.served_model_name = served_model_name
         self.response_role = response_role
-        self.engine = EmbeddedLLMEngine(model_path)
+        self.vision = vision
+        self.engine = EmbeddedLLMEngine(model_path, vision=self.vision)
 
         self.tokenizer=self.engine.tokenizer
         self._load_chat_template(chat_template)
@@ -111,17 +124,47 @@ class OpenAPIChatServer():
         parts: Iterable[ChatCompletionContentPartParam],
     ) -> ChatMessageParseResult:
         texts: List[str] = []
+        image_futures: List[ImagePixelData] = []
 
         for part in parts:
+            # logger.debug(f"part: {str(part)}")
             part_type = part["type"]
+            logger.debug(f"part_type: {part_type}")
             if part_type == "text":
                 text = cast(ChatCompletionContentPartTextParam, part)["text"]
 
                 texts.append(text)
             elif part_type == "image_url":
-                raise NotImplementedError(
-                    "'image_url' input is currently not supported."
-                )
+                if not self.vision:
+                    raise ValueError(
+                        "'image_url' input is not supported as the loaded "
+                        "model is not multimodal.")
+
+                elif len(image_futures) == 0:
+                    assert self.tokenizer is not None
+                    image_url = cast(ChatCompletionContentPartImageParam,
+                                     part)["image_url"]
+
+                    if image_url.get("detail", "auto") != "auto":
+                        logger.warning(
+                            "'image_url.detail' is currently not supported and "
+                            "will be ignored.")
+
+                    file_data, mime_type = decode_base64(image_url["url"])
+                    
+                    logger.debug(f"file_data: {type(file_data)}")
+                    logger.debug(f"mime_type: {str(mime_type)}")
+                    
+                    image_future: ImagePixelData = {
+                        "image_pixel_data": file_data,
+                        "mime_type": mime_type
+                    }
+                        
+                    image_futures.append(image_future)
+                else:
+                    raise NotImplementedError(
+                        "Multiple 'image_url' input is currently not supported."
+                    )
 
             else:
                 raise NotImplementedError(f"Unknown part type: {part_type}")
@@ -130,7 +173,8 @@ class OpenAPIChatServer():
 
         messages = [ConversationMessage(role=role, content=text_prompt)]
 
-        return ChatMessageParseResult(messages=messages)
+        logger.debug(f"messages: {str(messages)}")
+        return ChatMessageParseResult(messages=messages, image_futures=image_futures)
 
     def _parse_chat_message_content(
         self,
@@ -139,12 +183,16 @@ class OpenAPIChatServer():
         role = message["role"]
         content = message.get("content")
 
-        if content is None:
-            return ChatMessageParseResult(messages=[])
-        if isinstance(content, str):
-            messages = [ConversationMessage(role=role, content=content)]
-            return ChatMessageParseResult(messages=messages)
+        # logger.debug(f"content: {str(content)}")
 
+        if content is None:
+            return ChatMessageParseResult(messages=[], image_futures=[])
+        if isinstance(content, str):
+            # logger.debug(f"Content")
+            messages = [ConversationMessage(role=role, content=content)]
+            return ChatMessageParseResult(messages=messages, image_futures=[])
+
+        # logger.debug(f"ContentPart")
         return self._parse_chat_message_content_parts(role, content)
 
     async def create_chat_completion(
@@ -161,27 +209,43 @@ class OpenAPIChatServer():
         request_id = f"cmpl-{random_uuid()}"
         try:
             conversation: List[ConversationMessage] = []
+            image_futures: List[Awaitable[ImagePixelData]] = []
 
             for msg in request.messages:
+                # logger.debug(f"msg: {str(msg)}")
                 chat_parsed_result = self._parse_chat_message_content(msg)
 
                 conversation.extend(chat_parsed_result.messages)
+                image_futures.extend(chat_parsed_result.image_futures)
 
+            # print(conversation)
             prompt = self.tokenizer.apply_chat_template(
                 conversation=conversation,
                 tokenize=False,
                 add_generation_prompt=request.add_generation_prompt,
             )
         except Exception as e:
-            logger.error("Error in applying chat template from request: %s", e)
+            logger.error(f"Error in applying chat template from request: {str(e)}")
             return self.create_error_response(str(e))
 
+        inputs: PromptInputs = {
+            "prompt": prompt,
+        }
+        # print(image_futures)
+        
+        if self.vision:
+            inputs["multi_modal_data"] = image_futures
 
-        result_generator = self.engine.generate(
-                prompt, request.to_sampling_params(), request_id, stream=request.stream)
+        result_generator = None
+        if self.vision:
+            result_generator = self.engine.generate_vision(
+                    inputs, request.to_sampling_params(), request_id, stream=request.stream)
+        else:
+            result_generator = self.engine.generate(
+                    inputs, request.to_sampling_params(), request_id, stream=request.stream)
         # Streaming response
         if request.stream:
-            # logger.debug("result_generator: " + str(result_generator) )
+            logger.error("stream: " + str(request.stream) )
             return self.chat_completion_stream_generator(
                 request, result_generator, request_id, conversation)
         else:

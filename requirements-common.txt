@@ -1,4 +1,3 @@
-
 huggingface-hub[cli]
 fastapi~=0.110.0
 gunicorn~=21.2.0
@@ -11,3 +10,6 @@ openai
 torch
 transformers
 uvicorn
+filetype~=1.2.0
+Pillow~=10.3.0
+torchvision~=0.18.1
