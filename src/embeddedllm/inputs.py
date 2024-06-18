@@ -1,7 +1,16 @@
-from typing import (TYPE_CHECKING, List, Literal, Optional, Sequence,
-                    TypedDict, Union, cast, overload, Tuple)
+from typing import (
+    List,
+    Literal,
+    Optional,
+    Sequence,
+    TypedDict,
+    Union,
+    cast,
+    overload,
+)
 
 from typing_extensions import NotRequired
+
 
 class ParsedText(TypedDict):
     content: str
@@ -20,17 +29,16 @@ class ImagePixelData(TypedDict):
     # image_pixel_data: object
     # image_size: Tuple[int]
 
+
 # https://github.com/vllm-project/vllm/pull/4028
 @overload
-def parse_and_batch_prompt(
-        prompt: Union[str, List[str]]) -> Sequence[ParsedText]:
-    ...
+def parse_and_batch_prompt(prompt: Union[str, List[str]]) -> Sequence[ParsedText]: ...
 
 
 @overload
 def parse_and_batch_prompt(
-        prompt: Union[List[int], List[List[int]]]) -> Sequence[ParsedTokens]:
-    ...
+    prompt: Union[List[int], List[List[int]]]
+) -> Sequence[ParsedTokens]: ...
 
 
 def parse_and_batch_prompt(
@@ -46,10 +54,7 @@ def parse_and_batch_prompt(
 
         if isinstance(prompt[0], str):
             # case 2: array of strings
-            return [
-                ParsedText(content=elem, is_tokens=False)
-                for elem in cast(List[str], prompt)
-            ]
+            return [ParsedText(content=elem, is_tokens=False) for elem in cast(List[str], prompt)]
         if isinstance(prompt[0], int):
             # case 3: array of tokens
             elem = cast(List[int], prompt)
@@ -65,8 +70,9 @@ def parse_and_batch_prompt(
                     for elem in cast(List[List[int]], prompt)
                 ]
 
-    raise ValueError("prompt must be a string, array of strings, "
-                     "array of tokens, or array of token arrays")
+    raise ValueError(
+        "prompt must be a string, array of strings, " "array of tokens, or array of token arrays"
+    )
 
 
 class TextPrompt(TypedDict):
@@ -81,6 +87,7 @@ class TextPrompt(TypedDict):
     if the model supports it.
     """
 
+
 class TokensPrompt(TypedDict):
     """Schema for a tokenized prompt."""
 
@@ -92,6 +99,7 @@ class TokensPrompt(TypedDict):
     Optional multi-modal data to pass to the model,
     if the model supports it.
     """
+
 
 class TextTokensPrompt(TypedDict):
     """It is assumed that :attr:`prompt` is consistent with

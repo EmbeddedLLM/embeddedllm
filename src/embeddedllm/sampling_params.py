@@ -1,4 +1,5 @@
 """Sampling parameters for text generation."""
+
 import copy
 from enum import IntEnum
 from functools import cached_property
@@ -18,9 +19,10 @@ class SamplingType(IntEnum):
     BEAM = 3
 
 
-LogitsProcessor = Union[Callable[[List[int], torch.Tensor], torch.Tensor],
-                        Callable[[List[int], List[int], torch.Tensor],
-                                 torch.Tensor]]
+LogitsProcessor = Union[
+    Callable[[List[int], torch.Tensor], torch.Tensor],
+    Callable[[List[int], List[int], torch.Tensor], torch.Tensor],
+]
 """LogitsProcessor is a function that takes a list
 of previously generated tokens, the logits tensor
 for the next token and, optionally, prompt tokens as a
@@ -133,7 +135,7 @@ class SamplingParams:
         skip_special_tokens: bool = True,
         spaces_between_special_tokens: bool = True,
         logits_processors: Optional[List[LogitsProcessor]] = None,
-        truncate_prompt_tokens: Optional[Annotated[int, Field(ge=1)]] = None
+        truncate_prompt_tokens: Optional[Annotated[int, Field(ge=1)]] = None,
     ) -> None:
         self.n = n
         self.best_of = best_of if best_of is not None else n
@@ -200,64 +202,68 @@ class SamplingParams:
         # eos_token_id is added to this by the engine
         self.all_stop_token_ids = set(self.stop_token_ids)
 
-
     def _verify_args(self) -> None:
         if self.n < 1:
             raise ValueError(f"n must be at least 1, got {self.n}.")
         if self.best_of < self.n:
-            raise ValueError(f"best_of must be greater than or equal to n, "
-                             f"got n={self.n} and best_of={self.best_of}.")
-        if not -2.0 <= self.presence_penalty <= 2.0:
-            raise ValueError("presence_penalty must be in [-2, 2], got "
-                             f"{self.presence_penalty}.")
-        if not -2.0 <= self.frequency_penalty <= 2.0:
-            raise ValueError("frequency_penalty must be in [-2, 2], got "
-                             f"{self.frequency_penalty}.")
-        if not 0.0 < self.repetition_penalty <= 2.0:
-            raise ValueError("repetition_penalty must be in (0, 2], got "
-                             f"{self.repetition_penalty}.")
-        if self.temperature < 0.0:
             raise ValueError(
-                f"temperature must be non-negative, got {self.temperature}.")
+                f"best_of must be greater than or equal to n, "
+                f"got n={self.n} and best_of={self.best_of}."
+            )
+        if not -2.0 <= self.presence_penalty <= 2.0:
+            raise ValueError(
+                "presence_penalty must be in [-2, 2], got " f"{self.presence_penalty}."
+            )
+        if not -2.0 <= self.frequency_penalty <= 2.0:
+            raise ValueError(
+                "frequency_penalty must be in [-2, 2], got " f"{self.frequency_penalty}."
+            )
+        if not 0.0 < self.repetition_penalty <= 2.0:
+            raise ValueError(
+                "repetition_penalty must be in (0, 2], got " f"{self.repetition_penalty}."
+            )
+        if self.temperature < 0.0:
+            raise ValueError(f"temperature must be non-negative, got {self.temperature}.")
         if not 0.0 < self.top_p <= 1.0:
             raise ValueError(f"top_p must be in (0, 1], got {self.top_p}.")
         if self.top_k < -1 or self.top_k == 0:
-            raise ValueError(f"top_k must be -1 (disable), or at least 1, "
-                             f"got {self.top_k}.")
+            raise ValueError(f"top_k must be -1 (disable), or at least 1, " f"got {self.top_k}.")
         if not 0.0 <= self.min_p <= 1.0:
-            raise ValueError("min_p must be in [0, 1], got "
-                             f"{self.min_p}.")
+            raise ValueError("min_p must be in [0, 1], got " f"{self.min_p}.")
         if self.max_tokens is not None and self.max_tokens < 1:
-            raise ValueError(
-                f"max_tokens must be at least 1, got {self.max_tokens}.")
+            raise ValueError(f"max_tokens must be at least 1, got {self.max_tokens}.")
         if self.min_tokens < 0:
-            raise ValueError(f"min_tokens must be greater than or equal to 0, "
-                             f"got {self.min_tokens}.")
+            raise ValueError(
+                f"min_tokens must be greater than or equal to 0, " f"got {self.min_tokens}."
+            )
         if self.max_tokens is not None and self.min_tokens > self.max_tokens:
             raise ValueError(
                 f"min_tokens must be less than or equal to "
-                f"max_tokens={self.max_tokens}, got {self.min_tokens}.")
+                f"max_tokens={self.max_tokens}, got {self.min_tokens}."
+            )
         if self.logprobs is not None and self.logprobs < 0:
-            raise ValueError(
-                f"logprobs must be non-negative, got {self.logprobs}.")
+            raise ValueError(f"logprobs must be non-negative, got {self.logprobs}.")
         if self.prompt_logprobs is not None and self.prompt_logprobs < 0:
-            raise ValueError(f"prompt_logprobs must be non-negative, got "
-                             f"{self.prompt_logprobs}.")
-        if (self.truncate_prompt_tokens is not None
-                and self.truncate_prompt_tokens < 1):
-            raise ValueError(f"truncate_prompt_tokens must be >= 1, "
-                             f"got {self.truncate_prompt_tokens}")
+            raise ValueError(
+                f"prompt_logprobs must be non-negative, got " f"{self.prompt_logprobs}."
+            )
+        if self.truncate_prompt_tokens is not None and self.truncate_prompt_tokens < 1:
+            raise ValueError(
+                f"truncate_prompt_tokens must be >= 1, " f"got {self.truncate_prompt_tokens}"
+            )
         if any(not stop_str for stop_str in self.stop):
             raise ValueError("stop cannot contain an empty string.")
         if self.stop and not self.detokenize:
             raise ValueError(
                 "stop strings are only supported when detokenize is True. "
-                "Set detokenize=True to use stop.")
+                "Set detokenize=True to use stop."
+            )
 
     def _verify_beam_search(self) -> None:
         if self.best_of == 1:
-            raise ValueError("best_of must be greater than 1 when using beam "
-                             f"search. Got {self.best_of}.")
+            raise ValueError(
+                "best_of must be greater than 1 when using beam " f"search. Got {self.best_of}."
+            )
         if self.temperature > _SAMPLING_EPS:
             raise ValueError("temperature must be 0 when using beam search.")
         if self.top_p < 1.0 - _SAMPLING_EPS:
@@ -266,30 +272,30 @@ class SamplingParams:
             raise ValueError("top_k must be -1 when using beam search.")
         if self.early_stopping not in [True, False, "never"]:
             raise ValueError(
-                f"early_stopping must be True, False, or 'never', "
-                f"got {self.early_stopping}.")
+                f"early_stopping must be True, False, or 'never', " f"got {self.early_stopping}."
+            )
 
     def _verify_non_beam_search(self) -> None:
         if self.early_stopping is not False:
-            raise ValueError("early_stopping is not effective and must be "
-                             "False when not using beam search.")
-        if (self.length_penalty < 1.0 - _SAMPLING_EPS
-                or self.length_penalty > 1.0 + _SAMPLING_EPS):
+            raise ValueError(
+                "early_stopping is not effective and must be " "False when not using beam search."
+            )
+        if self.length_penalty < 1.0 - _SAMPLING_EPS or self.length_penalty > 1.0 + _SAMPLING_EPS:
             raise ValueError(
                 "length_penalty is not effective and must be the "
-                "default value of 1.0 when not using beam search.")
+                "default value of 1.0 when not using beam search."
+            )
 
     def _verify_greedy_sampling(self) -> None:
         if self.best_of > 1:
-            raise ValueError("best_of must be 1 when using greedy sampling."
-                             f"Got {self.best_of}.")
+            raise ValueError(
+                "best_of must be 1 when using greedy sampling." f"Got {self.best_of}."
+            )
 
-    def update_from_generation_config(
-            self, generation_config: Dict[str, Any]) -> None:
+    def update_from_generation_config(self, generation_config: Dict[str, Any]) -> None:
         """Update if there are non-default values from generation_config"""
         # Update eos_token_id for generation
-        if (not self.ignore_eos) and (eos_ids :=
-                                      generation_config.get("eos_token_id")):
+        if (not self.ignore_eos) and (eos_ids := generation_config.get("eos_token_id")):
             # it can be either int or list of int
             if isinstance(eos_ids, int):
                 eos_ids = [eos_ids]
@@ -315,10 +321,11 @@ class SamplingParams:
         See https://github.com/vllm-project/vllm/issues/3087
         """
 
-        logit_processor_refs = None if self.logits_processors is None else {
-            id(lp): lp
-            for lp in self.logits_processors
-        }
+        logit_processor_refs = (
+            None
+            if self.logits_processors is None
+            else {id(lp): lp for lp in self.logits_processors}
+        )
         return copy.deepcopy(self, memo=logit_processor_refs)
 
     def __repr__(self) -> str:
@@ -347,4 +354,5 @@ class SamplingParams:
             f"skip_special_tokens={self.skip_special_tokens}, "
             "spaces_between_special_tokens="
             f"{self.spaces_between_special_tokens}, "
-            f"truncate_prompt_tokens={self.truncate_prompt_tokens})")
+            f"truncate_prompt_tokens={self.truncate_prompt_tokens})"
+        )
