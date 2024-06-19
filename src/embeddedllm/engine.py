@@ -36,7 +36,6 @@ def onnx_generator_context(model, params):
 
 
 class EmbeddedLLMEngine:
-
     def __init__(self, model_path: str, vision: bool):
         self.model_path = model_path
         self.model_config = AutoConfig.from_pretrained(self.model_path, trust_remote_code=True)
@@ -103,10 +102,8 @@ class EmbeddedLLMEngine:
         request_id: str,
         stream: bool = True,
     ) -> AsyncIterator[RequestOutput]:
-
         prompt_text = inputs["prompt"]
         # print(f"inputs: {str(inputs)}")
-        print(inputs.keys())
         input_tokens = self.onnx_tokenizer.encode(prompt_text)
         # logger.debug(f"inputs: {str(inputs)}")
         # logger.debug(f'inputs["multi_model_data"]: {str(inputs.multi_model_data)}')

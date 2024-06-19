@@ -67,7 +67,6 @@ class ChatMessageParseResult:
 
 
 class OpenAPIChatServer:
-
     def __init__(
         self,
         model_path: str,
@@ -200,7 +199,6 @@ class OpenAPIChatServer:
     async def create_chat_completion(
         self, request: ChatCompletionRequest, raw_request: Optional[Request] = None
     ) -> Union[ErrorResponse, AsyncGenerator[str, None], ChatCompletionResponse]:
-
         error_check_ret = await self._check_model(request)
         if error_check_ret is not None:
             return error_check_ret
@@ -282,7 +280,7 @@ class OpenAPIChatServer:
         finish_reason_sent = [False] * request.n
         try:
             async for res in result_generator:
-                logger.debug("res:" + str(res))
+                # logger.debug("res:" + str(res))
                 # We need to do it here, because if there are exceptions in
                 # the result_generator, it needs to be sent as the FIRST
                 # response (by the try...catch).
@@ -352,7 +350,6 @@ class OpenAPIChatServer:
                         continue
 
                     if request.logprobs and request.top_logprobs is not None:
-
                         # @TODO: Add when ONNX support logits on DML
                         logprobs = None
                     else:
@@ -443,7 +440,6 @@ class OpenAPIChatServer:
         request_id: str,
         conversation: List[ConversationMessage],
     ) -> Union[ErrorResponse, ChatCompletionResponse]:
-
         model_name = self.served_model_name
         created_time = int(time.time())
         final_res: Optional[RequestOutput] = None

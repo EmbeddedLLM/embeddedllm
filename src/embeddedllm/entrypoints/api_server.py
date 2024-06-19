@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, Response, StreamingResponse
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import Field
 
 from embeddedllm.entrypoints.chat_server import OpenAPIChatServer
 from embeddedllm.protocol import (  # noqa: E501
@@ -18,14 +19,21 @@ openai_chat_server: OpenAPIChatServer
 
 
 class Config(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
-    port: int = 6979
-    host: str = "0.0.0.0"
-    response_role: str = "assistant"
-    uvicorn_log_level: str = "info"
-    served_model_name: str = "phi3-mini-int4"
-    model_path: str = None
-    vision: bool = False
+    model_config = SettingsConfigDict(
+        env_file=".env", env_file_encoding="utf-8", extra="ignore", cli_parse_args=True
+    )
+    port: int = Field(default=6979, description="Server port.")
+    host: str = Field(default="0.0.0.0", description="Server host.")
+    response_role: str = Field(default="assistant", description="Server response role.")
+    uvicorn_log_level: str = Field(
+        default="info",
+        description="Uvicorn logging level. `debug`, `info`, `trace`, `warning`, `critical`",
+    )
+    served_model_name: str = Field(default="phi3-mini-int4", description="Model name.")
+    model_path: str = Field(description="Path to model weights.")
+    vision: bool = Field(
+        default=False, description="Enable vision capability, only if model supports vision input."
+    )
 
 
 config = Config()
@@ -52,20 +60,18 @@ async def show_available_models():
 
 @app.post("/v1/chat/completions")
 async def create_chat_completion(request: ChatCompletionRequest, raw_request: Request):
-
     generator = await openai_chat_server.create_chat_completion(request, raw_request)
     if isinstance(generator, ErrorResponse):
         return JSONResponse(content=generator.model_dump(), status_code=generator.code)
     if request.stream:
         return StreamingResponse(content=generator, media_type="text/event-stream")
     else:
-        # return JSONResponse(content="Non-streaming Chat Generation Yet to be Implemented.",
-        #                     status_code=404)
         assert isinstance(generator, ChatCompletionResponse)
         return JSONResponse(content=generator.model_dump())
 
 
-if __name__ == "__main__":
+def main():
+    global openai_chat_server
     import os
 
     import uvicorn
@@ -90,3 +96,7 @@ if __name__ == "__main__":
     uvicorn.run(
         app, host=config.host, port=config.port, log_level=config.uvicorn_log_level, loop="asyncio"
     )
+
+
+if __name__ == "__main__":
+    main()

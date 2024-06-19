@@ -1,2 +1,2 @@
 onnxruntime-gpu~=1.18.0
-onnxruntime-genai-cuda~=0.2.0
+onnxruntime-genai-cuda~=0.3.0rc2

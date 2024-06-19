@@ -2,21 +2,21 @@ import io
 import os
 import re
 from typing import List
+import platform
 
 from setuptools import find_packages, setup
 
 ROOT_DIR = os.path.dirname(__file__)
 
-# # Custom function to check for DirectML support
-# def check_directml_support():
-#     if platform.system() != "Windows":
-#         raise RuntimeError("This package requires a Windows system with DirectML support.")
-#     # Add additional checks for DirectML support if necessary
 
-# # Run the check before proceeding with the setup
-# check_directml_support()
+ELLM_TARGET_DEVICE = os.environ.get("ELLM_TARGET_DEVICE", "directml")
 
-ELLM_TARGET_DEVICE = "cuda"
+
+# Custom function to check for DirectML support
+def check_directml_support():
+    if platform.system() != "Windows":
+        raise RuntimeError("This package requires a Windows system with DirectML support.")
+    # Add additional checks for DirectML support if necessary
 
 
 def read_readme() -> str:
@@ -29,6 +29,8 @@ def read_readme() -> str:
 
 
 def _is_directml() -> bool:
+    # Run the check before proceeding with the setup
+    check_directml_support()
     return ELLM_TARGET_DEVICE == "directml"
 
 
@@ -97,6 +99,8 @@ def get_ellm_version() -> str:
     return version
 
 
+print(get_requirements().extend(_read_requirements("requirements-common.txt")))
+
 setup(
     name="embeddedllm",
     version=get_ellm_version(),
@@ -120,9 +124,20 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
-    install_requires=get_requirements().extend(_read_requirements("requirements-common.txt")),
+    install_requires=get_requirements()
+    + _read_requirements("requirements-common.txt")
+    + _read_requirements("requirements-build.txt"),
     # Add other metadata and dependencies as needed
     extras_require={
         "lint": _read_requirements("requirements-lint.txt"),
+        "cuda": ["onnxruntime-genai-cuda==0.3.0rc2"],
+    },
+    dependency_links=[
+        "https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-genai/pypi/simple/"
+    ],
+    entry_points={
+        "console_scripts": [
+            "ellm_server=embeddedllm.entrypoints.api_server:main",
+        ],
     },
 )
