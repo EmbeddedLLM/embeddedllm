@@ -48,7 +48,7 @@ class EmbeddedLLMEngine:
             sliding_window_len=self.get_hf_config_sliding_window(),
         )
 
-        logger.info(self.max_model_len)
+        logger.info("Model Context Lenght: " + str(self.max_model_len))
 
         try:
             logger.info("Attempt to load fast tokenizer")
@@ -122,7 +122,7 @@ class EmbeddedLLMEngine:
                 tmpfile.flush()
 
             # logger.trace("Loading from temporary file: {name}", name=image_path.as_posix())
-            logger.debug("Loading from temporary file: {name}", name=image_path.as_posix())
+            # logger.debug("Loading from temporary file: {name}", name=image_path.as_posix())
 
             # if not os.path.exists(image_path.as_posix()):
             #     raise FileNotFoundError(f"Image file not found: {image_path.as_posix()}")
@@ -312,7 +312,7 @@ class EmbeddedLLMEngine:
         prompt_text = inputs["prompt"]
         input_token_length = None
         input_tokens = None  # for text only use case
-        logger.debug("inputs: " + prompt_text)
+        # logger.debug("inputs: " + prompt_text)
 
         input_tokens = self.onnx_tokenizer.encode(prompt_text)
         input_token_length = len(input_tokens)

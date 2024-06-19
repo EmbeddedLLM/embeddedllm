@@ -109,7 +109,7 @@ class OpenAPIChatServer:
         elif tokenizer.chat_template is not None:
             logger.info("Using default chat template:\n%s", tokenizer.chat_template)
         else:
-            logger.warning("No chat template provided. Chat API will not work.")
+            logger.warning("No chat template provided. Chat API will not work as intended.")
 
     def create_error_response(
         self,
@@ -130,7 +130,7 @@ class OpenAPIChatServer:
         for part in parts:
             # logger.debug(f"part: {str(part)}")
             part_type = part["type"]
-            logger.debug(f"part_type: {part_type}")
+            # logger.debug(f"part_type: {part_type}")
             if part_type == "text":
                 text = cast(ChatCompletionContentPartTextParam, part)["text"]
 
@@ -153,8 +153,8 @@ class OpenAPIChatServer:
 
                     file_data, mime_type = decode_base64(image_url["url"])
 
-                    logger.debug(f"file_data: {type(file_data)}")
-                    logger.debug(f"mime_type: {str(mime_type)}")
+                    # logger.debug(f"file_data: {type(file_data)}")
+                    # logger.debug(f"mime_type: {str(mime_type)}")
 
                     image_future: ImagePixelData = {
                         "image_pixel_data": file_data,
@@ -174,7 +174,7 @@ class OpenAPIChatServer:
 
         messages = [ConversationMessage(role=role, content=text_prompt)]
 
-        logger.debug(f"messages: {str(messages)}")
+        # logger.debug(f"messages: {str(messages)}")
         return ChatMessageParseResult(messages=messages, image_futures=image_futures)
 
     def _parse_chat_message_content(
@@ -343,7 +343,6 @@ class OpenAPIChatServer:
                     first_iteration = False
 
                 for output in res.outputs:
-                    time.sleep(0.5)
                     i = output.index
 
                     if finish_reason_sent[i]:
