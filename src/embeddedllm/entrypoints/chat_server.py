@@ -247,12 +247,10 @@ class OpenAPIChatServer:
             )
         # Streaming response
         if request.stream:
-            logger.error("stream: " + str(request.stream))
             return self.chat_completion_stream_generator(
                 request, result_generator, request_id, conversation
             )
         else:
-            # raise NotImplementedError("Not Yet Implemented Error")
             try:
                 return await self.chat_completion_full_generator(
                     request, raw_request, result_generator, request_id, conversation
@@ -302,8 +300,6 @@ class OpenAPIChatServer:
                             choices=[choice_data],
                             model=model_name,
                         )
-
-                        # logger.debug("chunk: "+ str(chunk))
 
                         if request.stream_options and request.stream_options.include_usage:
                             chunk.usage = None
@@ -400,7 +396,6 @@ class OpenAPIChatServer:
                             chunk.usage = None
                         data = chunk.model_dump_json(exclude_unset=True)
                         yield f"data: {data}\n\n"
-                        # logger.debug("chunk: "+ str(chunk))
                         finish_reason_sent[i] = True
 
             if request.stream_options and request.stream_options.include_usage:
@@ -422,7 +417,6 @@ class OpenAPIChatServer:
                     exclude_unset=True, exclude_none=True
                 )
                 yield f"data: {final_usage_data}\n\n"
-                # logger.debug("final_usage_data: "+ str(final_usage_data))
 
         except ValueError as e:
             # TODO: Use a vllm-specific Validation Error
