@@ -26,29 +26,22 @@ from transformers import PreTrainedTokenizer, PreTrainedTokenizerFast
 
 from embeddedllm.engine import EmbeddedLLMEngine
 from embeddedllm.inputs import ImagePixelData, PromptInputs
-from embeddedllm.protocol import (  # noqa: E501
+from embeddedllm.protocol import (  # noqa: E501; ChatCompletionLogProb,; ChatCompletionLogProbs,; ChatCompletionLogProbsContent,; ChatCompletionNamedToolChoiceParam,; CompletionOutput,; FunctionCall,; ToolCall,
     ChatCompletionContentPartParam,
-    # ChatCompletionLogProb,
-    # ChatCompletionLogProbs,
-    # ChatCompletionLogProbsContent,
     ChatCompletionMessageParam,
-    # ChatCompletionNamedToolChoiceParam,
     ChatCompletionRequest,
     ChatCompletionResponse,
     ChatCompletionResponseChoice,
     ChatCompletionResponseStreamChoice,
     ChatCompletionStreamResponse,
     ChatMessage,
-    # CompletionOutput,
     CompletionRequest,
     DeltaMessage,
     ErrorResponse,
-    # FunctionCall,
     ModelCard,
     ModelList,
     ModelPermission,
     RequestOutput,
-    # ToolCall,
     UsageInfo,
 )
 from embeddedllm.utils import decode_base64, random_uuid

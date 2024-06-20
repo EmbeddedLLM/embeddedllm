@@ -1,2 +1,2 @@
 onnxruntime
-onnxruntime-genai
+onnxruntime-genai==0.3.0rc2

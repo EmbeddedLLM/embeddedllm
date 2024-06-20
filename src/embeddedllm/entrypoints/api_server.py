@@ -3,8 +3,8 @@ from http import HTTPStatus
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, Response, StreamingResponse
-from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from embeddedllm.entrypoints.chat_server import OpenAPIChatServer
 from embeddedllm.protocol import (  # noqa: E501

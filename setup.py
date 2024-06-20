@@ -130,6 +130,7 @@ setup(
     # Add other metadata and dependencies as needed
     extras_require={
         "lint": _read_requirements("requirements-lint.txt"),
+        "webui": _read_requirements("requirements-webui.txt"),
         "cuda": ["onnxruntime-genai-cuda==0.3.0rc2"],
     },
     dependency_links=[
@@ -138,6 +139,7 @@ setup(
     entry_points={
         "console_scripts": [
             "ellm_server=embeddedllm.entrypoints.api_server:main",
+            "ellm_chatbot=embeddedllm.entrypoints.webui:main",
         ],
     },
 )
