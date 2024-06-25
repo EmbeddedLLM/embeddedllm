@@ -1,6 +1,7 @@
 # EmbeddedLLM
 
 Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon))
+Easiest way to launch OpenAI API Compatible Server on Windows, Linux and MacOS
 
 | Support matrix        | Supported now                                       | Under Development | On the roadmap |
 | --------------------- | --------------------------------------------------- | ----------------- | -------------- |
