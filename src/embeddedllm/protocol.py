@@ -157,7 +157,7 @@ class ChatCompletionRequest(OpenAIBaseModel):
     # doc: begin-chat-completion-sampling-params
     best_of: Optional[int] = None
     use_beam_search: Optional[bool] = False
-    top_k: Optional[int] = -1
+    top_k: Optional[int] = 10
     min_p: Optional[float] = 0.0
     repetition_penalty: Optional[float] = 1.0
     length_penalty: Optional[float] = 1.0
@@ -356,7 +356,7 @@ class CompletionRequest(OpenAIBaseModel):
 
     # doc: begin-completion-sampling-params
     use_beam_search: Optional[bool] = False
-    top_k: Optional[int] = -1
+    top_k: Optional[int] = 10
     min_p: Optional[float] = 0.0
     repetition_penalty: Optional[float] = 1.0
     length_penalty: Optional[float] = 1.0

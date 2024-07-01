@@ -1,8 +1,8 @@
 import io
 import os
+import platform
 import re
 from typing import List
-import platform
 
 from setuptools import find_packages, setup
 
@@ -140,6 +140,7 @@ setup(
         "console_scripts": [
             "ellm_server=embeddedllm.entrypoints.api_server:main",
             "ellm_chatbot=embeddedllm.entrypoints.webui:main",
+            "ellm_modelui=embeddedllm.entrypoints.modelui:main",
         ],
     },
 )

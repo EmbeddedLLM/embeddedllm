@@ -1,8 +1,9 @@
-from openai import AsyncOpenAI
 import asyncio
 import base64
 import mimetypes
 import os
+
+from openai import AsyncOpenAI
 
 current_file_path = os.path.abspath(__file__)
 IMAGE_PATH = os.path.join(os.path.dirname(current_file_path), "..", "images", "catdog.png")

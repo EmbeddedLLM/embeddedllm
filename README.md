@@ -1,6 +1,6 @@
 # EmbeddedLLM
 
-Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon))
+Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)).
 Easiest way to launch OpenAI API Compatible Server on Windows, Linux and MacOS
 
 | Support matrix        | Supported now                                       | Under Development | On the roadmap |
@@ -32,6 +32,10 @@ Easiest way to launch OpenAI API Compatible Server on Windows, Linux and MacOS
 | Phi3-mini-128k-instruct | 3.8B | 128k | [microsoft/Phi-3-mini-128k-instruct-onnx](https://huggingface.co/microsoft/Phi-3-mini-128k-instruct-onnx) |
 | Phi3-medium-4k-instruct | 17B | 4096 | [microsoft/Phi-3-medium-4k-instruct-onnx-directml](https://huggingface.co/microsoft/Phi-3-medium-4k-instruct-onnx-directml) |
 | Phi3-medium-128k-instruct | 17B | 128k | [microsoft/Phi-3-medium-128k-instruct-onnx-directml](https://huggingface.co/microsoft/Phi-3-medium-128k-instruct-onnx-directml) |
+| Openchat-3.6-8b | 8B | 8192 | [EmbeddedLLM/openchat-3.6-8b-20240522-onnx](https://huggingface.co/EmbeddedLLM/openchat-3.6-8b-20240522-onnx) |
+| Yi-1.5-6b-chat | 6B | 32k | [EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-onnx](https://huggingface.co/EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-onnx) |
+| Phi-3-vision-128k-instruct | | 128k | [EmbeddedLLM/Phi-3-vision-128k-instruct-onnx](https://huggingface.co/EmbeddedLLM/Phi-3-vision-128k-instruct-onnx/tree/main/onnx/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4) |
+
 
 ## Getting Started
 
@@ -86,6 +90,18 @@ options:
 ## Launch Chatbot Web UI
 
 1. `ellm_chatbot --port 7788 --host localhost --server_port <ellm_server_port> --server_host localhost`.
+
+  ![Chatbot Web UI](asset/ellm_chatbot_vid.webp)
+
+## Launch Model Management UI
+It is an interface that allows you to download and deploy OpenAI API compatible server.
+You can find out the disk space required to download the model in the UI.
+
+1. `ellm_modelui --port 6678`
+
+  ![Model Management UI](asset/ellm_modelui.png)
+
+
 
 ## Acknowledgements
 

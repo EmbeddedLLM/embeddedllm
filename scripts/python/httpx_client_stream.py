@@ -1,16 +1,16 @@
 import asyncio
-
-import httpx
 import json
 
-def parse_stream(stream:str):
+import httpx
 
-    stream = stream.replace('data: ', '')
 
+def parse_stream(stream: str):
+    stream = stream.replace("data: ", "")
     response_obj = json.loads(stream)
     # print(response_obj)
 
     return response_obj
+
 
 async def stream_chat_completion(url: str, payload: dict):
     async with httpx.AsyncClient() as client:
@@ -22,9 +22,9 @@ async def stream_chat_completion(url: str, payload: dict):
                         if "[DONE]" in decodes_stream:
                             continue
                         resp = parse_stream(decodes_stream)
-                        if resp["choices"][0]["delta"].get('content', None):
-                            print(resp["choices"][0]["delta"]["content"], end='', flush=True)
-                        
+                        if resp["choices"][0]["delta"].get("content", None):
+                            print(resp["choices"][0]["delta"]["content"], end="", flush=True)
+
                         # time.sleep(1)
             else:
                 print(f"Error: {response.status_code}")

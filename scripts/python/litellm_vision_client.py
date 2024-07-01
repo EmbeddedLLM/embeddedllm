@@ -1,7 +1,8 @@
-import litellm
 import base64
 import mimetypes
 import os
+
+import litellm
 
 current_file_path = os.path.abspath(__file__)
 IMAGE_PATH = os.path.join(os.path.dirname(current_file_path), "..", "images", "catdog.png")

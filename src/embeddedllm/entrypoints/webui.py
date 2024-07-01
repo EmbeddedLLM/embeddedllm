@@ -26,6 +26,7 @@ class Config(BaseSettings):
     )
     port: int = Field(default=7788, description="Gradio port.")
     host: str = Field(default="127.0.0.1", description="Gradio host.")
+    model_name: str = Field(default="phi3-mini-int4", description="Gradio host.")
     server_port: int = Field(default=6979, description="ELLM Server port.")
     server_host: str = Field(default="localhost", description="ELLM Server host.")
 
@@ -146,7 +147,7 @@ async def bot(history, temperature, top_p, top_k, output_token):
     url = f"{URL}/chat/completions"
     payload = {
         "messages": history_openai_format,
-        "model": "phi3-mini-int4",
+        "model": config.model_name,
         "max_tokens": output_token,
         "top_p": top_p,
         "top_k": top_k,
