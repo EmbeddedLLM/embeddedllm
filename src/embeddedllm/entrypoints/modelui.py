@@ -37,7 +37,7 @@ backend = get_embeddedllm_backend()
 
 class Config(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
-    port: int = Field(default=7788, description="Gradio port.")
+    port: int = Field(default=6678, description="Gradio port.")
     host: str = Field(default="127.0.0.1", description="Gradio host.")
 
 
@@ -64,6 +64,7 @@ class ModelCard(BaseModel):
     model_name: str
     subfolder: str
     repo_type: str
+    context_length: int
     size: Optional[int] = 0
 
 
@@ -74,6 +75,7 @@ dml_model_dict_list = {
         model_name="Phi-3-mini-4k-instruct-onnx",
         subfolder="directml/directml-int4-awq-block-128",
         repo_type="model",
+        context_length=4096,
     ),
     "EmbeddedLLM/mistralai_Mistral-7B-Instruct-v0.3-int4": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx/tree/main/onnx/directml/mistralai_Mistral-7B-Instruct-v0.3-int4",
@@ -81,6 +83,7 @@ dml_model_dict_list = {
         model_name="mistral-7b-instruct-v0.3-onnx",
         subfolder="onnx/directml/mistralai_Mistral-7B-Instruct-v0.3-int4",
         repo_type="model",
+        context_length=32768,
     ),
     "EmbeddedLLM/gemma-2b-it-int4": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/gemma-2b-it-onnx/tree/main/onnx/directml/gemma-2b-it-int4",
@@ -88,6 +91,7 @@ dml_model_dict_list = {
         model_name="gemma-2b-it-int4",
         subfolder="onnx/directml/gemma-2b-it-int4",
         repo_type="model",
+        context_length=8192,
     ),
     "EmbeddedLLM/gemma-7b-it-int4": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/gemma-7b-it-onnx/tree/main/onnx/directml/gemma-7b-it-int4",
@@ -95,6 +99,7 @@ dml_model_dict_list = {
         model_name="gemma-7b-it-int4",
         subfolder="onnx/directml/gemma-7b-it-int4",
         repo_type="model",
+        context_length=8192,
     ),
     "EmbeddedLLM/llama-2-7b-chat-int4-onnx-directml": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/llama-2-7b-chat-int4-onnx-directml/tree/main",
@@ -102,13 +107,15 @@ dml_model_dict_list = {
         model_name="llama-2-7b-chat-int4-onnx-directml",
         subfolder=".",
         repo_type="model",
+        context_length=4096,
     ),
     "EmbeddedLLM/Starling-LM-7b-beta-int4": ModelCard(
-        hf_url="https://huggingface.co/EmbeddedLLM/llama-2-7b-chat-int4-onnx-directml/tree/main",
+        hf_url="https://huggingface.co/EmbeddedLLM/Starling-LM-7b-beta-onnx/tree/main/onnx/directml/Starling-LM-7b-beta-int4",
         repo_id="EmbeddedLLM/Starling-LM-7b-beta-onnx",
-        model_name="llama-2-7b-chat-int4-onnx-directml",
+        model_name="Starling-LM-7b-beta-int4",
         subfolder="onnx/directml/Starling-LM-7b-beta-int4",
         repo_type="model",
+        context_length=8192,
     ),
     "EmbeddedLLM/openchat-3.6-8b-20240522-int4": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/openchat-3.6-8b-20240522-onnx/tree/main/onnx/directml/openchat-3.6-8b-20240522-int4",
@@ -116,6 +123,7 @@ dml_model_dict_list = {
         model_name="openchat-3.6-8b-20240522-int4",
         subfolder="onnx/directml/openchat-3.6-8b-20240522-int4",
         repo_type="model",
+        context_length=8192,
     ),
     "EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-int4": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-onnx/tree/main/onnx/directml/01-ai_Yi-1.5-6B-Chat-int4",
@@ -123,6 +131,7 @@ dml_model_dict_list = {
         model_name="01-ai_Yi-1.5-6B-Chat-int4",
         subfolder="onnx/directml/01-ai_Yi-1.5-6B-Chat-int4",
         repo_type="model",
+        context_length=4096,
     ),
 }
 
@@ -133,6 +142,7 @@ cpu_model_dict_list = {
         model_name="Phi-3-mini-4k-instruct-onnx",
         subfolder="cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4",
         repo_type="model",
+        context_length=4096,
     ),
     "EmbeddedLLM/mistral-7b-instruct-v0.3-cpu-int4-rtn-block-32-acc-level-4": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx/tree/main/onnx/cpu_and_mobile/mistral-7b-instruct-v0.3-cpu-int4-rtn-block-32-acc-level-4",
@@ -140,6 +150,7 @@ cpu_model_dict_list = {
         model_name="mistral-7b-instruct-v0.3-cpu-int4-rtn-block-32-acc-level-4",
         subfolder="onnx/cpu_and_mobile/mistral-7b-instruct-v0.3-cpu-int4-rtn-block-32-acc-level-4",
         repo_type="model",
+        context_length=32768,
     ),
     "EmbeddedLLM/mistral-7b-instruct-v0.3-cpu-int4-rtn-block-32": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx/tree/main/onnx/cpu_and_mobile/mistral-7b-instruct-v0.3-cpu-int4-rtn-block-32",
@@ -147,6 +158,7 @@ cpu_model_dict_list = {
         model_name="mistral-7b-instruct-v0.3-cpu-int4-rtn-block-32",
         subfolder="onnx/cpu_and_mobile/mistral-7b-instruct-v0.3-cpu-int4-rtn-block-32",
         repo_type="model",
+        context_length=32768,
     ),
     "EmbeddedLLM/openchat-3.6-8b-20240522-cpu-int4-rtn-block-32-acc-level-4": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/openchat-3.6-8b-20240522-onnx/tree/main/onnx/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4",
@@ -154,6 +166,7 @@ cpu_model_dict_list = {
         model_name="openchat-3.6-8b-20240522-cpu-int4-rtn-block-32-acc-level-4",
         subfolder="onnx/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4",
         repo_type="model",
+        context_length=8192,
     ),
     "EmbeddedLLM/openchat-3.6-8b-20240522-cpu-int4-rtn-block-32": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/openchat-3.6-8b-20240522-onnx/tree/main/onnx/cpu_and_mobile/cpu-int4-rtn-block-32",
@@ -161,13 +174,15 @@ cpu_model_dict_list = {
         model_name="openchat-3.6-8b-20240522-cpu-int4-rtn-block-32",
         subfolder="onnx/cpu_and_mobile/cpu-int4-rtn-block-32",
         repo_type="model",
+        context_length=8192,
     ),
     # 'EmbeddedLLM/Phi-3-vision-128k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4': ModelCard(
     #     hf_url='https://huggingface.co/EmbeddedLLM/Phi-3-vision-128k-instruct-onnx/tree/main/onnx/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4',
     #     repo_id='EmbeddedLLM/Phi-3-vision-128k-instruct-onnx',
     #     model_name='Phi-3-vision-128k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4',
     #     subfolder= 'onnx/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4',
-    #     repo_type='model'
+    #     repo_type='model',
+    #    context_length=128000
     # ),
 }
 
@@ -221,6 +236,7 @@ def convert_to_dataframe(dml_model_dict_list):
     subfolders = []
     repo_types = []
     sizes = []
+    context_lengths = []
 
     # Iterate through the dictionary and extract the data
     for key, model_card in dml_model_dict_list.items():
@@ -231,11 +247,13 @@ def convert_to_dataframe(dml_model_dict_list):
         subfolders.append(model_card.subfolder)
         repo_types.append(model_card.repo_type)
         sizes.append(model_card.size)
+        context_lengths.append(model_card.context_length)
 
     # Create a dictionary with the extracted data
     data = {
         "Model Name": model_names,
         "Size (GB)": sizes,
+        "Context Length": context_lengths,
         "HuggingFace URL": hf_urls,
         "Repository ID": repo_ids,
         "Full Model Name": model_names_full,

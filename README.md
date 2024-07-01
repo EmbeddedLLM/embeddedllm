@@ -91,11 +91,17 @@ options:
 
 1. `ellm_chatbot --port 7788 --host localhost --server_port <ellm_server_port> --server_host localhost`.
 
+  ![Chatbot Web UI](asset/ellm_chatbot_vid.webp)
+
 ## Launch Model Management UI
 It is an interface that allows you to download and deploy OpenAI API compatible server.
 You can find out the disk space required to download the model in the UI.
 
 1. `ellm_modelui --port 6678`
+
+  ![Model Management UI](asset/ellm_modelui.png)
+
+
 
 ## Acknowledgements
 
