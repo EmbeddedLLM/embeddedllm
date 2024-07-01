@@ -1,7 +1,7 @@
 import asyncio
+import json
 
 import httpx
-import json
 
 
 def parse_stream(stream: str):

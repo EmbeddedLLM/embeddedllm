@@ -1,11 +1,10 @@
-import httpx
-import os
 import base64
 import mimetypes
+import os
 
-from embeddedllm.protocol import (
-    CustomChatCompletionMessageParam,
-)
+import httpx
+
+from embeddedllm.protocol import CustomChatCompletionMessageParam
 
 
 def chat_completion(url: str, payload: dict):

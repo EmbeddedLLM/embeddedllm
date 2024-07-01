@@ -68,6 +68,7 @@ class OpenAPIChatServer:
         chat_template: Optional[str] = None,
         vision: Optional[bool] = False,
     ):
+        self.initialized_flag = False
         self.model_path = model_path
         self.served_model_name = served_model_name
         self.response_role = response_role
@@ -76,6 +77,8 @@ class OpenAPIChatServer:
 
         self.tokenizer = self.engine.tokenizer
         self._load_chat_template(chat_template)
+
+        self.initialized_flag = True
 
     def _load_chat_template(self, chat_template: Optional[str]):
         tokenizer: Union[PreTrainedTokenizer, PreTrainedTokenizerFast] = self.tokenizer
@@ -533,3 +536,6 @@ class OpenAPIChatServer:
             err_type="NotFoundError",
             status_code=HTTPStatus.NOT_FOUND,
         )
+
+    def check_health(self):
+        return self.initialized_flag
