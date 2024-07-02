@@ -82,14 +82,6 @@ dml_model_dict_list = {
         repo_type="model",
         context_length=4096,
     ),
-    # "EmbeddedLLM/Phi-3-mini-128k-instruct-062024-onnx": ModelCard(
-    #     hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-128k-instruct-062024-onnx/tree/main/onnx/directml/Phi-3-mini-128k-instruct-062024-int4",
-    #     repo_id="EmbeddedLLM/Phi-3-mini-128k-instruct-062024-onnx",
-    #     model_name="Phi-3-mini-128k-instruct-062024-onnx",
-    #     subfolder="onnx/directml/Phi-3-mini-128k-instruct-062024-int4",
-    #     repo_type="model",
-    #     context_length=128000,
-    # ),
     "EmbeddedLLM/mistralai_Mistral-7B-Instruct-v0.3-int4": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx/tree/main/onnx/directml/mistralai_Mistral-7B-Instruct-v0.3-int4",
         repo_id="EmbeddedLLM/mistral-7b-instruct-v0.3-onnx",
@@ -367,7 +359,6 @@ def deploy_model(engine_type, model_name, port_number):
             "--port",
             f"{port_number}",
             "--served_model_name",
-            # 'phi3-mini-int4'
             model_name,
         ]
     )
