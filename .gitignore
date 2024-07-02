@@ -9,3 +9,5 @@ test_phi3*
 
 scripts/*.ps1
 scripts/*.sh
+**/dist
+**/build
