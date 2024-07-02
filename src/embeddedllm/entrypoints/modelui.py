@@ -42,9 +42,6 @@ class Config(BaseSettings):
 
 
 config = Config()
-import subprocess
-
-from pydantic import BaseModel, Field
 
 
 class DeployedModel(BaseModel):
@@ -74,6 +71,14 @@ dml_model_dict_list = {
         repo_id="microsoft/Phi-3-mini-4k-instruct-onnx",
         model_name="Phi-3-mini-4k-instruct-onnx",
         subfolder="directml/directml-int4-awq-block-128",
+        repo_type="model",
+        context_length=4096,
+    ),
+    "EmbeddedLLM/Phi-3-mini-4k-instruct-062024-onnx": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-4k-instruct-062024-onnx/tree/main/onnx/directml/Phi-3-mini-4k-instruct-062024-int4",
+        repo_id="EmbeddedLLM/Phi-3-mini-4k-instruct-062024-onnx",
+        model_name="Phi-3-mini-4k-instruct-062024-onnx",
+        subfolder="onnx/directml/Phi-3-mini-4k-instruct-062024-int4",
         repo_type="model",
         context_length=4096,
     ),
@@ -433,7 +438,7 @@ def main():
             <p style="font-size: 24px; font-weight: bold; color: #007bff;">Backend: {backend}</p>
         </div>
         """
-        big_block = gr.HTML(html_content)
+        gr.HTML(html_content)
 
         with gr.Accordion("See More Model Details", open=False):
             model_info_pandas_frame = gr.Dataframe(value=None)

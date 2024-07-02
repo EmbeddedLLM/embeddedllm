@@ -28,6 +28,7 @@ Easiest way to launch OpenAI API Compatible Server on Windows, Linux and MacOS
 | Llama-2-13b-chat | 13B | 4096 | [EmbeddedLLM/llama-2-13b-chat-int4-onnx-directml](https://huggingface.co/EmbeddedLLM/llama-2-13b-chat-int4-onnx-directml) |
 | Llama-3-8b-chat | 8B | 8192 | [EmbeddedLLM/mistral-7b-instruct-v0.3-onnx](https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx) |
 | Mistral-7b-v0.3-instruct | 7B | 32768 | [EmbeddedLLM/mistral-7b-instruct-v0.3-onnx](https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx) |
+| Phi-3-mini-4k-instruct-062024 | 3.8B | 4096 | [EmbeddedLLM/Phi-3-mini-4k-instruct-062024-onnx](https://huggingface.co/EmbeddedLLM/Phi-3-mini-4k-instruct-062024-onnx/tree/main/onnx/directml/Phi-3-mini-4k-instruct-062024-int4) |
 | Phi3-mini-4k-instruct | 3.8B | 4096 | [microsoft/Phi-3-mini-4k-instruct-onnx](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-onnx) |
 | Phi3-mini-128k-instruct | 3.8B | 128k | [microsoft/Phi-3-mini-128k-instruct-onnx](https://huggingface.co/microsoft/Phi-3-mini-128k-instruct-onnx) |
 | Phi3-medium-4k-instruct | 17B | 4096 | [microsoft/Phi-3-medium-4k-instruct-onnx-directml](https://huggingface.co/microsoft/Phi-3-medium-4k-instruct-onnx-directml) |
@@ -64,6 +65,9 @@ Easiest way to launch OpenAI API Compatible Server on Windows, Linux and MacOS
      - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml, webui]`
      - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu, webui]`
      - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda, webui]`
+
+**Note**
+1. If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
 
 ### Launch OpenAI API Compatible Server
 
@@ -102,6 +106,11 @@ You can find out the disk space required to download the model in the UI.
   ![Model Management UI](asset/ellm_modelui.png)
 
 
+## Compile OpenAI-API Compatible Server into Windows Executable
+1. Install `embeddedllm`.
+2. Install PyInstaller: `pip install pyinstaller`.
+3. Compile Windows Executable: `pyinstaller .\ellm_api_server.spec`.
+4. You can find the executable in the `dist\ellm_api_server`.
 
 ## Acknowledgements
 
