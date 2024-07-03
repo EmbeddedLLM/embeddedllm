@@ -13,4 +13,4 @@ transformers
 uvicorn
 filetype~=1.2.0
 Pillow~=10.3.0
-torchvision~=0.18.1
+torchvision

@@ -1,7 +1,6 @@
 # EmbeddedLLM
 
-Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)).
-Easiest way to launch OpenAI API Compatible Server on Windows, Linux and MacOS
+Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). Easiest way to launch OpenAI API Compatible Server on Windows, Linux and MacOS
 
 | Support matrix        | Supported now                                       | Under Development | On the roadmap |
 | --------------------- | --------------------------------------------------- | ----------------- | -------------- |
@@ -35,8 +34,7 @@ Easiest way to launch OpenAI API Compatible Server on Windows, Linux and MacOS
 | Phi3-medium-128k-instruct | 17B | 128k | [microsoft/Phi-3-medium-128k-instruct-onnx-directml](https://huggingface.co/microsoft/Phi-3-medium-128k-instruct-onnx-directml) |
 | Openchat-3.6-8b | 8B | 8192 | [EmbeddedLLM/openchat-3.6-8b-20240522-onnx](https://huggingface.co/EmbeddedLLM/openchat-3.6-8b-20240522-onnx) |
 | Yi-1.5-6b-chat | 6B | 32k | [EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-onnx](https://huggingface.co/EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-onnx) |
-| Phi-3-vision-128k-instruct | | 128k | [EmbeddedLLM/Phi-3-vision-128k-instruct-onnx](https://huggingface.co/EmbeddedLLM/Phi-3-vision-128k-instruct-onnx/tree/main/onnx/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4) |
-
+| Phi-3-vision-128k-instruct |  | 128k | [EmbeddedLLM/Phi-3-vision-128k-instruct-onnx](https://huggingface.co/EmbeddedLLM/Phi-3-vision-128k-instruct-onnx/tree/main/onnx/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4) |
 
 ## Getting Started
 
@@ -46,10 +44,13 @@ Easiest way to launch OpenAI API Compatible Server on Windows, Linux and MacOS
 
 **Windows**
 
-1. Install embeddedllm package. `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
+1. **XPU**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate llm`.
+
+2. Install embeddedllm package. `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
    - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml]`
    - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu]`
    - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]`
+   - **XPU:** `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu]`
    - **With Web UI**:
      - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml, webui]`
      - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu, webui]`
@@ -57,7 +58,9 @@ Easiest way to launch OpenAI API Compatible Server on Windows, Linux and MacOS
 
 **Linux**
 
-1. Install embeddedllm package. `ELLM_TARGET_DEVICE='directml' pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
+1. **XPU**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate llm`.
+
+2. Install embeddedllm package. `ELLM_TARGET_DEVICE='directml' pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
    - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml]`
    - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu]`
    - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]`
@@ -67,6 +70,7 @@ Easiest way to launch OpenAI API Compatible Server on Windows, Linux and MacOS
      - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda, webui]`
 
 **Note**
+
 1. If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
 
 ### Launch OpenAI API Compatible Server
@@ -95,18 +99,18 @@ options:
 
 1. `ellm_chatbot --port 7788 --host localhost --server_port <ellm_server_port> --server_host localhost`.
 
-  ![Chatbot Web UI](asset/ellm_chatbot_vid.webp)
+![Chatbot Web UI](asset/ellm_chatbot_vid.webp)
 
 ## Launch Model Management UI
-It is an interface that allows you to download and deploy OpenAI API compatible server.
-You can find out the disk space required to download the model in the UI.
+
+It is an interface that allows you to download and deploy OpenAI API compatible server. You can find out the disk space required to download the model in the UI.
 
 1. `ellm_modelui --port 6678`
 
-  ![Model Management UI](asset/ellm_modelui.png)
-
+![Model Management UI](asset/ellm_modelui.png)
 
 ## Compile OpenAI-API Compatible Server into Windows Executable
+
 1. Install `embeddedllm`.
 2. Install PyInstaller: `pip install pyinstaller`.
 3. Compile Windows Executable: `pyinstaller .\ellm_api_server.spec`.

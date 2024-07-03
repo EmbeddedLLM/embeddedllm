@@ -11,3 +11,4 @@ scripts/*.ps1
 scripts/*.sh
 **/dist
 **/build
+*.log

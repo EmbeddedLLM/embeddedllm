@@ -42,6 +42,10 @@ def _is_cuda() -> bool:
     return ELLM_TARGET_DEVICE == "cuda"
 
 
+def _is_xpu() -> bool:
+    return ELLM_TARGET_DEVICE == "xpu"
+
+
 def get_path(*filepath) -> str:
     return os.path.join(ROOT_DIR, *filepath)
 
@@ -79,6 +83,9 @@ def get_requirements() -> List[str]:
         requirements = _read_requirements("requirements-cuda.txt")
     elif _is_cpu():
         requirements = _read_requirements("requirements-cpu.txt")
+    elif _is_xpu():
+        requirements = []
+    #     requirements = _read_requirements("requirements-xpu.txt")
     else:
         raise ValueError("Unsupported platform, please use CUDA, ROCm, Neuron, or CPU.")
     return requirements
@@ -93,6 +100,8 @@ def get_ellm_version() -> str:
         version += "+cuda"
     elif _is_cpu():
         version += "+cpu"
+    elif _is_xpu():
+        version += "+xpu"
     else:
         raise RuntimeError("Unknown runtime environment")
 
@@ -132,9 +141,11 @@ setup(
         "lint": _read_requirements("requirements-lint.txt"),
         "webui": _read_requirements("requirements-webui.txt"),
         "cuda": ["onnxruntime-genai-cuda==0.3.0rc2"],
+        "xpu": ["ipex-llm[xpu]"],
     },
     dependency_links=[
-        "https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-genai/pypi/simple/"
+        "https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-genai/pypi/simple/",
+        "https://pytorch-extension.intel.com/release-whl/stable/xpu/us/",
     ],
     entry_points={
         "console_scripts": [

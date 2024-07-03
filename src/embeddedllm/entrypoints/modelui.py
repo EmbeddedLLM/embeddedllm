@@ -420,7 +420,7 @@ def download_model(engine_type, model_name):
 
 def main():
     with gr.Blocks(title="EmbeddedLLM Chatbot", theme="freddyaboulton/dracula_revamped") as demo:
-        big_block = gr.HTML(
+        gr.HTML(
             """
         <div style="height: 100%; width: 100%; font-size: 24px; text-align: center;">Embedded LLM Engine</div>
         """
