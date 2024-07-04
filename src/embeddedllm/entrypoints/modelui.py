@@ -20,7 +20,7 @@ def get_embeddedllm_backend():
         version = importlib.metadata.version("embeddedllm")
 
         # Use regex to extract the backend
-        match = re.search(r"\+(directml|cpu|cuda)$", version)
+        match = re.search(r"\+(directml|cpu|cuda|ipex)$", version)
 
         if match:
             backend = match.group(1)

@@ -11,6 +11,7 @@ from loguru import logger
 from embeddedllm.inputs import PromptInputs
 from embeddedllm.protocol import CompletionOutput, RequestOutput
 from embeddedllm.sampling_params import SamplingParams
+import os
 
 
 class EmbeddedLLMEngine:
@@ -23,6 +24,8 @@ class EmbeddedLLMEngine:
         if self.backend == "ipex":
             from embeddedllm.backend.ipex_engine import IpexEngine
 
+            if self.device == "xpu":
+                os.environ["SYCL_CACHE_PERSISTENT"] = "1"
             self.engine = IpexEngine(self.model_path, self.vision, self.device)
             logger.info(f"Initializing xpu backend: IpexEngine")
         elif self.backend == "directml":

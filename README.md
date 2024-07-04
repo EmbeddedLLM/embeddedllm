@@ -7,7 +7,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 | Model architectures   | Gemma <br/> Llama \* <br/> Mistral + <br/>Phi <br/> |                   |                |
 | Platform              | Linux <br/> Windows                                 |                   |                |
 | Architecture          | x86 <br/> x64 <br/>                                 | Arm64             |                |
-| Hardware Acceleration | CUDA<br/>DirectML<br/>OpenVINO(Ipex)                | QNN <br/> ROCm    |                |
+| Hardware Acceleration | CUDA<br/>DirectML<br/>IpexLLM                       | QNN <br/> ROCm    | OpenVINO       |
 
 \* The Llama model architecture supports similar model families such as CodeLlama, Vicuna, Yi, and more.
 
@@ -17,6 +17,17 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 
 - [2024/06] Support Phi-3 (mini, small, medium), Phi-3-Vision-Mini, Llama-2, Llama-3, Gemma (v1), Mistral v0.3, Starling-LM, Yi-1.5.
 - [2024/06] Support vision/chat inference on iGPU, APU, CPU and CUDA.
+
+## Table Content
+
+- [Supported Models](#supported-models-quick-start)
+- [Getting Started](#getting-started)
+  - [Installation From Source](#installation)
+  - [Launch OpenAI API Compatible Server](#launch-openai-api-compatible-server)
+  - [Launch Chatbot Web UI](#launch-chatbot-web-ui)
+  - [Launch Model Management UI](#launch-model-management-ui)
+- [Compile OpenAI-API Compatible Server into Windows Executable](#compile-openai-api-compatible-server-into-windows-executable)
+- [Acknowledgements](#acknowledgements)
 
 ## Supported Models (Quick Start)
 
@@ -42,79 +53,80 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 
 #### From Source
 
-**Windows**
+- **Windows**
 
-1. Custom Setup:
+  1. Custom Setup:
 
-- **XPU**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate llm`.
-- **DirectML**: If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
+  - **XPU**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate llm`.
+  - **DirectML**: If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
 
-2. Install embeddedllm package. `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
-   - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml]`
-   - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu]`
-   - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]`
-   - **XPU:** `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu]`
-   - **With Web UI**:
-     - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml,webui]`
-     - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu,webui]`
-     - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda,webui]`
-     - **XPU:** `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu,webui]`
+  2. Install embeddedllm package. `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
 
-**Linux**
 
-1. Custom Setup:
+      - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml]`
+      - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu]`
+      - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]`
+      - **XPU:** `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu]`
+      - **With Web UI**:
+        - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml,webui]`
+        - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu,webui]`
+        - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda,webui]`
+        - **XPU:** `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu,webui]`
 
-- **XPU**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate llm`.
-- **DirectML**: If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
+- **Linux**
 
-2. Install embeddedllm package. `ELLM_TARGET_DEVICE='directml' pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
-   - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml]`
-   - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu]`
-   - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]`
-   - **XPU:** `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu]`
-   - **With Web UI**:
-     - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml,webui]`
-     - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu,webui]`
-     - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda,webui]`
-     - **XPU:** `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu,webui]`
+  1. Custom Setup:
 
-**Note**
+  - **XPU**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate llm`.
+  - **DirectML**: If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
+
+  2. Install embeddedllm package. `ELLM_TARGET_DEVICE='directml' pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
+
+
+      - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml]`
+      - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu]`
+      - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]`
+      - **XPU:** `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu]`
+      - **With Web UI**:
+        - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml,webui]`
+        - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu,webui]`
+        - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda,webui]`
+        - **XPU:** `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu,webui]`
 
 ### Launch OpenAI API Compatible Server
 
-```
-usage: ellm_server.exe [-h] [--port int] [--host str] [--response_role str] [--uvicorn_log_level str]
-                       [--served_model_name str] [--model_path str] [--vision bool]
+1. Custom Setup:
 
-options:
-  -h, --help            show this help message and exit
-  --port int            Server port. (default: 6979)
-  --host str            Server host. (default: 0.0.0.0)
-  --response_role str   Server response role. (default: assistant)
-  --uvicorn_log_level str
-                        Uvicorn logging level. `debug`, `info`, `trace`, `warning`, `critical` (default: info)
-  --served_model_name str
-                        Model name. (default: phi3-mini-int4)
-  --model_path str      Path to model weights. (required)
-  --vision bool         Enable vision capability, only if model supports vision input. (default: False)
-```
+   - **Ipex**
 
-1. `ellm_server --model_path <path/to/model/weight>`.
-2. Example code to connect to the api server can be found in `scripts/python`.
+     - For **Intel iGPU**:
 
-## Launch Chatbot Web UI
+       ```cmd
+       set SYCL_CACHE_PERSISTENT=1
+       set BIGDL_LLM_XMX_DISABLED=1
+       ```
 
-1. `ellm_chatbot --port 7788 --host localhost --server_port <ellm_server_port> --server_host localhost`.
+     - For **Intel Arc™ A-Series Graphics**:
+       ```cmd
+       set SYCL_CACHE_PERSISTENT=1
+       ```
 
-![Chatbot Web UI](asset/ellm_chatbot_vid.webp)
+2. `ellm_server --model_path <path/to/model/weight>`.
+3. Example code to connect to the api server can be found in `scripts/python`. **Note:** To find out more of the supported arguments. `ellm_server --help`.
 
-## Launch Model Management UI
+### Launch Chatbot Web UI
+
+1.  `ellm_chatbot --port 7788 --host localhost --server_port <ellm_server_port> --server_host localhost`. **Note:** To find out more of the supported arguments. `ellm_chatbot --help`.
+
+        ![Chatbot Web UI](asset/ellm_chatbot_vid.webp)
+
+### Launch Model Management UI
 
 It is an interface that allows you to download and deploy OpenAI API compatible server. You can find out the disk space required to download the model in the UI.
 
-1. `ellm_modelui --port 6678`
+1.  `ellm_modelui --port 6678`. **Note:** To find out more of the supported arguments. `ellm_modelui --help`.
 
-![Model Management UI](asset/ellm_modelui.png)
+        ![Model Management UI](asset/ellm_modelui.png)
 
 ## Compile OpenAI-API Compatible Server into Windows Executable
 
@@ -125,4 +137,4 @@ It is an interface that allows you to download and deploy OpenAI API compatible 
 
 ## Acknowledgements
 
-- Excellent open-source projects: [vLLM](https://github.com/vllm-project/vllm.git), [onnxruntime-genai](https://github.com/microsoft/onnxruntime-genai.git) and many others.
+- Excellent open-source projects: [vLLM](https://github.com/vllm-project/vllm.git), [onnxruntime-genai](https://github.com/microsoft/onnxruntime-genai.git), [Ipex-LLM](https://github.com/intel-analytics/ipex-llm/tree/main) and many others.
