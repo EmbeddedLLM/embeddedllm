@@ -1,6 +1,11 @@
 # Model Powered by Ipex-LLM
 
-## Supported Models
+## Verified Models
+| Model | Model Link |
+| --- | --- |
+| Phi-3 | [link](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct) |
+
+## Supported Models by Ipex-LLM
 
 | Model | Model Link |
 | --- | --- |
