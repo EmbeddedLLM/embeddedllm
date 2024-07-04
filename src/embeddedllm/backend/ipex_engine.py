@@ -51,7 +51,7 @@ class IpexEngine(BaseLLMEngine):
 
         self.model = AutoModelForCausalLM.from_pretrained(
             model_path, trust_remote_code=True, load_in_4bit=True
-        ).to(device)
+        ).to(self.device)
         logger.info("Model loaded")
         self.tokenizer_stream = TextIteratorStreamer(
             self.tokenizer, skip_prompt=True, skip_special_tokens=True
@@ -300,6 +300,7 @@ class IpexEngine(BaseLLMEngine):
         }
         generation_options["max_length"] = self.max_model_len
         generation_options["input_ids"] = input_tokens.clone().to(self.device)
+        print(generation_options)
 
         token_list: List[int] = []
         output_text: str = ""
@@ -391,46 +392,46 @@ class IpexEngine(BaseLLMEngine):
             #     )
             #     yield error_output
         else:
-            try:
-                token_list = self.model.generate(**generation_options)[0]
+            # try:
+            token_list = self.model.generate(**generation_options)[0]
+            print(token_list[input_token_length:])
+            output_text = self.tokenizer.decode(
+                token_list[input_token_length:], skip_special_tokens=True
+            )
 
-                output_text = self.tokenizer.decode(
-                    token_list[input_token_length:], skip_special_tokens=True
-                )
+            yield RequestOutput(
+                request_id=request_id,
+                prompt=prompt_text,
+                prompt_token_ids=input_tokens[0],
+                finished=True,
+                outputs=[
+                    CompletionOutput(
+                        index=0,
+                        text=output_text,
+                        token_ids=token_list,
+                        cumulative_logprob=-1.0,
+                        finish_reason="stop",
+                    )
+                ],
+            )
 
-                yield RequestOutput(
-                    request_id=request_id,
-                    prompt=prompt_text,
-                    prompt_token_ids=input_tokens[0],
-                    finished=True,
-                    outputs=[
-                        CompletionOutput(
-                            index=0,
-                            text=output_text,
-                            token_ids=token_list,
-                            cumulative_logprob=-1.0,
-                            finish_reason="stop",
-                        )
-                    ],
-                )
+            # except Exception as e:
+            #     logger.error(str(e))
 
-            except Exception as e:
-                logger.error(str(e))
-
-                error_output = RequestOutput(
-                    prompt=prompt_text,
-                    prompt_token_ids=input_tokens[0],
-                    finished=True,
-                    request_id=request_id,
-                    outputs=[
-                        CompletionOutput(
-                            index=0,
-                            text=output_text,
-                            token_ids=token_list,
-                            cumulative_logprob=-1.0,
-                            finish_reason="error",
-                            stop_reason=str(e),
-                        )
-                    ],
-                )
-                yield error_output
+            #     error_output = RequestOutput(
+            #         prompt=prompt_text,
+            #         prompt_token_ids=input_tokens[0],
+            #         finished=True,
+            #         request_id=request_id,
+            #         outputs=[
+            #             CompletionOutput(
+            #                 index=0,
+            #                 text=output_text,
+            #                 token_ids=token_list,
+            #                 cumulative_logprob=-1.0,
+            #                 finish_reason="error",
+            #                 stop_reason=str(e),
+            #             )
+            #         ],
+            #     )
+            #     yield error_output

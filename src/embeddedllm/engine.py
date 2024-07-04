@@ -12,6 +12,17 @@ from embeddedllm.inputs import PromptInputs
 from embeddedllm.protocol import CompletionOutput, RequestOutput
 from embeddedllm.sampling_params import SamplingParams
 import os
+import platform
+
+
+def get_processor_type():
+    processor_info = platform.processor()
+    if "intel" in processor_info.lower():
+        return "Intel"
+    elif "amd" in processor_info.lower():
+        return "AMD"
+    else:
+        return "Unknown processor brand"
 
 
 class EmbeddedLLMEngine:
@@ -24,17 +35,39 @@ class EmbeddedLLMEngine:
         if self.backend == "ipex":
             from embeddedllm.backend.ipex_engine import IpexEngine
 
+            assert (
+                self.device == "xpu"
+            ), f"To run ipex on cpu, set `backend` to `cpu` and `device` to `cpu`. EmbeddedLLMEngine load model with ipex on Intel processor."
             if self.device == "xpu":
                 os.environ["SYCL_CACHE_PERSISTENT"] = "1"
             self.engine = IpexEngine(self.model_path, self.vision, self.device)
-            logger.info(f"Initializing xpu backend: IpexEngine")
-        elif self.backend == "directml":
+            logger.info(f"Initializing ipex-llm backend (XPU): IpexEngine")
+        elif self.backend in ("directml", "cuda"):
             from embeddedllm.backend.onnxruntime_engine import OnnxruntimeEngine
 
             self.engine = OnnxruntimeEngine(self.model_path, self.vision, self.device)
-            logger.info(f"Initializing xpu backend: OnnxruntimeEngine")
+            logger.info(f"Initializing onnxruntime backend ({backend.upper()}): OnnxruntimeEngine")
+        elif self.backend == "cpu":
+            assert self.device == "cpu", f"To run `cpu` backend, `device` must be `cpu`."
+            processor = get_processor_type()
+            if processor == "Intel":
+                from embeddedllm.backend.ipex_engine import IpexEngine
+
+                self.engine = IpexEngine(self.model_path, self.vision, self.device)
+                logger.info(f"Initializing ipex-llm backend (CPU): IpexEngine")
+            elif processor == "AMD":
+                from embeddedllm.backend.onnxruntime_engine import OnnxruntimeEngine
+
+                self.engine = OnnxruntimeEngine(self.model_path, self.vision, self.device)
+                logger.info(f"Initializing onnxruntime backend (CPU): OnnxruntimeEngine")
+
+            else:
+                raise SystemError(f"Only support `intel` and `amd` CPU processor.")
+
         else:
-            raise ValueError(f"EmbeddedLLMEngine only supports `xpu` and `directml`.")
+            raise ValueError(
+                f"EmbeddedLLMEngine only supports `cpu`, `ipex`, `cuda` and `directml`."
+            )
         self.tokenizer = self.engine.tokenizer
 
     async def generate_vision(
