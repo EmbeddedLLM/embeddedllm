@@ -21,6 +21,8 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 ## Table Content
 
 - [Supported Models](#supported-models-quick-start)
+  - [Onnxruntime Models](./docs/model/onnxruntime_models.md)
+  - [Ipex-LLM Models](./docs/model/ipex_models.md)
 - [Getting Started](#getting-started)
   - [Installation From Source](#installation)
   - [Launch OpenAI API Compatible Server](#launch-openai-api-compatible-server)
@@ -62,16 +64,15 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 
   2. Install embeddedllm package. `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
 
-
-      - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml]`
-      - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu]`
-      - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]`
-      - **XPU:** `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu]`
-      - **With Web UI**:
-        - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml,webui]`
-        - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu,webui]`
-        - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda,webui]`
-        - **XPU:** `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu,webui]`
+     - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml]`
+     - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu]`
+     - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]`
+     - **XPU:** `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu]`
+     - **With Web UI**:
+       - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml,webui]`
+       - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu,webui]`
+       - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda,webui]`
+       - **XPU:** `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu,webui]`
 
 - **Linux**
 
@@ -82,16 +83,15 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 
   2. Install embeddedllm package. `ELLM_TARGET_DEVICE='directml' pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
 
-
-      - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml]`
-      - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu]`
-      - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]`
-      - **XPU:** `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu]`
-      - **With Web UI**:
-        - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml,webui]`
-        - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu,webui]`
-        - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda,webui]`
-        - **XPU:** `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu,webui]`
+     - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml]`
+     - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu]`
+     - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]`
+     - **XPU:** `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu]`
+     - **With Web UI**:
+       - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml,webui]`
+       - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu,webui]`
+       - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda,webui]`
+       - **XPU:** `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu,webui]`
 
 ### Launch OpenAI API Compatible Server
 
