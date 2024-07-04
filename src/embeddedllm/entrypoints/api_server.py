@@ -24,6 +24,10 @@ class Config(BaseSettings):
     )
     port: int = Field(default=6979, description="Server port.")
     host: str = Field(default="0.0.0.0", description="Server host.")
+    device: str = Field(default="cpu", description="Device type: `cpu`, `xpu`")
+    backend: str = Field(
+        default="directml", description="Backend engine: `cpu`, `ipex` and `directml`"
+    )
     response_role: str = Field(default="assistant", description="Server response role.")
     uvicorn_log_level: str = Field(
         default="info",
@@ -91,6 +95,8 @@ def main():
     openai_chat_server = OpenAPIChatServer(
         config.model_path,
         served_model_name=config.served_model_name,
+        device=config.device,
+        backend=config.backend,
         response_role=config.response_role,
         vision=config.vision,
     )

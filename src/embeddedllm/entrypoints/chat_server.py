@@ -64,6 +64,8 @@ class OpenAPIChatServer:
         self,
         model_path: str,
         served_model_name: str = "",
+        device: str = "xpu",
+        backend: str = "ipex",
         response_role: str = "assistant",
         chat_template: Optional[str] = None,
         vision: Optional[bool] = False,
@@ -71,9 +73,13 @@ class OpenAPIChatServer:
         self.initialized_flag = False
         self.model_path = model_path
         self.served_model_name = served_model_name
+        self.device = device
+        self.backend = backend
         self.response_role = response_role
         self.vision = vision
-        self.engine = EmbeddedLLMEngine(model_path, vision=self.vision)
+        self.engine = EmbeddedLLMEngine(
+            model_path, vision=self.vision, device=self.device, backend=self.backend
+        )
 
         self.tokenizer = self.engine.tokenizer
         self._load_chat_template(chat_template)

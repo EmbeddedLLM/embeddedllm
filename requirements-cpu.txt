@@ -1,2 +1,4 @@
+torch==2.3.1
+torchvision~=0.18.1
 onnxruntime
 onnxruntime-genai==0.3.0rc2

@@ -20,7 +20,7 @@ def get_embeddedllm_backend():
         version = importlib.metadata.version("embeddedllm")
 
         # Use regex to extract the backend
-        match = re.search(r"\+(directml|cpu|cuda)$", version)
+        match = re.search(r"\+(directml|cpu|cuda|ipex)$", version)
 
         if match:
             backend = match.group(1)
@@ -420,7 +420,7 @@ def download_model(engine_type, model_name):
 
 def main():
     with gr.Blocks(title="EmbeddedLLM Chatbot", theme="freddyaboulton/dracula_revamped") as demo:
-        big_block = gr.HTML(
+        gr.HTML(
             """
         <div style="height: 100%; width: 100%; font-size: 24px; text-align: center;">Embedded LLM Engine</div>
         """
