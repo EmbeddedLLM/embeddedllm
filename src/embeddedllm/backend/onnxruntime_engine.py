@@ -337,7 +337,7 @@ class OnnxruntimeEngine(BaseLLMEngine):
 
                         output = RequestOutput(
                             request_id=request_id,
-                            prompt=inputs,
+                            prompt=prompt_text,
                             prompt_token_ids=input_tokens,
                             finished=False,
                             outputs=[
@@ -357,7 +357,7 @@ class OnnxruntimeEngine(BaseLLMEngine):
 
                     yield RequestOutput(
                         request_id=request_id,
-                        prompt=inputs,
+                        prompt=prompt_text,
                         prompt_token_ids=input_tokens,
                         finished=True,
                         outputs=[
@@ -381,7 +381,7 @@ class OnnxruntimeEngine(BaseLLMEngine):
                     logger.error(str(e))
 
                     error_output = RequestOutput(
-                        prompt=inputs,
+                        prompt=prompt_text,
                         prompt_token_ids=input_tokens,
                         finished=True,
                         request_id=request_id,
@@ -405,7 +405,7 @@ class OnnxruntimeEngine(BaseLLMEngine):
 
                 yield RequestOutput(
                     request_id=request_id,
-                    prompt=inputs,
+                    prompt=prompt_text,
                     prompt_token_ids=input_tokens,
                     finished=True,
                     outputs=[
@@ -423,7 +423,7 @@ class OnnxruntimeEngine(BaseLLMEngine):
                 logger.error(str(e))
 
                 error_output = RequestOutput(
-                    prompt=inputs,
+                    prompt=prompt_text,
                     prompt_token_ids=input_tokens,
                     finished=True,
                     request_id=request_id,

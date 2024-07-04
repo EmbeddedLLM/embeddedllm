@@ -299,12 +299,12 @@ class IpexEngine(BaseLLMEngine):
             if hasattr(sampling_params, name)
         }
         generation_options["max_length"] = self.max_model_len
-        generation_options["streamer"] = self.tokenizer_stream
         generation_options["input_ids"] = input_tokens.clone().to(self.device)
 
         token_list: List[int] = []
         output_text: str = ""
         if stream:
+            generation_options["streamer"] = self.tokenizer_stream
             if RECORD_TIMING:
                 started_timestamp = time.time()
                 first_token_timestamp = 0
@@ -330,7 +330,7 @@ class IpexEngine(BaseLLMEngine):
 
                     output = RequestOutput(
                         request_id=request_id,
-                        prompt=inputs,
+                        prompt=prompt_text,
                         prompt_token_ids=input_tokens[0],
                         finished=False,
                         outputs=[
@@ -350,7 +350,7 @@ class IpexEngine(BaseLLMEngine):
 
                 yield RequestOutput(
                     request_id=request_id,
-                    prompt=inputs,
+                    prompt=prompt_text,
                     prompt_token_ids=input_tokens[0],
                     finished=True,
                     outputs=[
@@ -391,4 +391,46 @@ class IpexEngine(BaseLLMEngine):
             #     )
             #     yield error_output
         else:
-            raise NotImplementedError("`generate` non-streaming mode yet to be implemented.")
+            try:
+                token_list = self.model.generate(**generation_options)[0]
+
+                output_text = self.tokenizer.decode(
+                    token_list[input_token_length:], skip_special_tokens=True
+                )
+
+                yield RequestOutput(
+                    request_id=request_id,
+                    prompt=prompt_text,
+                    prompt_token_ids=input_tokens[0],
+                    finished=True,
+                    outputs=[
+                        CompletionOutput(
+                            index=0,
+                            text=output_text,
+                            token_ids=token_list,
+                            cumulative_logprob=-1.0,
+                            finish_reason="stop",
+                        )
+                    ],
+                )
+
+            except Exception as e:
+                logger.error(str(e))
+
+                error_output = RequestOutput(
+                    prompt=prompt_text,
+                    prompt_token_ids=input_tokens[0],
+                    finished=True,
+                    request_id=request_id,
+                    outputs=[
+                        CompletionOutput(
+                            index=0,
+                            text=output_text,
+                            token_ids=token_list,
+                            cumulative_logprob=-1.0,
+                            finish_reason="error",
+                            stop_reason=str(e),
+                        )
+                    ],
+                )
+                yield error_output
