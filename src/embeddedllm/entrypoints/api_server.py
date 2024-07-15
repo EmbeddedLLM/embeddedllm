@@ -1,3 +1,6 @@
+import os
+os.environ["SYCL_CACHE_PERSISTENT"] = "1"
+os.environ["BIGDL_LLM_XMX_DISABLED"] = "1"
 from http import HTTPStatus
 
 from fastapi import FastAPI, Request
@@ -79,6 +82,8 @@ async def create_chat_completion(request: ChatCompletionRequest, raw_request: Re
 def main():
     global openai_chat_server
     import os
+    os.environ["SYCL_CACHE_PERSISTENT"] = "1"
+    os.environ["BIGDL_LLM_XMX_DISABLED"] = "1"
 
     import uvicorn
 

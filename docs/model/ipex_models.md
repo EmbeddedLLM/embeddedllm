@@ -63,3 +63,15 @@
 | MiniCPM | [link](https://huggingface.co/openbmb/MiniCPM-2B-sft-bf16) |
 
 Resources from: https://github.com/intel-analytics/ipex-llm/
+
+
+## Qwen2 Model (Experimental)
+1. Upgrade `transformers`. `pip install --upgrade transformers~=4.42.3`.
+2. Edit `lib\site-packages\transformers\models\qwen2\modeling_qwen2.py`.
+3. Change `from transformers.models.qwen2.modeling_qwen2 import _prepare_4d_causal_attention_mask` to
+`from transformers.modeling_attn_mask_utils import _prepare_4d_causal_attention_mask`.
+
+### FAQ
+```
+ImportError: cannot import name '_prepare_4d_causal_attention_mask' from 'transformers.models.qwen2.modeling_qwen2' (C:\Users\hpintel\anaconda3\envs\ellmipex\lib\site-packages\transformers\models\qwen2\modeling_qwen2.py)
+```

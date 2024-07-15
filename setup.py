@@ -42,8 +42,8 @@ def _is_cuda() -> bool:
     return ELLM_TARGET_DEVICE == "cuda"
 
 
-def _is_xpu() -> bool:
-    return ELLM_TARGET_DEVICE == "xpu"
+def _is_ipex() -> bool:
+    return ELLM_TARGET_DEVICE == "ipex"
 
 
 def get_path(*filepath) -> str:
@@ -83,9 +83,9 @@ def get_requirements() -> List[str]:
         requirements = _read_requirements("requirements-cuda.txt")
     elif _is_cpu():
         requirements = _read_requirements("requirements-cpu.txt")
-    elif _is_xpu():
+    elif _is_ipex():
         requirements = []
-    #     requirements = _read_requirements("requirements-xpu.txt")
+    #     requirements = _read_requirements("requirements-ipex.txt")
     else:
         raise ValueError("Unsupported platform, please use CUDA, ROCm, Neuron, or CPU.")
     return requirements
@@ -100,8 +100,8 @@ def get_ellm_version() -> str:
         version += "+cuda"
     elif _is_cpu():
         version += "+cpu"
-    elif _is_xpu():
-        version += "+xpu"
+    elif _is_ipex():
+        version += "+ipex"
     else:
         raise RuntimeError("Unknown runtime environment")
 
@@ -141,7 +141,7 @@ setup(
         "lint": _read_requirements("requirements-lint.txt"),
         "webui": _read_requirements("requirements-webui.txt"),
         "cuda": ["onnxruntime-genai-cuda==0.3.0rc2"],
-        "xpu": ["ipex-llm[xpu]"],
+        "ipex": ["ipex-llm[xpu]==2.1.0b20240702"],
     },
     dependency_links=[
         "https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-genai/pypi/simple/",
