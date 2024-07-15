@@ -53,45 +53,52 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 
 ### Installation
 
+#### Prerequisites
+  1. **Install Git**
+     - Download and install Git from [git-scm.com](https://git-scm.com/).
+    
+  2. **Install Miniconda/Anaconda**
+   - Download and install Miniconda or Anaconda from [docs.anaconda.com](https://docs.anaconda.com/anaconda/install/).
+
 #### From Source
 
-- **Windows**
+- **Clone the EmbeddedLLM Repository**
+  1. **Clone the EmbeddedLLM Repository**
+     1. **Open Git Bash**
+   - Navigate to your `Documents` folder:
+     ```sh
+     cd ~/Documents
+     ```
 
-  1. Custom Setup:
+  2. **Initialize Git and Clone the Repository**
+   - Initialize a new Git repository:
+     ```sh
+     git init
+     ```
+   - Clone the EmbeddedLLM repository:
+     ```sh
+     git clone https://github.com/EmbeddedLLM/embeddedllm.git
+     ```
 
-  - **XPU**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate llm`.
-  - **DirectML**: If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
+- **Setup Conda Environment**
 
-  2. Install embeddedllm package. `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
-
-     - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml]`
-     - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu]`
-     - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]`
-     - **XPU:** `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu]`
-     - **With Web UI**:
-       - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml,webui]`
-       - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu,webui]`
-       - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda,webui]`
-       - **XPU:** `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu,webui]`
-
-- **Linux**
-
-  1. Custom Setup:
-
-  - **XPU**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate llm`.
-  - **DirectML**: If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
-
-  2. Install embeddedllm package. `ELLM_TARGET_DEVICE='directml' pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
-
-     - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml]`
-     - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu]`
-     - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]`
-     - **XPU:** `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu]`
-     - **With Web UI**:
-       - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml,webui]`
-       - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu,webui]`
-       - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda,webui]`
-       - **XPU:** `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu,webui]`
+| Step | Windows | Linux |
+|------|---------|-------|
+| **1. Custom Setup** | | |
+| **Create and Activate Conda Environment** | `conda create -n ellm python=3.10 libuv`<br>`conda activate ellm` | `conda create -n ellm python=3.10 libuv`<br>`conda activate ellm` |
+| **Additional Dependencies for DirectML** | `conda install conda-forge::vs2015_runtime` | `conda install conda-forge::vs2015_runtime` |
+| **2. Install EmbeddedLLM Package** | | |
+| **Set Target Device and Install Package** | | |
+| **DirectML** | `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml]` | `ELLM_TARGET_DEVICE='directml' pip install -e .[directml]` |
+| **CPU** | `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu]` | `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu]` |
+| **CUDA** | `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]` | `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]` |
+| **XPU** | `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu]` | `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu]` |
+| **With Web UI** | | |
+| **DirectML** | `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml,webui]` | `ELLM_TARGET_DEVICE='directml' pip install -e .[directml,webui]` |
+| **CPU** | `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu,webui]` | `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu,webui]` |
+| **CUDA** | `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda,webui]` | `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda,webui]` |
+| **XPU** | `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu,webui]` | `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu,webui]` |
+  
 
 ### Launch OpenAI API Compatible Server
 
