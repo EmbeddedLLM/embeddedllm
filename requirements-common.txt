@@ -8,7 +8,6 @@ pydantic-core~=2.18.4
 pydantic~=2.7.4
 loguru
 openai
-torch
 transformers
 uvicorn
 filetype~=1.2.0

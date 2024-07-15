@@ -29,8 +29,6 @@ backend = get_embeddedllm_backend()
 
 binaries_list = []
 
-print(Path("src/owl/entrypoints/api.py").resolve().as_posix())
-
 datas_list = [
     (Path("src/embeddedllm/entrypoints/api_server.py").resolve().as_posix(), 'embeddedllm/entrypoints')
 ]

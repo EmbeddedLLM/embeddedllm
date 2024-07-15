@@ -59,7 +59,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 
   1. Custom Setup:
 
-  - **IPEX(XPU)**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate llm`.
+  - **IPEX(XPU)**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate ellm`.
   - **DirectML**: If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
 
   2. Install embeddedllm package. `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
@@ -67,18 +67,18 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
      - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml]`
      - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu]`
      - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]`
-     - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; pip install -e .[ipex]`
+     - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop`
      - **With Web UI**:
        - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml,webui]`
        - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu,webui]`
        - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda,webui]`
-       - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; pip install -e .[ipex,webui]`
+       - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop; pip install -r requirements-webui.txt`
 
 - **Linux**
 
   1. Custom Setup:
 
-  - **IPEX(XPU)**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate llm`.
+  - **IPEX(XPU)**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate ellm`.
   - **DirectML**: If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
 
   2. Install embeddedllm package. `ELLM_TARGET_DEVICE='directml' pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
@@ -86,12 +86,12 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
      - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml]`
      - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu]`
      - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]`
-     - **IPEX:** `ELLM_TARGET_DEVICE='ipex' pip install -e .[ipex]`
+     - **IPEX:** `ELLM_TARGET_DEVICE='ipex' python setup.py develop`
      - **With Web UI**:
        - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml,webui]`
        - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu,webui]`
        - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda,webui]`
-       - **IPEX:** `ELLM_TARGET_DEVICE='ipex' pip install -e .[ipex,webui]`
+       - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop; pip install -r requirements-webui.txt`
 
 ### Launch OpenAI API Compatible Server
 
@@ -131,7 +131,7 @@ It is an interface that allows you to download and deploy OpenAI API compatible 
 ## Compile OpenAI-API Compatible Server into Windows Executable
 
 1. Install `embeddedllm`.
-2. Install PyInstaller: `pip install pyinstaller`.
+2. Install PyInstaller: `pip install pyinstaller==6.9.0`.
 3. Compile Windows Executable: `pyinstaller .\ellm_api_server.spec`.
 4. You can find the executable in the `dist\ellm_api_server`.
 
