@@ -23,6 +23,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 - [Supported Models](#supported-models-quick-start)
   - [Onnxruntime Models](./docs/model/onnxruntime_models.md)
   - [Ipex-LLM Models](./docs/model/ipex_models.md)
+- [Benchmark](#benchmark)
 - [Getting Started](#getting-started)
   - [Installation From Source](#installation)
   - [Launch OpenAI API Compatible Server](#launch-openai-api-compatible-server)
@@ -48,6 +49,264 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 | Openchat-3.6-8b | 8B | 8192 | [EmbeddedLLM/openchat-3.6-8b-20240522-onnx](https://huggingface.co/EmbeddedLLM/openchat-3.6-8b-20240522-onnx) |
 | Yi-1.5-6b-chat | 6B | 32k | [EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-onnx](https://huggingface.co/EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-onnx) |
 | Phi-3-vision-128k-instruct |  | 128k | [EmbeddedLLM/Phi-3-vision-128k-instruct-onnx](https://huggingface.co/EmbeddedLLM/Phi-3-vision-128k-instruct-onnx/tree/main/onnx/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4) |
+
+## Benchmark
+
+### <HARDWARE NAME> <GPU>
+
+#### Llama-3-8b-chat
+
+| Token In | Token Out | In / sec | Out / sec |
+| --- | --- | --- | --- |
+| 128 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+
+#### Phi-3-mini-4k-instruct-062024
+
+| Token In | Token Out | In / sec | Out / sec |
+| --- | --- | --- | --- |
+| 128 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+
+#### Phi3-mini-4k-instruct
+
+| Token In | Token Out | In / sec | Out / sec |
+| --- | --- | --- | --- |
+| 128 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+
+#### Phi3-mini-128k-instruct
+
+| Token In | Token Out | In / sec | Out / sec |
+| --- | --- | --- | --- |
+| 128 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+
+#### Phi3-medium-4k-instruct
+
+| Token In | Token Out | In / sec | Out / sec |
+| --- | --- | --- | --- |
+| 128 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+
+#### Phi3-medium-128k-instruct
+
+| Token In | Token Out | In / sec | Out / sec |
+| --- | --- | --- | --- |
+| 128 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+
+### <HARDWARE NAME> <GPU>
+
+#### Llama-3-8b-chat
+
+| Token In | Token Out | In / sec | Out / sec |
+| --- | --- | --- | --- |
+| 128 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+
+#### Phi-3-mini-4k-instruct-062024
+
+| Token In | Token Out | In / sec | Out / sec |
+| --- | --- | --- | --- |
+| 128 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+
+#### Phi3-mini-4k-instruct
+
+| Token In | Token Out | In / sec | Out / sec |
+| --- | --- | --- | --- |
+| 128 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+
+#### Phi3-mini-128k-instruct
+
+| Token In | Token Out | In / sec | Out / sec |
+| --- | --- | --- | --- |
+| 128 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+
+#### Phi3-medium-4k-instruct
+
+| Token In | Token Out | In / sec | Out / sec |
+| --- | --- | --- | --- |
+| 128 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+
+#### Phi3-medium-128k-instruct
+
+| Token In | Token Out | In / sec | Out / sec |
+| --- | --- | --- | --- |
+| 128 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 128 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 256 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 512 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 128 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 256 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 512 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
+| 1024 | 1024 | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> | std: <br> mean: <br> min: <br> 1% tile: <br> 25% tile: <br> 50% tile: <br> 75% tile: <br> 99% tile: <br> max: <br> |
 
 ## Getting Started
 
