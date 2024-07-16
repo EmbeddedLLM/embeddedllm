@@ -71,7 +71,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 2. **Download Model using Huggingface CLI**
    - Download the model:
      ```sh
-     huggingface-cli download EmbeddedLLM/<MODEL>-onnx --include="onnx/directml/*" --local-dir .\<MODEL>
+     huggingface-cli download <PROVIDER>/<MODEL>-onnx --include="onnx/directml/*" --local-dir .\<MODEL>
      ```
      
 For more information on steps to download the model, kindly refer to [Supported Models](#supported-models-quick-start).
