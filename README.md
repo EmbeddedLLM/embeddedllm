@@ -210,7 +210,8 @@ For more information on steps to download the model, kindly refer to [Supported 
 
 | Step | Windows | Linux |
 |------|---------|-------|
-| **Create and Activate<br>Conda Environment** | `conda create -n ellm python=3.10 libuv`<br>`conda activate ellm` | `conda create -n ellm python=3.10 libuv`<br>`conda activate ellm` |
+| **Create and Activate<br>Conda Environment** | `conda create -n ellm python=3.10`<br>`conda activate ellm` | `conda create -n ellm python=3.10`<br>`conda activate ellm` |
+| **Step <br>for XPU** | `conda create -n ellm python=3.10 libuv`<br>`conda activate ellm` | `conda create -n ellm python=3.10 libuv`<br>`conda activate ellm` |
 | **Additional Dependencies<br>for DirectML** | `conda install conda-forge::vs2015_runtime` | `conda install conda-forge::vs2015_runtime` |
 
 
