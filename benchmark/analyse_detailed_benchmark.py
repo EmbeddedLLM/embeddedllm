@@ -37,10 +37,10 @@ def print_statistics(data, label):
 
 def main():
     model_path = "C:\\Users\\ryzzai\\Documents\\Phi-3-mini-4k-instruct-062024-int4\\onnx\\directml\\Phi-3-mini-4k-instruct-062024-int4"
-    model_name = os.path.basename(model_path)
+    model_name = "Phi-3-mini-4k-instruct-062024-int4"
     backend = "cpu"
     input_token_length = 128
-    output_token_length = 128
+    output_token_length = 512
     log_file = f'profile_model_timing_{os.path.basename(model_path)}_{input_token_length}_{output_token_length}_{backend}.log'
 
     average_tps_list, prompt_tokens_per_second_list, new_tokens_per_second_list = extract_data_from_log(log_file)
