@@ -12,7 +12,11 @@ from embeddedllm import engine
 from embeddedllm import sampling_params
 
 async def benchmark(input_token_length, output_token_length, model_path, model_name, backend):
-    log_file = f'profile_model_timing_{model_name}_{input_token_length}_{output_token_length}.log'
+    # Create the profile_model_timing directory if it doesn't exist
+    log_dir = "profile_model_timing"
+    os.makedirs(log_dir, exist_ok=True)
+
+    log_file = os.path.join(log_dir, f'profile_model_timing_{model_name}_{input_token_length}_{output_token_length}.log')
 
     # Check if the log file already exists
     if not os.path.exists(log_file):
@@ -32,7 +36,7 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
     # Open the file and read its contents into the variable
     with open(file_path, 'r') as file:
         prompt_text = file.read()
-        
+
     input_tokens = model.tokenizer.encode(prompt_text)[:input_token_length-1]
     input_text = model.tokenizer.decode(input_tokens)
     print(input_text)
@@ -93,11 +97,11 @@ for input_token_length in token_ins:
             asyncio.run(benchmark(input_token_length, output_token_length, model_path, model_name, backend))
 
 # Define the specific combinations that need to be produced
-# specific_combinations = [(128, 1024), (256, 1024)]
+# specific_combinations = [(256, 1024)]
 
 # for input_token_length in token_ins:
 #     for output_token_length in token_outs:
 #         if (input_token_length, output_token_length) in specific_combinations:
 #             for i in range(50):
 #                 # Run the async function using asyncio.run()
-#                 asyncio.run(benchmark(input_token_length, output_token_length, model_path, model_name, backend))
+                asyncio.run(benchmark(input_token_length, output_token_length, model_path, model_name, backend))
