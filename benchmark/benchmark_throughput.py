@@ -23,11 +23,13 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
 
     model.tokenizer.chat_template = "{% for message in messages %}{{  message['content']}}{% endfor %}"  # Override
 
+    prompt_text = """
+    
+    """
     # Define the path to the file
     file_path = "sampleText.txt"
 
     # Open the file and read its contents into the variable
-    prompt_text = ""
     with open(file_path, 'r') as file:
         prompt_text = file.read()
         
@@ -79,8 +81,8 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
 token_ins = [128, 256, 512, 1024]
 token_outs = [128, 256, 512, 1024]
 
-model_path ="C:\\Users\\ryzzai\\Documents\\Phi-3-mini-4k-instruct-062024-int4\\onnx\\directml\\Phi-3-mini-4k-instruct-062024-int4"
-model_name = "Phi-3-mini-4k-instruct-062024-int4-directml"
+model_path ="C:\\Users\\ryzzai\\Documents\\Phi-3-mini-4k-instruct-onnx-directml\\Phi-3-mini-4k-instruct-onnx-directml"
+model_name = "Phi-3-mini-4k-instruct-onnx-directml"
 
 backend = "directml"
 
