@@ -55,17 +55,19 @@ def calculate_statistics(data):
     return stats
 
 def main():
-    model_path = "C:\\Users\\ryzzai\\Documents\\Phi-3-mini-4k-instruct-062024-int4\\onnx\\directml\\Phi-3-mini-4k-instruct-062024-int4"
-    model_name = "Phi-3-mini-4k-instruct-062024-int4-directml"
-    backend = "directml"
+    model_name = "Phi-3-mini-4k-instruct-062024-onnx-directml"
     token_ins = [128, 256, 512, 1024]
     token_outs = [128, 256, 512, 1024]
 
     statistics = []
 
+    # Create the profile_model_timing directory if it doesn't exist
+    log_dir = "profile_model_timing"
+    os.makedirs(log_dir, exist_ok=True)
+
     for input_token_length in token_ins:
         for output_token_length in token_outs:
-            log_file = f'profile_model_timing_{os.path.basename(model_path)}_{input_token_length}_{output_token_length}.log'
+            log_file = os.path.join(log_dir, f'profile_model_timing_{model_name}_{input_token_length}_{output_token_length}.log')
             average_tps_list, prompt_tokens_per_second_list, new_tokens_per_second_list, error_count = extract_data_from_log(log_file)
 
             if not average_tps_list and not prompt_tokens_per_second_list and not new_tokens_per_second_list:
@@ -103,8 +105,12 @@ def main():
     ]
     df = pd.DataFrame(statistics, columns=columns)
 
+    # Create the statistics directory if it doesn't exist
+    output_dir = "statistics"
+    os.makedirs(output_dir, exist_ok=True)
+
     # Write to Excel
-    output_file = f"{model_name}_statistics.xlsx"
+    output_file = os.path.join(output_dir, f"{model_name}_statistics.xlsx")
     df.to_excel(output_file, index=False)
     print(f"Statistics written to {output_file}")
 
