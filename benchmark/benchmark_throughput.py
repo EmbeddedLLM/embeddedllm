@@ -11,14 +11,14 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 from embeddedllm import engine
 from embeddedllm import sampling_params
 
-async def benchmark(input_token_length, output_token_length, model_path, backend):
-    log_file = f'profile_model_timing_{os.path.basename(model_path)}_{input_token_length}_{output_token_length}_{backend}.log'
+async def benchmark(input_token_length, output_token_length, model_path, model_name, backend):
+    log_file = f'profile_model_timing_{model_name}_{input_token_length}_{output_token_length}_{backend}.log'
 
     # Check if the log file already exists
     if not os.path.exists(log_file):
         logger.add(log_file)
 
-    model = engine.EmbeddedLLMEngine(model_path, vision=False, device="cpu", backend=backend)
+    model = engine.EmbeddedLLMEngine(model_path, vision=False, device="AMD", backend=backend)
     logger.info(f"Model: {model_name}")
 
     model.tokenizer.chat_template = "{% for message in messages %}{{  message['content']}}{% endfor %}"  # Override
@@ -164,13 +164,13 @@ async def benchmark(input_token_length, output_token_length, model_path, backend
 token_ins = [128, 256, 512]
 token_outs = [128, 256, 512]
 
-model_path ="C:\\Users\\ryzzai\\Documents\\Phi-3-mini-4k-instruct-062024-int4\\onnx\\directml\\Phi-3-mini-4k-instruct-062024-int4"
-model_name = os.path.basename(model_path)
+model_path ="C:\\Users\\ryzzai\\Documents\\Phi-3-mini-4k-instruct-onnx\\directml\\directml-int4-awq-block-128"
+model_name = "Phi-3-mini-4k-instruct-onnx"
 
-backend = "cpu"
+backend = "directml"
 
 for input_token_length in token_ins:
     for output_token_length in token_outs:
         for i in range(50):
             # Run the async function using asyncio.run()
-            asyncio.run(benchmark(input_token_length, output_token_length, model_path, backend))
+            asyncio.run(benchmark(input_token_length, output_token_length, model_path, model_name, backend))
