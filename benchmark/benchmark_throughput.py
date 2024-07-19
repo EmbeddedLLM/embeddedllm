@@ -18,17 +18,26 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
 
     log_file = os.path.join(log_dir, f'profile_model_timing_{model_name}_{input_token_length}_{output_token_length}.log')
 
-    # Check if the log file already exists
-    if not os.path.exists(log_file):
-        logger.add(log_file)
+    # Skip the process if the log file already exists
+    if os.path.exists(log_file):
+        print(f"Log file {log_file} already exists. Skipping...")
+        return
 
-    model = engine.EmbeddedLLMEngine(model_path, vision=False, device="AMD", backend=backend)
+    # Add the log file to the logger (it will append if the file already exists)
+    logger.add(log_file, mode='a')
+
+    # need different parameter for cpu and directml
+    if backend == "cpu":
+        model = engine.EmbeddedLLMEngine(model_path, vision=False, device="cpu", backend=backend)
+    else:
+        model = engine.EmbeddedLLMEngine(model_path, vision=False, device="AMD", backend=backend)
+
     logger.info(f"Model: {model_name}")
 
     model.tokenizer.chat_template = "{% for message in messages %}{{  message['content']}}{% endfor %}"  # Override
 
     prompt_text = """
-    
+
     """
     # Define the path to the file
     file_path = "sampleText.txt"
@@ -81,27 +90,31 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
     average_tps = (input_token_length + output_token_length) / total_time_taken
     logger.info("Average tps: "+ str(average_tps))
 
+    # Remove the logger to close the log file
+    logger.remove()
 
-token_ins = [128, 256, 512, 1024]
-token_outs = [128, 256, 512, 1024]
+token_ins = [128, 256]
+token_outs = [128, 256]
 
-model_path ="C:\\Users\\ryzzai\\Documents\\Phi-3-mini-4k-instruct-onnx-directml\\Phi-3-mini-4k-instruct-onnx-directml"
-model_name = "Phi-3-mini-4k-instruct-onnx-directml"
+model_names = [
+            "Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32",
+            "Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4"
+            ]
 
-backend = "directml"
+model_paths = [
+    "C:\\Users\\hpamd\\Documents\\Phi-3-mini-4k-instruct-onnx\\cpu_and_mobile\\cpu-int4-rtn-block-32",
+    "C:\\Users\\hpamd\\Documents\\Phi-3-mini-4k-instruct-onnx\\cpu_and_mobile\\cpu-int4-rtn-block-32-acc-level-4"
+]
 
-for input_token_length in token_ins:
-    for output_token_length in token_outs:
-        for i in range(50):
-            # Run the async function using asyncio.run()
-            asyncio.run(benchmark(input_token_length, output_token_length, model_path, model_name, backend))
+# choose cpu or directml for backend
+backend = "cpu"
+# backend = "directml"
 
-# Define the specific combinations that need to be produced
-# specific_combinations = [(256, 1024)]
-
-# for input_token_length in token_ins:
-#     for output_token_length in token_outs:
-#         if (input_token_length, output_token_length) in specific_combinations:
-#             for i in range(50):
-#                 # Run the async function using asyncio.run()
+for j in range(len(model_names)):
+    model_name = model_names[j]
+    model_path = model_paths[j]
+    for input_token_length in token_ins:
+        for output_token_length in token_outs:
+            for i in range(50):
+                # Run the async function using asyncio.run()
                 asyncio.run(benchmark(input_token_length, output_token_length, model_path, model_name, backend))
