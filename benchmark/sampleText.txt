@@ -1,0 +1,81 @@
+A large language model (LLM) is a computational model notable for its ability to achieve general-purpose language generation and other natural language processing tasks such as classification. Based on language models, LLMs acquire these abilities by learning statistical relationships from vast amounts of text during a computationally intensive self-supervised and semi-supervised training process.[1] LLMs can be used for text generation, a form of generative AI, by taking an input text and repeatedly predicting the next token or word.[2]
+
+LLMs are artificial neural networks that utilize the transformer architecture, invented in 2017. The largest and most capable LLMs, as of June 2024, are built with a decoder-only transformer-based architecture, which enables efficient processing and generation of large-scale text data.
+
+Historically, up to 2020, fine-tuning was the primary method used to adapt a model for specific tasks. However, larger models such as GPT-3 have demonstrated the ability to achieve similar results through prompt engineering, which involves crafting specific input prompts to guide the model's responses.[3] These models acquire knowledge about syntax, semantics, and ontologies[4] inherent in human language corpora, but they also inherit inaccuracies and biases present in the data they are trained on.[5]
+
+Some notable LLMs are OpenAI's GPT series of models (e.g., GPT-3.5 and GPT-4, used in ChatGPT and Microsoft Copilot), Google's Gemini (the latter of which is currently used in the chatbot of the same name), Meta's LLaMA family of models, Anthropic's Claude models, and Mistral AI's models.
+
+History
+Before 2017, there were a few language models that were large as compared to capacities then available. In the 1990s, the IBM alignment models pioneered statistical language modelling. A smoothed n-gram model in 2001 trained on 0.3 billion words achieved then-SOTA perplexity.[6] In the 2000s, as Internet use became prevalent, some researchers constructed Internet-scale language datasets ("web as corpus"[7]), upon which they trained statistical language models.[8][9] In 2009, in most language processing tasks, statistical language models dominated over symbolic language models, as they can usefully ingest large datasets.[10]
+
+After neural networks became dominant in image processing around 2012, they were applied to language modelling as well. Google converted its translation service to Neural Machine Translation in 2016. As it was before Transformers, it was done by seq2seq deep LSTM networks.
+
+
+An illustration of main components of the transformer model from the original paper, where layers were normalized after (instead of before) multiheaded attention
+At the 2017 NeurIPS conference, Google researchers introduced the transformer architecture in their landmark paper "Attention Is All You Need". This paper's goal was to improve upon 2014 Seq2seq technology,[11] and was based mainly on the attention mechanism developed by Bahdanau et al. in 2014.[12] The following year in 2018, BERT was introduced and quickly became "ubiquitous".[13] Though the original transformer has both encoder and decoder blocks, BERT is an encoder-only model.
+
+Although decoder-only GPT-1 was introduced in 2018, it was GPT-2 in 2019 that caught widespread attention because OpenAI at first deemed it too powerful to release publicly, out of fear of malicious use.[14] GPT-3 in 2020 went a step further and as of 2024 is available only via API with no offering of downloading the model to execute locally. But it was the 2022 consumer-facing browser-based ChatGPT that captured the imaginations of the general population and caused some media hype and online buzz.[15] The 2023 GPT-4 was praised for its increased accuracy and as a "holy grail" for its multimodal capabilities.[16] OpenAI did not reveal high-level architecture and the number of parameters of GPT-4.
+
+Competing language models have for the most part been attempting to equal the GPT series, at least in terms of number of parameters.[17]
+
+Since 2022, source-available models have been gaining popularity, especially at first with BLOOM and LLaMA, though both have restrictions on the field of use. Mistral AI's models Mistral 7B and Mixtral 8x7b have the more permissive Apache License. As of June 2024, The Instruction fine tuned variant of the Llama 3 70 billion parameter model is the most powerful open LLM according to the LMSYS Chatbot Arena Leaderboard, being more powerful than GPT-3.5 but not as powerful as GPT-4.[18]
+
+As of 2024, the largest and most capable models are all based on the Transformer architecture. Some recent implementations are based on other architectures, such as recurrent neural network variants and Mamba (a state space model).[19][20][21]
+
+Dataset preprocessing
+See also: List of datasets for machine-learning research § Internet
+Probabilistic tokenization
+Because machine learning algorithms process numbers rather than text, the text must be converted to numbers. In the first step, a vocabulary is decided upon, then integer indexes are arbitrarily but uniquely assigned to each vocabulary entry, and finally, an embedding is associated to the integer index. Algorithms include byte-pair encoding and WordPiece.
+
+Probabilistic tokenization also compresses the datasets. Because LLMs generally require input to be an array that is not jagged, the shorter texts must be "padded" until they match the length of the longest one. How many tokens are, on average, needed per word depends on the language of the dataset.[22][23]
+
+BPE
+Using a modification of byte-pair encoding, in the first step, all unique characters (including blanks and punctuation marks) are treated as an initial set of n-grams (i.e. initial set of uni-grams). Successively the most frequent pair of adjacent characters is merged into a bi-gram and all instances of the pair are replaced by it. All occurrences of adjacent pairs of (previously merged) n-grams that most frequently occur together are then again merged into even lengthier n-gram repeatedly until a vocabulary of prescribed size is obtained (in case of GPT-3, the size is 50257).[24] Token vocabulary consists of integers, spanning from zero up to the size of the token vocabulary. New words can always be interpreted as combinations of the tokens and the initial-set uni-grams.[25]
+
+A token vocabulary based on the frequencies extracted from mainly English corpora uses as few tokens as possible for an average English word. An average word in another language encoded by such an English-optimized tokenizer is however split into suboptimal amount of tokens. GPT-2 tokenizer can use up to 15 times more tokens per word for some languages, for example for the Shan language from Myanmar. Even more widespread languages such as Portuguese and German have "a premium of 50%" compared to English.[26]
+
+For example, here is how tokenizer used by GPT-3 (Legacy) split the following sentence tokenizer: texts -> series of numerical "tokens".
+
+token	izer	:	 texts	 ->	series	 of	 numerical	 "	t	ok	ens	"
+Dataset cleaning
+Main article: Data cleansing
+In the context of training LLMs, datasets are typically cleaned by removing toxic passages from the dataset, discarding low-quality data, and de-duplication.[27] Cleaned datasets can increase training efficiency and lead to improved downstream performance.[28][29] A trained LLM can be used to clean datasets for training a further LLM.[30]
+
+With the increasing proportion of LLM-generated content on the web, data cleaning in the future may include filtering out such content. LLM-generated content can pose a problem if the content is similar to human text (making filtering difficult) but of lower quality (degrading performance of models trained on it).[31]
+
+Synthetic data
+Main article: Synthetic data
+Training of largest language models might need more linguistic data than naturally available, or that the naturally occurring data is of insufficient quality. In these cases, synthetic data might be used. Microsoft's Phi series of LLMs is trained on textbook-like data generated by another LLM.[32]
+
+Training and architecture
+See also: Fine-tuning (machine learning)
+Reinforcement learning from human feedback (RLHF)
+Reinforcement learning from human feedback (RLHF) through algorithms, such as proximal policy optimization, is used to further fine-tune a model based on a dataset of human preferences.[33]
+
+Instruction tuning
+Using "self-instruct" approaches, LLMs have been able to bootstrap correct responses, replacing any naive responses, starting from human-generated corrections of a few cases. For example, in the instruction "Write an essay about the main themes represented in Hamlet," an initial naive completion might be "If you submit the essay after March 17, your grade will be reduced by 10% for each day of delay," based on the frequency of this textual sequence in the corpus.[34]
+
+Mixture of experts
+Main article: Mixture of experts
+The largest LLM may be too expensive to train and use directly. For such models, mixture of experts (MoE) can be applied, a line of research pursued by Google researchers since 2017 to train models reaching up to 1 trillion parameters.[35][36][37]
+
+Prompt engineering, attention mechanism, and context window
+See also: Prompt engineering and Attention (machine learning)
+Most results previously achievable only by (costly) fine-tuning, can be achieved through prompt engineering, although limited to the scope of a single conversation (more precisely, limited to the scope of a context window).[38]
+
+
+When each head calculates, according to its own criteria, how much other tokens are relevant for the "it_" token, note that the second attention head, represented by the second column, is focusing most on the first two rows, i.e. the tokens "The" and "animal", while the third column is focusing most on the bottom two rows, i.e. on "tired", which has been tokenized into two tokens.[39]
+In order to find out which tokens are relevant to each other within the scope of the context window, the attention mechanism calculates "soft" weights for each token, more precisely for its embedding, by using multiple attention heads, each with its own "relevance" for calculating its own soft weights. For example, the small (i.e. 117M parameter sized) GPT-2 model has had twelve attention heads and a context window of only 1k token.[40] In its medium version it has 345M parameters and contains 24 layers, each with 12 attention heads. For the training with gradient descent a batch size of 512 was utilized.[25]
+
+The largest models, such as Google's Gemini 1.5, presented in February 2024, can have a context window sized up to 1 million (context window of 10 million was also "successfully tested").[41] Other models with large context windows includes Anthropic's Claude 2.1, with a context window of up to 200k tokens.[42] Note that this maximum refers to the number of input tokens and that the maximum number of output tokens differs from the input and is often smaller. For example, the GPT-4 Turbo model has a maximum output of 4096 tokens.[43]
+
+Length of a conversation that the model can take into account when generating its next answer is limited by the size of a context window, as well. If the length of a conversation, for example with ChatGPT, is longer than its context window, only the parts inside the context window are taken into account when generating the next answer, or the model needs to apply some algorithm to summarize the too distant parts of conversation.
+
+The shortcomings of making a context window larger include higher computational cost and possibly diluting the focus on local context, while making it smaller can cause a model to miss an important long-range dependency. Balancing them are a matter of experimentation and domain-specific considerations.
+
+A model may be pre-trained either to predict how the segment continues, or what is missing in the segment, given a segment from its training dataset.[44] It can be either
+
+autoregressive (i.e. predicting how the segment continues, the way GPTs do it): for example given a segment "I like to eat", the model predicts "ice cream", or "sushi".
+"masked" (i.e. filling in the parts missing from the segment, the way "BERT"[45] does it): for example, given a segment "I like to [__] [__] cream", the model predicts that "eat" and "ice" are missing.
+Models may be trained on auxiliary tasks which test their understanding of the data distribution, such as Next Sentence Prediction (NSP), in which pairs of sentences are presented and the model must predict whether they appear consecutively in the training corpus.[45] During training, regularization loss is also used to stabilize training. However regularization loss is usually not used during testing and evaluation.
