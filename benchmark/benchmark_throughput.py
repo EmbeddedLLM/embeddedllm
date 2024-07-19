@@ -18,11 +18,6 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
 
     log_file = os.path.join(log_dir, f'profile_model_timing_{model_name}_{input_token_length}_{output_token_length}.log')
 
-    # Skip the process if the log file already exists
-    if os.path.exists(log_file):
-        print(f"Log file {log_file} already exists. Skipping...")
-        return
-
     # Add the log file to the logger (it will append if the file already exists)
     logger.add(log_file, mode='a')
 
@@ -93,8 +88,10 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
     # Remove the logger to close the log file
     logger.remove()
 
-token_ins = [128, 256]
-token_outs = [128, 256]
+token_in_out = [
+                (128,256),
+                (128,512)
+                ]
 
 model_names = [
             "Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32",
@@ -113,8 +110,7 @@ backend = "cpu"
 for j in range(len(model_names)):
     model_name = model_names[j]
     model_path = model_paths[j]
-    for input_token_length in token_ins:
-        for output_token_length in token_outs:
-            for i in range(50):
-                # Run the async function using asyncio.run()
-                asyncio.run(benchmark(input_token_length, output_token_length, model_path, model_name, backend))
+    for input_token_length, output_token_length in token_in_out:
+        for i in range(50):
+            # Run the async function using asyncio.run()
+            asyncio.run(benchmark(input_token_length, output_token_length, model_path, model_name, backend))
