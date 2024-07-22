@@ -3,10 +3,7 @@ import os
 
 # Define the models and token lengths
 model_names = [
-    "Phi-3-mini-4k-instruct-062024-int4-directml",
-    "Phi-3-mini-128k-instruct-onnx-directml",
-    "Phi-3-medium-4k-instruct-onnx-directml",
-    "Phi-3-medium-128k-instruct-onnx-directml",
+
 ]
 
 model_paths = [
@@ -14,12 +11,12 @@ model_paths = [
 ]
 
 token_in_out = [
-    # (128, 128),
-    # (128, 256),
+    (128, 128),
+    (128, 256),
     (128, 512),
     (128, 1024),
-    # (256, 128),
-    # (256, 256),
+    (256, 128),
+    (256, 256),
     (256, 512),
     (256, 1024),
     (512, 128),
@@ -31,7 +28,7 @@ token_in_out = [
 backend = "directml"
 
 # Number of loops
-loop_count = 50
+loop_count = 20
 
 # Path to the ellm_benchmark.py script
 ellm_benchmark_script = "ellm_benchmark.py"
