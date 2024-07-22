@@ -68,9 +68,6 @@ def main():
     with open(file_path, 'r') as file:
         prompt_text = file.read()
 
-    PromptInputs = {
-        "prompt": prompt_text
-    }
 
     sampling_params_config = sampling_params.SamplingParams(
         max_tokens=args.token_out,
@@ -85,20 +82,24 @@ def main():
     # need different parameter for cpu and directml
     if args.backend == "cpu":
         model = engine.EmbeddedLLMEngine(args.model_path, vision=False, device="cpu", backend=args.backend)
+        input_tokens = model.tokenizer.encode(prompt_text)[:args.token_in-1]
     elif args.backend == "ipex":
         model = engine.EmbeddedLLMEngine(args.model_path, vision=False, device="xpu", backend=args.backend)
+        input_tokens = model.tokenizer.encode(prompt_text)[:args.token_in]
     else:
         model = engine.EmbeddedLLMEngine(args.model_path, vision=False, device="", backend=args.backend)
+        input_tokens = model.tokenizer.encode(prompt_text)[:args.token_in-1]
 
     model.tokenizer.chat_template = "{% for message in messages %}{{  message['content']}}{% endfor %}"  # Override
 
-    input_tokens = model.tokenizer.encode(prompt_text)[:args.token_in-1]
     input_text = model.tokenizer.decode(input_tokens)
     print(input_text)
     input_tokens = model.tokenizer.encode(input_text)
     print(len(input_tokens))
 
-    assert args.token_in-1 == len(input_tokens)
+    PromptInputs = {
+        "prompt": input_text
+    }
 
     for _ in range(args.loop_count):
         # Run the async function using asyncio.run()
