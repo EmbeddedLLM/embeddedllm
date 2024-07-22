@@ -10,10 +10,7 @@ model_names = [
 ]
 
 model_paths = [
-    "C:\\Users\\ryzzai\\Documents\\Phi-3-mini-4k-instruct-062024-int4-directml",
-    "C:\\Users\\ryzzai\\Documents\\Phi-3-mini-128k-instruct-onnx-directml\\Phi-3-mini-128k-instruct-onnx-directml",
-    "C:\\Users\\ryzzai\\Documents\\Phi-3-medium-4k-instruct-onnx-directml\\Phi-3-medium-4k-instruct-onnx-directml",
-    "C:\\Users\\ryzzai\\Documents\\Phi-3-medium-128k-instruct-onnx-directml\\Phi-3-medium-128k-instruct-onnx-directml",
+
 ]
 
 token_in_out = [
