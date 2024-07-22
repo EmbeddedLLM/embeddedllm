@@ -3,7 +3,16 @@ import os
 
 # Define the models and token lengths
 model_names = [
+    # "Phi-3-medium-128k-instruct-onnx-directml",
+    # "Phi-3-medium-4k-instruct-onnx-directml",
+    # "Phi-3-mini-128k-instruct-onnx-directml",
+    # "Phi-3-mini-4k-instruct-062024-int4-directml",
+    # "Phi-3-mini-4k-instruct-onnx-directml",
 
+    # "Phi-3-mini-4k-instruct-ipex",
+    # "Phi-3-mini-128k-instruct-ipex",
+    # "Phi-3-medium-4k-instruct-ipex",
+    # "Phi-3-medium-128k-instruct-ipex",
 ]
 
 model_paths = [
@@ -26,8 +35,8 @@ token_in_out = [
 ]
 
 # Choose backend
-# backend = "cpu"
-backend = "directml"
+backend = "ipex"
+# backend = "directml"
 
 # Number of loops
 loop_count = 20
@@ -37,16 +46,16 @@ ellm_benchmark_script = "ellm_benchmark.py"
 
 for model_name, model_path in zip(model_names, model_paths):
     for input_token_length, output_token_length in token_in_out:
-        for i in range(loop_count):
-            # Construct the command
-            command = [
-                "python", ellm_benchmark_script,
-                "--backend", backend,
-                "--model_name", model_name,
-                "--model_path", model_path,
-                "--token_in", str(input_token_length),
-                "--token_out", str(output_token_length)
-            ]
+        # Construct the command
+        command = [
+            "python", ellm_benchmark_script,
+            "--backend", backend,
+            "--model_name", model_name,
+            "--model_path", model_path,
+            "--token_in", str(input_token_length),
+            "--token_out", str(output_token_length),
+            "--loop_count", str(loop_count)
+        ]
 
-            # Execute the command
-            subprocess.run(command)
+        # Execute the command
+        subprocess.run(command)
