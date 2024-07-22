@@ -23,6 +23,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 - [Supported Models](#supported-models-quick-start)
   - [Onnxruntime Models](./docs/model/onnxruntime_models.md)
   - [Ipex-LLM Models](./docs/model/ipex_models.md)
+- [Benchmark](#benchmark)
 - [Getting Started](#getting-started)
   - [Installation From Source](#installation)
   - [Launch OpenAI API Compatible Server](#launch-openai-api-compatible-server)
@@ -38,7 +39,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 | Gemma-2b-Instruct v1 | 2B | 8192 | [EmbeddedLLM/gemma-2b-it-onnx](https://huggingface.co/EmbeddedLLM/gemma-2b-it-onnx) |
 | Llama-2-7b-chat | 7B | 4096 | [EmbeddedLLM/llama-2-7b-chat-int4-onnx-directml](https://huggingface.co/EmbeddedLLM/llama-2-7b-chat-int4-onnx-directml) |
 | Llama-2-13b-chat | 13B | 4096 | [EmbeddedLLM/llama-2-13b-chat-int4-onnx-directml](https://huggingface.co/EmbeddedLLM/llama-2-13b-chat-int4-onnx-directml) |
-| Llama-3-8b-chat | 8B | 8192 | [EmbeddedLLM/mistral-7b-instruct-v0.3-onnx](https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx) |
+| Llama-3-8b-chat | 8B | 8192 | [luweigen/Llama-3-8B-Instruct-int4-onnx-directml](https://huggingface.co/luweigen/Llama-3-8B-Instruct-int4-onnx-directml) |
 | Mistral-7b-v0.3-instruct | 7B | 32768 | [EmbeddedLLM/mistral-7b-instruct-v0.3-onnx](https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx) |
 | Phi-3-mini-4k-instruct-062024 | 3.8B | 4096 | [EmbeddedLLM/Phi-3-mini-4k-instruct-062024-onnx](https://huggingface.co/EmbeddedLLM/Phi-3-mini-4k-instruct-062024-onnx/tree/main/onnx/directml/Phi-3-mini-4k-instruct-062024-int4) |
 | Phi3-mini-4k-instruct | 3.8B | 4096 | [microsoft/Phi-3-mini-4k-instruct-onnx](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-onnx) |
@@ -49,49 +50,190 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 | Yi-1.5-6b-chat | 6B | 32k | [EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-onnx](https://huggingface.co/EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-onnx) |
 | Phi-3-vision-128k-instruct |  | 128k | [EmbeddedLLM/Phi-3-vision-128k-instruct-onnx](https://huggingface.co/EmbeddedLLM/Phi-3-vision-128k-instruct-onnx/tree/main/onnx/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4) |
 
+## Benchmark
+
+| Hardware | Model | Token In | Token Out | Token In / sec | Token Out / sec |
+| --- | --- | --- | --- | --- | --- |
+| AMD Ryzen 9 7940HS w/ Radeon 780M Graphics | Llama-3-8b-chat | 128 | 128 | std: <br> mean: | std: <br> mean: |
+||| 128 | 256 | std: <br> mean: | std: <br> mean: |
+||| 128 | 512 | std: <br> mean: | std: <br> mean: |
+||| 128 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 256 | 128 | std: <br> mean: | std: <br> mean: |
+||| 256 | 256 | std: <br> mean: | std: <br> mean: |
+||| 256 | 512 | std: <br> mean: | std: <br> mean: |
+||| 256 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 512 | 128 | std: <br> mean: | std: <br> mean: |
+||| 512 | 256 | std: <br> mean: | std: <br> mean: |
+||| 512 | 512 | std: <br> mean: | std: <br> mean: |
+||| 512 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 128 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 256 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 512 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 1024 | std: <br> mean: | std: <br> mean: |
+|||||||
+|| Phi-3-mini-4k-instruct-062024 | 128 | 128 | std: <br> mean: | std: <br> mean: |
+||| 128 | 256 | std: <br> mean: | std: <br> mean: |
+||| 128 | 512 | std: <br> mean: | std: <br> mean: |
+||| 128 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 256 | 128 | std: <br> mean: | std: <br> mean: |
+||| 256 | 256 | std: <br> mean: | std: <br> mean: |
+||| 256 | 512 | std: <br> mean: | std: <br> mean: |
+||| 256 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 512 | 128 | std: <br> mean: | std: <br> mean: |
+||| 512 | 256 | std: <br> mean: | std: <br> mean: |
+||| 512 | 512 | std: <br> mean: | std: <br> mean: |
+||| 512 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 128 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 256 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 512 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 1024 | std: <br> mean: | std: <br> mean: |
+|||||||
+|| Phi3-mini-4k-instruct | 128 | 128 | std: <br> mean: | std: <br> mean: |
+||| 128 | 256 | std: <br> mean: | std: <br> mean: |
+||| 128 | 512 | std: <br> mean: | std: <br> mean: |
+||| 128 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 256 | 128 | std: <br> mean: | std: <br> mean: |
+||| 256 | 256 | std: <br> mean: | std: <br> mean: |
+||| 256 | 512 | std: <br> mean: | std: <br> mean: |
+||| 256 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 512 | 128 | std: <br> mean: | std: <br> mean: |
+||| 512 | 256 | std: <br> mean: | std: <br> mean: |
+||| 512 | 512 | std: <br> mean: | std: <br> mean: |
+||| 512 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 128 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 256 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 512 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 1024 | std: <br> mean: | std: <br> mean: |
+|||||||
+|| Phi3-mini-128k-instruct | 128 | 128 | std: <br> mean: | std: <br> mean: |
+||| 128 | 256 | std: <br> mean: | std: <br> mean: |
+||| 128 | 512 | std: <br> mean: | std: <br> mean: |
+||| 128 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 256 | 128 | std: <br> mean: | std: <br> mean: |
+||| 256 | 256 | std: <br> mean: | std: <br> mean: |
+||| 256 | 512 | std: <br> mean: | std: <br> mean: |
+||| 256 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 512 | 128 | std: <br> mean: | std: <br> mean: |
+||| 512 | 256 | std: <br> mean: | std: <br> mean: |
+||| 512 | 512 | std: <br> mean: | std: <br> mean: |
+||| 512 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 128 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 256 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 512 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 1024 | std: <br> mean: | std: <br> mean: |
+|||||||
+|| Phi3-medium-4k-instruct | 128 | 128 | std: <br> mean: | std: <br> mean: |
+||| 128 | 256 | std: <br> mean: | std: <br> mean: |
+||| 128 | 512 | std: <br> mean: | std: <br> mean: |
+||| 128 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 256 | 128 | std: <br> mean: | std: <br> mean: |
+||| 256 | 256 | std: <br> mean: | std: <br> mean: |
+||| 256 | 512 | std: <br> mean: | std: <br> mean: |
+||| 256 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 512 | 128 | std: <br> mean: | std: <br> mean: |
+||| 512 | 256 | std: <br> mean: | std: <br> mean: |
+||| 512 | 512 | std: <br> mean: | std: <br> mean: |
+||| 512 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 128 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 256 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 512 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 1024 | std: <br> mean: | std: <br> mean: |
+|||||||
+|| Phi3-medium-128k-instruct | 128 | 128 | std: <br> mean: | std: <br> mean: |
+||| 128 | 256 | std: <br> mean: | std: <br> mean: |
+||| 128 | 512 | std: <br> mean: | std: <br> mean: |
+||| 128 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 256 | 128 | std: <br> mean: | std: <br> mean: |
+||| 256 | 256 | std: <br> mean: | std: <br> mean: |
+||| 256 | 512 | std: <br> mean: | std: <br> mean: |
+||| 256 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 512 | 128 | std: <br> mean: | std: <br> mean: |
+||| 512 | 256 | std: <br> mean: | std: <br> mean: |
+||| 512 | 512 | std: <br> mean: | std: <br> mean: |
+||| 512 | 1024 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 128 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 256 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 512 | std: <br> mean: | std: <br> mean: |
+||| 1024 | 1024 | std: <br> mean: | std: <br> mean: |
+|||||||
+
+
 ## Getting Started
 
 ### Installation
 
+#### Prerequisites
+  1. **Install Git**
+     - Download and install Git from [git-scm.com](https://git-scm.com/).
+    
+  2. **Install Miniconda/Anaconda**
+   - Download and install Miniconda or Anaconda from [docs.anaconda.com](https://docs.anaconda.com/anaconda/install/).
+
+#### Model Download
+
+1. **Install Huggingface Hub CLI**
+   - Install the CLI:
+     ```sh
+     pip install huggingface-hub[cli]
+     ```
+
+2. **Download Model using Huggingface CLI**
+   - Download the model:
+     ```sh
+     huggingface-cli download <PROVIDER>/<MODEL>-onnx --include="onnx/directml/*" --local-dir .\<MODEL>
+     ```
+     
+For more information on steps to download the model, kindly refer to [Supported Models](#supported-models-quick-start).
+
+
 #### From Source
+  1. **Clone the EmbeddedLLM Repository**
+     1. **Open Git Bash**
+   - Navigate to your `Documents` folder:
+     ```sh
+     cd ~/Documents
+     ```
 
-- **Windows**
+  2. **Initialize Git and Clone the Repository**
+   - Initialize a new Git repository:
+     ```sh
+     git init
+     ```
+   - Clone the EmbeddedLLM repository:
+     ```sh
+     git clone https://github.com/EmbeddedLLM/embeddedllm.git
+     ```
 
-  1. Custom Setup:
+#### Setup Conda Environment
 
-  - **IPEX(XPU)**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate ellm`.
-  - **DirectML**: If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
+  1. **Custom Setup**
 
-  2. Install embeddedllm package. `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
+| Step | Windows | Linux |
+|------|---------|-------|
+| **Create and Activate<br>Conda Environment** | `conda create -n ellm python=3.10 libuv`<br>`conda activate ellm` | `conda create -n ellm python=3.10 libuv`<br>`conda activate ellm` |
+| **Additional Dependencies<br>for DirectML** | `conda install conda-forge::vs2015_runtime` | `conda install conda-forge::vs2015_runtime` |
 
-     - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml]`
-     - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu]`
-     - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]`
-     - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop`
-     - **With Web UI**:
-       - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml,webui]`
-       - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu,webui]`
-       - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda,webui]`
-       - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop; pip install -r requirements-webui.txt`
 
-- **Linux**
+  2. **Install EmbeddedLLM Package** (Set Target Device and Install Package)
 
-  1. Custom Setup:
+  Without Web UI
 
-  - **IPEX(XPU)**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate ellm`.
-  - **DirectML**: If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
+| Step | Windows | Linux |
+|------|---------|-------|
+| **DirectML** | `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml]` | `ELLM_TARGET_DEVICE='directml' pip install -e .[directml]` |
+| **CPU** | `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu]` | `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu]` |
+| **CUDA** | `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]` | `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]` |
+| **XPU** | `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu]` | `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu]` |
 
-  2. Install embeddedllm package. `ELLM_TARGET_DEVICE='directml' pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
+  With Web UI
 
-     - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml]`
-     - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu]`
-     - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]`
-     - **IPEX:** `ELLM_TARGET_DEVICE='ipex' python setup.py develop`
-     - **With Web UI**:
-       - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml,webui]`
-       - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu,webui]`
-       - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda,webui]`
-       - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop; pip install -r requirements-webui.txt`
+| Step | Windows | Linux |
+|------|---------|-------|
+| **DirectML** | `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml,webui]` | `ELLM_TARGET_DEVICE='directml' pip install -e .[directml,webui]` |
+| **CPU** | `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu,webui]` | `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu,webui]` |
+| **CUDA** | `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda,webui]` | `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda,webui]` |
+| **XPU** | `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu,webui]` | `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu,webui]` |
+  
 
 ### Launch OpenAI API Compatible Server
 
@@ -116,9 +258,9 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 
 ### Launch Chatbot Web UI
 
-1.  `ellm_chatbot --port 7788 --host localhost --server_port <ellm_server_port> --server_host localhost`. **Note:** To find out more of the supported arguments. `ellm_chatbot --help`.
+1.  `ellm_chatbot`. **Note:** To find out more of the supported arguments. `ellm_chatbot --help`.
 
-        ![Chatbot Web UI](asset/ellm_chatbot_vid.webp)
+   ![asset/ellm_chatbot_vid.webp](asset/ellm_chatbot_vid.webp)
 
 ### Launch Model Management UI
 
@@ -126,12 +268,12 @@ It is an interface that allows you to download and deploy OpenAI API compatible 
 
 1.  `ellm_modelui --port 6678`. **Note:** To find out more of the supported arguments. `ellm_modelui --help`.
 
-        ![Model Management UI](asset/ellm_modelui.png)
+   ![Model Management UI](asset/ellm_modelui.png)
 
 ## Compile OpenAI-API Compatible Server into Windows Executable
 
 1. Install `embeddedllm`.
-2. Install PyInstaller: `pip install pyinstaller==6.9.0`.
+2. Install PyInstaller: `pip install pyinstaller`.
 3. Compile Windows Executable: `pyinstaller .\ellm_api_server.spec`.
 4. You can find the executable in the `dist\ellm_api_server`.
 
