@@ -2,6 +2,7 @@ import os
 import re
 import numpy as np
 import pandas as pd
+import argparse
 
 def extract_data_from_log(log_file):
     average_tps_list = []
@@ -24,7 +25,7 @@ def extract_data_from_log(log_file):
             if "Average tps" in line and error_state == True:
                 error_state = False
                 continue
-                
+
             if "Average tps" in line:
                 average_tps = float(re.search(r"Average tps: ([\d.]+)", line).group(1))
                 average_tps_list.append(average_tps)
@@ -54,8 +55,12 @@ def calculate_statistics(data):
     }
     return stats
 
-def main():
-    model_name = "Phi-3-mini-4k-instruct-062024-int4-directml"
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Process log files and generate statistics.")
+    parser.add_argument('--model_name', type=str, required=True, help='Name of the model')
+    return parser.parse_args()
+
+def main(model_name):
     token_ins = [128, 256, 512, 1024]
     token_outs = [128, 256, 512, 1024]
 
@@ -115,4 +120,5 @@ def main():
     print(f"Statistics written to {output_file}")
 
 if __name__ == "__main__":
-    main()
+    args = parse_arguments()
+    main(args.model_name)
