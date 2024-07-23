@@ -76,21 +76,31 @@ def main(model_name):
             average_tps_list, prompt_tokens_per_second_list, new_tokens_per_second_list, error_count = extract_data_from_log(log_file)
 
             if not average_tps_list and not prompt_tokens_per_second_list and not new_tokens_per_second_list:
-                # Log file does not exist or is empty, append "-" for each statistical value
-                statistics.append([
-                    model_name, input_token_length, output_token_length,
-                    "-", "-", "-", "-", "-", "-", "-", "-", "-",
-                    "-", "-", "-", "-", "-", "-", "-", "-", "-",
-                    "-", "-", "-", "-", "-", "-", "-", "-", "-",
-                    error_count
-                ])
+                if error_count > 0:
+                    statistics.append([
+                        model_name, input_token_length, output_token_length,
+                        "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM",
+                        "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM",
+                        "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM",
+                        error_count
+                    ])
+
+                else:
+                    # Log file does not exist or is empty, append "-" for each statistical value
+                    statistics.append([
+                        model_name, input_token_length, output_token_length,
+                        "-", "-", "-", "-", "-", "-", "-", "-", "-",
+                        "-", "-", "-", "-", "-", "-", "-", "-", "-",
+                        "-", "-", "-", "-", "-", "-", "-", "-", "-",
+                        error_count
+                    ])
             else:
                 min_len = min(len(average_tps_list), len(prompt_tokens_per_second_list), len(new_tokens_per_second_list))
 
                 if min_len > 0:
-                    prompt_stats = calculate_statistics(prompt_tokens_per_second_list[5:min_len])
-                    new_token_stats = calculate_statistics(new_tokens_per_second_list[5:min_len])
-                    average_tps_stats = calculate_statistics(average_tps_list[5:min_len])
+                    prompt_stats = calculate_statistics(prompt_tokens_per_second_list[3:min_len])
+                    new_token_stats = calculate_statistics(new_tokens_per_second_list[3:min_len])
+                    average_tps_stats = calculate_statistics(average_tps_list[3:min_len])
 
                     statistics.append([
                         model_name, input_token_length, output_token_length,
