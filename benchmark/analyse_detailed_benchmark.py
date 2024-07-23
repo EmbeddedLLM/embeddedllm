@@ -75,25 +75,23 @@ def main(model_name):
             log_file = os.path.join(log_dir, f'profile_model_timing_{model_name}_{input_token_length}_{output_token_length}.log')
             average_tps_list, prompt_tokens_per_second_list, new_tokens_per_second_list, error_count = extract_data_from_log(log_file)
 
-            if not average_tps_list and not prompt_tokens_per_second_list and not new_tokens_per_second_list:
-                if error_count > 0:
-                    statistics.append([
-                        model_name, input_token_length, output_token_length,
-                        "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM",
-                        "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM",
-                        "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM",
-                        error_count
-                    ])
-
-                else:
-                    # Log file does not exist or is empty, append "-" for each statistical value
-                    statistics.append([
-                        model_name, input_token_length, output_token_length,
-                        "-", "-", "-", "-", "-", "-", "-", "-", "-",
-                        "-", "-", "-", "-", "-", "-", "-", "-", "-",
-                        "-", "-", "-", "-", "-", "-", "-", "-", "-",
-                        error_count
-                    ])
+            if error_count > 0:
+                statistics.append([
+                    model_name, input_token_length, output_token_length,
+                    "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM",
+                    "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM",
+                    "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM", "OOM",
+                    error_count
+                ])
+            elif not average_tps_list and not prompt_tokens_per_second_list and not new_tokens_per_second_list:
+                # Log file does not exist or is empty, append "-" for each statistical value
+                statistics.append([
+                    model_name, input_token_length, output_token_length,
+                    "-", "-", "-", "-", "-", "-", "-", "-", "-",
+                    "-", "-", "-", "-", "-", "-", "-", "-", "-",
+                    "-", "-", "-", "-", "-", "-", "-", "-", "-",
+                    error_count
+                ])
             else:
                 min_len = min(len(average_tps_list), len(prompt_tokens_per_second_list), len(new_tokens_per_second_list))
 
