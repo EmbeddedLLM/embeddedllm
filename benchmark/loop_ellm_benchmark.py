@@ -13,13 +13,22 @@ model_names = [
     # "Phi-3-mini-128k-instruct-ipex",
     # "Phi-3-medium-4k-instruct-ipex",
     # "Phi-3-medium-128k-instruct-ipex",
+
+    # "Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32",
+    # "Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4",
+    # "Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32",
+    # "Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4",
 ]
 
 model_paths = [
-
+    # path to your model weight in the order with the model_names
 ]
 
 token_in_out = [
+    (1024, 1024),
+    (1024, 512),
+    (1024, 256),
+    (1024, 128),
     (512, 1024),
     (512, 512),
     (512, 256),
@@ -35,8 +44,9 @@ token_in_out = [
 ]
 
 # Choose backend
-backend = "ipex"
+# backend = "ipex"
 # backend = "directml"
+# backend = "cpu"
 
 # Number of loops
 loop_count = 20
