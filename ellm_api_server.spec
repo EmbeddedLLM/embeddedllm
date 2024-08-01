@@ -67,7 +67,7 @@ elif backend == 'ipex':
     add_package('intel_extension_for_pytorch')
     add_package('trl')
     add_package('embeddedllm')
-    add_package('intel_extension_for_pytorch')
+    add_package('numpy')
     binaries_list.append((f'{CONDA_PATH.parent}/Library/bin/*', '.'))
 
 print(binaries_list)

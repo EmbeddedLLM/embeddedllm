@@ -135,15 +135,15 @@ def _get_and_verify_max_len(
     for key in possible_keys:
         max_len = getattr(hf_config, key, None)
         if max_len is not None:
-            max_len_key = key if max_len < derived_max_model_len else max_len_key
+            max_len_key = key if max_len < derived_max_model_len \
+                else max_len_key
             derived_max_model_len = min(derived_max_model_len, max_len)
 
     # If sliding window is manually disabled, max_length should be less
     # than the sliding window length in the model config.
     if disable_sliding_window and sliding_window_len is not None:
-        max_len_key = (
-            "sliding_window" if sliding_window_len < derived_max_model_len else max_len_key
-        )
+        max_len_key = "sliding_window" \
+            if sliding_window_len < derived_max_model_len else max_len_key
         derived_max_model_len = min(derived_max_model_len, sliding_window_len)
 
     # If none of the keys were found in the config, use a default and
@@ -157,27 +157,37 @@ def _get_and_verify_max_len(
         logger.warning(
             "The model's config.json does not contain any of the following "
             "keys to determine the original maximum length of the model: "
-            "%s. Assuming the model's maximum length is %d.",
-            possible_keys,
-            default_max_len,
-        )
+            "%s. Assuming the model's maximum length is %d.", possible_keys,
+            default_max_len)
         derived_max_model_len = default_max_len
 
     rope_scaling = getattr(hf_config, "rope_scaling", None)
-    if rope_scaling is not None and rope_scaling["type"] != "su":
-        if disable_sliding_window:
-            # TODO(robertgshaw): Find a model that supports rope_scaling
-            # with sliding window to see if this case should be allowed.
-            raise NotImplementedError(
-                "Disabling sliding window is not supported for models "
-                "with rope_scaling. Please raise an issue so we can "
-                "investigate."
-            )
-        assert "factor" in rope_scaling
-        scaling_factor = rope_scaling["factor"]
-        if rope_scaling["type"] == "yarn":
-            derived_max_model_len = rope_scaling["original_max_position_embeddings"]
-        derived_max_model_len *= scaling_factor
+    if rope_scaling is not None:
+        if "type" in rope_scaling:
+            rope_type = rope_scaling["type"]
+        elif "rope_type" in rope_scaling:
+            rope_type = rope_scaling["rope_type"]
+        else:
+            raise ValueError(
+                "rope_scaling must have a 'type' or 'rope_type' key.")
+
+        # The correct one should be "longrope", kept "su" here
+        # to be backward compatible
+        if rope_type not in ("su", "longrope", "llama3"):
+            if disable_sliding_window:
+                # TODO(robertgshaw): Find a model that supports rope_scaling
+                # with sliding window to see if this case should be allowed.
+                raise NotImplementedError(
+                    "Disabling sliding window is not supported for models "
+                    "with rope_scaling. Please raise an issue so we can "
+                    "investigate.")
+
+            assert "factor" in rope_scaling
+            scaling_factor = rope_scaling["factor"]
+            if rope_type == "yarn":
+                derived_max_model_len = rope_scaling[
+                    "original_max_position_embeddings"]
+            derived_max_model_len *= scaling_factor
 
     # If the user specified a max length, make sure it is smaller than the
     # derived length from the HF model config.
@@ -195,8 +205,7 @@ def _get_and_verify_max_len(
                 raise NotImplementedError(
                     "Disabling sliding window is not supported for models "
                     "model_max_length in the config. Please raise an issue "
-                    "so we can investigate."
-                )
+                    "so we can investigate.")
             pass
         else:
             raise ValueError(
@@ -205,6 +214,5 @@ def _get_and_verify_max_len(
                 f"({max_len_key}={derived_max_model_len} or model_max_length="
                 f"{model_max_length} in model's config.json). This may lead "
                 "to incorrect model outputs or CUDA errors. Make sure the "
-                "value is correct and within the model context size."
-            )
+                "value is correct and within the model context size.")
     return int(max_model_len)

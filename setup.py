@@ -73,6 +73,10 @@ class ELLMDevelopCommand(develop):
                 'pip', 'install', '--pre', '--upgrade', 'ipex-llm[xpu]',
                 '--extra-index-url', 'https://pytorch-extension.intel.com/release-whl/stable/xpu/us/'
             ], capture_output=True, text=True)
+            
+            result = subprocess.run([
+                'pip', 'install', '--upgrade', 'transformers==4.43.3'
+            ], capture_output=True, text=True)
             # print("STDOUT:", result.stdout)
             # print("STDERR:", result.stderr)
 
