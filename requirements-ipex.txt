@@ -1,1 +1,3 @@
 trl
+huggingface-hub~=0.24.3
+fsspec~=2024.5.0

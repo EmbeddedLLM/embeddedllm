@@ -4,6 +4,13 @@ from pathlib import Path
 from PyInstaller.utils.hooks import collect_all, collect_data_files
 import importlib.metadata
 import re
+import sys
+import os
+
+CONDA_PATH=Path(sys.executable)
+print(dir(CONDA_PATH))
+print(CONDA_PATH)
+print(CONDA_PATH.parent)
 
 excluded_modules = ['torch.distributions'] # <<< ADD THIS LINE
 
@@ -30,7 +37,7 @@ backend = get_embeddedllm_backend()
 binaries_list = []
 
 datas_list = [
-    (Path("src/embeddedllm/entrypoints/api_server.py").resolve().as_posix(), 'embeddedllm/entrypoints')
+    (Path("src/embeddedllm/entrypoints/api_server.py").resolve().as_posix(), 'embeddedllm/entrypoints'),
 ]
 datas_list.extend(collect_data_files('torch', include_py_files=True))
 
@@ -41,6 +48,8 @@ hiddenimports_list = ['multipart']
 #    'intel_extension_for_pytorch.xpu', 'intel_extension_for_pytorch.xpu.fp8',
 #    'intel_extension_for_pytorch.nn.utils'
 #])
+
+pathex = []
 
 def add_package(package_name):
     datas, binaries, hiddenimports = collect_all(package_name)
@@ -58,19 +67,17 @@ elif backend == 'ipex':
     add_package('intel_extension_for_pytorch')
     add_package('trl')
     add_package('embeddedllm')
-    # add_package('torch')
-    # datas_list.extend(collect_data_files('torch', include_py_files=True))
-    # datas_list.extend(collect_data_files('torchvision', include_py_files=True))
-    # datas_list.extend(collect_data_files('intel_extension_for_pytorch', include_py_files=True))
-    # hiddenimports_list.extend(['pip', 'pip._internal', 'pip._internal.commands.list'])
+    add_package('intel_extension_for_pytorch')
+    binaries_list.append((f'{CONDA_PATH.parent}/Library/bin/*', '.'))
 
 print(binaries_list)
+
 with open("binary.txt", 'w') as f:
     f.write(str(binaries_list))
 block_cipher = None
 a = Analysis(
-    ['src\\embeddedllm\\entrypoints\\api_server.py'],
-    pathex=[],
+    ['src\\embeddedllm\\entrypoints\\api_server.py'],             
+    pathex=pathex,
     binaries=binaries_list,
     datas=datas_list,
     hiddenimports=hiddenimports_list,

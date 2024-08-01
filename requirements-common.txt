@@ -1,5 +1,5 @@
 huggingface-hub[cli]
-fastapi~=0.110.0
+fastapi
 gunicorn~=22.0.0
 loguru~=0.7.2
 numpy~=1.26.4
@@ -13,3 +13,5 @@ uvicorn
 filetype~=1.2.0
 Pillow~=10.3.0
 torchvision
+aiohttp<4
+fsspec[http]<=2024.5.0,>=2023.1.0
