@@ -29,6 +29,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
   - [Launch Chatbot Web UI](#launch-chatbot-web-ui)
   - [Launch Model Management UI](#launch-model-management-ui)
 - [Compile OpenAI-API Compatible Server into Windows Executable](#compile-openai-api-compatible-server-into-windows-executable)
+- [Prebuilt Binary (Alpha)](#compile-openai-api-compatible-server-into-windows-executable)
 - [Acknowledgements](#acknowledgements)
 
 ## Supported Models (Quick Start)
@@ -134,6 +135,16 @@ It is an interface that allows you to download and deploy OpenAI API compatible 
 2. Install PyInstaller: `pip install pyinstaller==6.9.0`.
 3. Compile Windows Executable: `pyinstaller .\ellm_api_server.spec`.
 4. You can find the executable in the `dist\ellm_api_server`.
+5. Use it like `ellm_server`. `.\ellm_api_server.exe --model_path <path/to/model/weight>`.
+
+## Prebuilt OpenAI API Compatible Windows Executable (Alpha)
+You can find the prebuilt OpenAI API Compatible Windows Executable in the Release page.
+
+*Powershell/Terminal Usage (Use it like `ellm_server`)*:
+```powershell
+.\ellm_api_server.exe --model_path <path/to/model/weight>
+```
+
 
 ## Acknowledgements
 
