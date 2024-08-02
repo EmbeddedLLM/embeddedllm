@@ -26,10 +26,13 @@ from embeddedllm.backend.base_engine import BaseLLMEngine, _get_and_verify_max_l
 
 RECORD_TIMING = True
 
+
 class IpexEngine(BaseLLMEngine):
     def __init__(self, model_path: str, vision: bool, device: str = "xpu"):
         self.model_path = model_path
-        self.model_config: AutoConfig = AutoConfig.from_pretrained(self.model_path, trust_remote_code=True)
+        self.model_config: AutoConfig = AutoConfig.from_pretrained(
+            self.model_path, trust_remote_code=True
+        )
         self.device = device
 
         # model_config is to find out the max length of the model
@@ -56,7 +59,6 @@ class IpexEngine(BaseLLMEngine):
         #     model_path, trust_remote_code=True
         # ).to(self.device)
         logger.info("Model loaded")
-        
         self.tokenizer_stream = TextIteratorStreamer(
             self.tokenizer, skip_prompt=True, skip_special_tokens=True
         )
@@ -315,7 +317,7 @@ class IpexEngine(BaseLLMEngine):
                 first_token_timestamp = 0
                 first = True
                 new_tokens = []
-                # try:
+            try:
                 thread = Thread(target=self.model.generate, kwargs=generation_options)
                 started_timestamp = time.time()
                 first_token_timestamp = None
@@ -375,67 +377,67 @@ class IpexEngine(BaseLLMEngine):
                         f"Prompt length: {len(input_tokens[0])}, New tokens: {len(new_tokens)}, Time to first: {(prompt_time):.2f}s, Prompt tokens per second: {len(input_tokens[0])/prompt_time:.2f} tps, New tokens per second: {len(new_tokens)/run_time:.2f} tps"
                     )
 
-            # except Exception as e:
-            #     logger.error(str(e))
+            except Exception as e:
+                logger.error(str(e))
 
-            #     error_output = RequestOutput(
-            #         prompt=inputs,
-            #         prompt_token_ids=input_tokens,
-            #         finished=True,
-            #         request_id=request_id,
-            #         outputs=[
-            #             CompletionOutput(
-            #                 index=0,
-            #                 text=output_text,
-            #                 token_ids=token_list,
-            #                 cumulative_logprob=-1.0,
-            #                 finish_reason="error",
-            #                 stop_reason=str(e),
-            #             )
-            #         ],
-            #     )
-            #     yield error_output
+                error_output = RequestOutput(
+                    prompt=inputs,
+                    prompt_token_ids=input_tokens,
+                    finished=True,
+                    request_id=request_id,
+                    outputs=[
+                        CompletionOutput(
+                            index=0,
+                            text=output_text,
+                            token_ids=token_list,
+                            cumulative_logprob=-1.0,
+                            finish_reason="error",
+                            stop_reason=str(e),
+                        )
+                    ],
+                )
+                yield error_output
         else:
-            # try:
-            token_list = self.model.generate(**generation_options)[0]
-            print(token_list[input_token_length:])
-            output_text = self.tokenizer.decode(
-                token_list[input_token_length:], skip_special_tokens=True
-            )
+            try:
+                token_list = self.model.generate(**generation_options)[0]
 
-            yield RequestOutput(
-                request_id=request_id,
-                prompt=prompt_text,
-                prompt_token_ids=input_tokens[0],
-                finished=True,
-                outputs=[
-                    CompletionOutput(
-                        index=0,
-                        text=output_text,
-                        token_ids=token_list,
-                        cumulative_logprob=-1.0,
-                        finish_reason="stop",
-                    )
-                ],
-            )
+                output_text = self.tokenizer.decode(
+                    token_list[input_token_length:], skip_special_tokens=True
+                )
 
-            # except Exception as e:
-            #     logger.error(str(e))
+                yield RequestOutput(
+                    request_id=request_id,
+                    prompt=prompt_text,
+                    prompt_token_ids=input_tokens[0],
+                    finished=True,
+                    outputs=[
+                        CompletionOutput(
+                            index=0,
+                            text=output_text,
+                            token_ids=token_list,
+                            cumulative_logprob=-1.0,
+                            finish_reason="stop",
+                        )
+                    ],
+                )
 
-            #     error_output = RequestOutput(
-            #         prompt=prompt_text,
-            #         prompt_token_ids=input_tokens[0],
-            #         finished=True,
-            #         request_id=request_id,
-            #         outputs=[
-            #             CompletionOutput(
-            #                 index=0,
-            #                 text=output_text,
-            #                 token_ids=token_list,
-            #                 cumulative_logprob=-1.0,
-            #                 finish_reason="error",
-            #                 stop_reason=str(e),
-            #             )
-            #         ],
-            #     )
-            #     yield error_output
+            except Exception as e:
+                logger.error(str(e))
+
+                error_output = RequestOutput(
+                    prompt=prompt_text,
+                    prompt_token_ids=input_tokens[0],
+                    finished=True,
+                    request_id=request_id,
+                    outputs=[
+                        CompletionOutput(
+                            index=0,
+                            text=output_text,
+                            token_ids=token_list,
+                            cumulative_logprob=-1.0,
+                            finish_reason="error",
+                            stop_reason=str(e),
+                        )
+                    ],
+                )
+                yield error_output
