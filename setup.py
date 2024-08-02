@@ -60,8 +60,15 @@ class ELLMInstallCommand(install):
                 'pip', 'install', '--pre', '--upgrade', 'ipex-llm[xpu]',
                 '--extra-index-url', 'https://pytorch-extension.intel.com/release-whl/stable/xpu/us/'
             ], capture_output=True, text=True)
-            # print("STDOUT:", result.stdout)
-            # print("STDERR:", result.stderr)
+
+            result = subprocess.run([
+                'pip', 'install', '--upgrade', 'transformers==4.43.3'
+            ], capture_output=True, text=True)
+
+        if _is_directml():
+            result = subprocess.run([
+                'conda', 'install', 'conda-forge::vs2015_runtime' , '-y'
+            ], capture_output=True, text=True)
 
 class ELLMDevelopCommand(develop):
     def run(self):
@@ -77,8 +84,13 @@ class ELLMDevelopCommand(develop):
             result = subprocess.run([
                 'pip', 'install', '--upgrade', 'transformers==4.43.3'
             ], capture_output=True, text=True)
-            # print("STDOUT:", result.stdout)
-            # print("STDERR:", result.stderr)
+
+        if _is_directml():
+            result = subprocess.run([
+                'conda', 'install', 'conda-forge::vs2015_runtime' , '-y'
+            ], capture_output=True, text=True)
+            
+            print(result)
 
 def get_path(*filepath) -> str:
     return os.path.join(ROOT_DIR, *filepath)
