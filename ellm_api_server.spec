@@ -1,17 +1,55 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 from pathlib import Path
-from PyInstaller.utils.hooks import collect_all
+from PyInstaller.utils.hooks import collect_all, collect_data_files
+import importlib.metadata
+import re
+import sys
+import os
+
+CONDA_PATH=Path(sys.executable)
+print(dir(CONDA_PATH))
+print(CONDA_PATH)
+print(CONDA_PATH.parent)
+
+excluded_modules = ['torch.distributions'] # <<< ADD THIS LINE
+
+def get_embeddedllm_backend():
+    try:
+        # Get the version of embeddedllm
+        version = importlib.metadata.version("embeddedllm")
+
+        # Use regex to extract the backend
+        match = re.search(r"\+(directml|cpu|cuda|ipex)$", version)
+
+        if match:
+            backend = match.group(1)
+            return backend
+        else:
+            return "Unknown backend"
+
+    except importlib.metadata.PackageNotFoundError:
+        return "embeddedllm not installed"
+
+
+backend = get_embeddedllm_backend()
 
 binaries_list = []
 
-print(Path("src/owl/entrypoints/api.py").resolve().as_posix())
-
 datas_list = [
-    (Path("src/embeddedllm/entrypoints/api_server.py").resolve().as_posix(), 'embeddedllm/entrypoints')
+    (Path("src/embeddedllm/entrypoints/api_server.py").resolve().as_posix(), 'embeddedllm/entrypoints'),
 ]
+datas_list.extend(collect_data_files('torch', include_py_files=True))
 
 hiddenimports_list = ['multipart']
+# Add missing hidden imports
+#hiddenimports_list.extend([
+#    'torch', 'torchvision', 'intel_extension_for_pytorch',
+#    'intel_extension_for_pytorch.xpu', 'intel_extension_for_pytorch.xpu.fp8',
+#    'intel_extension_for_pytorch.nn.utils'
+#])
+
+pathex = []
 
 def add_package(package_name):
     datas, binaries, hiddenimports = collect_all(package_name)
@@ -19,25 +57,37 @@ def add_package(package_name):
     binaries_list.extend(binaries)
     hiddenimports_list.extend(hiddenimports)
 
-add_package('onnxruntime')
-add_package('onnxruntime_genai')
+if backend in ('directml', 'cpu', 'cuda'):
+    add_package('onnxruntime')
+    add_package('onnxruntime_genai')
+elif backend == 'ipex':
+    add_package('ipex_llm')
+    add_package('torch')
+    add_package('torchvision')
+    add_package('intel_extension_for_pytorch')
+    add_package('trl')
+    add_package('embeddedllm')
+    add_package('numpy')
+    binaries_list.append((f'{CONDA_PATH.parent}/Library/bin/*', '.'))
 
 print(binaries_list)
+
 with open("binary.txt", 'w') as f:
     f.write(str(binaries_list))
-
+block_cipher = None
 a = Analysis(
-    ['src\\embeddedllm\\entrypoints\\api_server.py'],
-    pathex=[],
+    ['src\\embeddedllm\\entrypoints\\api_server.py'],             
+    pathex=pathex,
     binaries=binaries_list,
     datas=datas_list,
     hiddenimports=hiddenimports_list,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=excluded_modules,
+    block_cipher=block_cipher,
     noarchive=False,
-    optimize=0,
+    optimize=1,
 )
 pyz = PYZ(a.pure)
 

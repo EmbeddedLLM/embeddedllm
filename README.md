@@ -29,6 +29,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
   - [Launch Chatbot Web UI](#launch-chatbot-web-ui)
   - [Launch Model Management UI](#launch-model-management-ui)
 - [Compile OpenAI-API Compatible Server into Windows Executable](#compile-openai-api-compatible-server-into-windows-executable)
+- [Prebuilt Binary (Alpha)](#compile-openai-api-compatible-server-into-windows-executable)
 - [Acknowledgements](#acknowledgements)
 
 ## Supported Models (Quick Start)
@@ -59,7 +60,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 
   1. Custom Setup:
 
-  - **XPU**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate llm`.
+  - **IPEX(XPU)**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate ellm`.
   - **DirectML**: If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
 
   2. Install embeddedllm package. `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
@@ -67,18 +68,18 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
      - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml]`
      - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu]`
      - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]`
-     - **XPU:** `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu]`
+     - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop`
      - **With Web UI**:
        - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml,webui]`
        - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu,webui]`
        - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda,webui]`
-       - **XPU:** `$env:ELLM_TARGET_DEVICE='xpu'; pip install -e .[xpu,webui]`
+       - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop; pip install -r requirements-webui.txt`
 
 - **Linux**
 
   1. Custom Setup:
 
-  - **XPU**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate llm`.
+  - **IPEX(XPU)**: Requires anaconda environment. `conda create -n ellm python=3.10 libuv; conda activate ellm`.
   - **DirectML**: If you are using Conda Environment. Install additional dependencies: `conda install conda-forge::vs2015_runtime`.
 
   2. Install embeddedllm package. `ELLM_TARGET_DEVICE='directml' pip install -e .`. Note: currently support `cpu`, `directml` and `cuda`.
@@ -86,12 +87,12 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
      - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml]`
      - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu]`
      - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]`
-     - **XPU:** `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu]`
+     - **IPEX:** `ELLM_TARGET_DEVICE='ipex' python setup.py develop`
      - **With Web UI**:
        - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml,webui]`
        - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu,webui]`
        - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda,webui]`
-       - **XPU:** `ELLM_TARGET_DEVICE='xpu' pip install -e .[xpu,webui]`
+       - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop; pip install -r requirements-webui.txt`
 
 ### Launch OpenAI API Compatible Server
 
@@ -131,9 +132,19 @@ It is an interface that allows you to download and deploy OpenAI API compatible 
 ## Compile OpenAI-API Compatible Server into Windows Executable
 
 1. Install `embeddedllm`.
-2. Install PyInstaller: `pip install pyinstaller`.
+2. Install PyInstaller: `pip install pyinstaller==6.9.0`.
 3. Compile Windows Executable: `pyinstaller .\ellm_api_server.spec`.
 4. You can find the executable in the `dist\ellm_api_server`.
+5. Use it like `ellm_server`. `.\ellm_api_server.exe --model_path <path/to/model/weight>`.
+
+## Prebuilt OpenAI API Compatible Windows Executable (Alpha)
+You can find the prebuilt OpenAI API Compatible Windows Executable in the Release page.
+
+*Powershell/Terminal Usage (Use it like `ellm_server`)*:
+```powershell
+.\ellm_api_server.exe --model_path <path/to/model/weight>
+```
+
 
 ## Acknowledgements
 

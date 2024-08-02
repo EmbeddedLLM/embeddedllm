@@ -40,6 +40,7 @@ class EmbeddedLLMEngine:
             ), f"To run ipex on cpu, set `backend` to `cpu` and `device` to `cpu`. EmbeddedLLMEngine load model with ipex on Intel processor."
             if self.device == "xpu":
                 os.environ["SYCL_CACHE_PERSISTENT"] = "1"
+                os.environ["BIGDL_LLM_XMX_DISABLED"] = "1"
             self.engine = IpexEngine(self.model_path, self.vision, self.device)
             logger.info(f"Initializing ipex-llm backend (XPU): IpexEngine")
         elif self.backend in ("directml", "cuda"):

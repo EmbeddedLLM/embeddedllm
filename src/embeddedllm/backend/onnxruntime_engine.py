@@ -401,7 +401,7 @@ class OnnxruntimeEngine(BaseLLMEngine):
             try:
                 token_list = self.model.generate(params)
 
-                output_text = self.onnx_tokenizer.decode(token_list[0])
+                output_text = self.onnx_tokenizer.decode(token_list[0][input_token_length:])
 
                 yield RequestOutput(
                     request_id=request_id,

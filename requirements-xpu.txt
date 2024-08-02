@@ -1,4 +1,0 @@
-torch==2.1.0
-torchvision
-trl
-transformers~=4.42.3

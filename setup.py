@@ -5,6 +5,10 @@ import re
 from typing import List
 
 from setuptools import find_packages, setup
+from setuptools.command.install import install
+from setuptools.command.develop import develop
+import subprocess
+
 
 ROOT_DIR = os.path.dirname(__file__)
 
@@ -42,9 +46,51 @@ def _is_cuda() -> bool:
     return ELLM_TARGET_DEVICE == "cuda"
 
 
-def _is_xpu() -> bool:
-    return ELLM_TARGET_DEVICE == "xpu"
+def _is_ipex() -> bool:
+    return ELLM_TARGET_DEVICE == "ipex"
 
+
+class ELLMInstallCommand(install):
+    def run(self):
+        install.run(self)
+        print("is_ipex(): " + str(_is_ipex()))
+        if _is_ipex():
+            print("Install Ipex-LLM")
+            result = subprocess.run([
+                'pip', 'install', '--pre', '--upgrade', 'ipex-llm[xpu]',
+                '--extra-index-url', 'https://pytorch-extension.intel.com/release-whl/stable/xpu/us/'
+            ], capture_output=True, text=True)
+
+            result = subprocess.run([
+                'pip', 'install', '--upgrade', 'transformers==4.43.3'
+            ], capture_output=True, text=True)
+
+        if _is_directml():
+            result = subprocess.run([
+                'conda', 'install', 'conda-forge::vs2015_runtime' , '-y'
+            ], capture_output=True, text=True)
+
+class ELLMDevelopCommand(develop):
+    def run(self):
+        develop.run(self)
+        print("is_ipex(): " + str(_is_ipex()))
+        if _is_ipex():
+            print("Install Ipex-LLM")
+            result = subprocess.run([
+                'pip', 'install', '--pre', '--upgrade', 'ipex-llm[xpu]',
+                '--extra-index-url', 'https://pytorch-extension.intel.com/release-whl/stable/xpu/us/'
+            ], capture_output=True, text=True)
+            
+            result = subprocess.run([
+                'pip', 'install', '--upgrade', 'transformers==4.43.3'
+            ], capture_output=True, text=True)
+
+        if _is_directml():
+            result = subprocess.run([
+                'conda', 'install', 'conda-forge::vs2015_runtime' , '-y'
+            ], capture_output=True, text=True)
+            
+            print(result)
 
 def get_path(*filepath) -> str:
     return os.path.join(ROOT_DIR, *filepath)
@@ -83,9 +129,8 @@ def get_requirements() -> List[str]:
         requirements = _read_requirements("requirements-cuda.txt")
     elif _is_cpu():
         requirements = _read_requirements("requirements-cpu.txt")
-    elif _is_xpu():
-        requirements = []
-    #     requirements = _read_requirements("requirements-xpu.txt")
+    elif _is_ipex():
+        requirements = _read_requirements("requirements-ipex.txt")
     else:
         raise ValueError("Unsupported platform, please use CUDA, ROCm, Neuron, or CPU.")
     return requirements
@@ -100,8 +145,8 @@ def get_ellm_version() -> str:
         version += "+cuda"
     elif _is_cpu():
         version += "+cpu"
-    elif _is_xpu():
-        version += "+xpu"
+    elif _is_ipex():
+        version += "+ipex"
     else:
         raise RuntimeError("Unknown runtime environment")
 
@@ -109,6 +154,18 @@ def get_ellm_version() -> str:
 
 
 print(get_requirements().extend(_read_requirements("requirements-common.txt")))
+
+dependency_links = []
+extra_install_requires = []
+
+if(_is_directml() or _is_cuda() or _is_cpu()):
+    dependency_links.extend(["https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-genai/pypi/simple/"])
+# elif(_is_ipex()):
+#     dependency_links.extend(["https://pytorch-extension.intel.com/release-whl/stable/xpu/us/"])
+    # extra_install_requires.extend(["torch==2.1.0a0 @ https://pytorch-extension.intel.com/release-whl/stable/xpu/us/"])
+    # extra_install_requires.extend(["ipex-llm[xpu]==2.1.0b20240702 @ https://pytorch-extension.intel.com/release-whl/stable/xpu/us/"])
+
+    # extra_install_requires = ['ipex-llm[xpu]==2.1.0b20240702 @ https://pytorch-extension.intel.com/release-whl/stable/xpu/us/']
 
 setup(
     name="embeddedllm",
@@ -135,23 +192,24 @@ setup(
     ],
     install_requires=get_requirements()
     + _read_requirements("requirements-common.txt")
-    + _read_requirements("requirements-build.txt"),
+    + _read_requirements("requirements-build.txt") + extra_install_requires,
     # Add other metadata and dependencies as needed
     extras_require={
         "lint": _read_requirements("requirements-lint.txt"),
         "webui": _read_requirements("requirements-webui.txt"),
         "cuda": ["onnxruntime-genai-cuda==0.3.0rc2"],
-        "xpu": ["ipex-llm[xpu]"],
+        "ipex": [],
     },
-    dependency_links=[
-        "https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-genai/pypi/simple/",
-        "https://pytorch-extension.intel.com/release-whl/stable/xpu/us/",
-    ],
+    dependency_links=dependency_links,
     entry_points={
         "console_scripts": [
             "ellm_server=embeddedllm.entrypoints.api_server:main",
             "ellm_chatbot=embeddedllm.entrypoints.webui:main",
             "ellm_modelui=embeddedllm.entrypoints.modelui:main",
         ],
+    },
+    cmdclass={
+        'install': ELLMInstallCommand,
+        'develop': ELLMDevelopCommand,
     },
 )

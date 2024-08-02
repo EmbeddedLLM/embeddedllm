@@ -16,6 +16,7 @@ from transformers import (
 )
 
 from threading import Thread
+
 from ipex_llm.transformers import AutoModelForCausalLM
 
 from embeddedllm.inputs import PromptInputs
@@ -25,11 +26,10 @@ from embeddedllm.backend.base_engine import BaseLLMEngine, _get_and_verify_max_l
 
 RECORD_TIMING = True
 
-
 class IpexEngine(BaseLLMEngine):
     def __init__(self, model_path: str, vision: bool, device: str = "xpu"):
         self.model_path = model_path
-        self.model_config = AutoConfig.from_pretrained(self.model_path, trust_remote_code=True)
+        self.model_config: AutoConfig = AutoConfig.from_pretrained(self.model_path, trust_remote_code=True)
         self.device = device
 
         # model_config is to find out the max length of the model
@@ -52,7 +52,11 @@ class IpexEngine(BaseLLMEngine):
         self.model = AutoModelForCausalLM.from_pretrained(
             model_path, trust_remote_code=True, load_in_4bit=True
         ).to(self.device)
+        # self.model = AutoModelForCausalLM.from_pretrained(
+        #     model_path, trust_remote_code=True
+        # ).to(self.device)
         logger.info("Model loaded")
+        
         self.tokenizer_stream = TextIteratorStreamer(
             self.tokenizer, skip_prompt=True, skip_special_tokens=True
         )

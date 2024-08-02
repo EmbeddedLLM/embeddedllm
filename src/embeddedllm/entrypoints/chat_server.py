@@ -525,7 +525,7 @@ class OpenAPIChatServer:
         model_cards = [
             ModelCard(
                 id=self.served_model_name,
-                max_model_len=self.engine.max_model_len,
+                max_model_len=self.engine.engine.max_model_len,
                 root=self.served_model_name,
                 permission=[ModelPermission()],
             )
