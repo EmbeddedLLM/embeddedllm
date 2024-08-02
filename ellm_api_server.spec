@@ -61,6 +61,7 @@ if backend in ('directml', 'cpu', 'cuda'):
     add_package('onnxruntime')
     add_package('onnxruntime_genai')
 elif backend == 'ipex':
+    print(f"Backend IPEX")
     add_package('ipex_llm')
     add_package('torch')
     add_package('torchvision')
