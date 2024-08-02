@@ -56,19 +56,33 @@ class ELLMInstallCommand(install):
         print("is_ipex(): " + str(_is_ipex()))
         if _is_ipex():
             print("Install Ipex-LLM")
-            result = subprocess.run([
-                'pip', 'install', '--pre', '--upgrade', 'ipex-llm[xpu]',
-                '--extra-index-url', 'https://pytorch-extension.intel.com/release-whl/stable/xpu/us/'
-            ], capture_output=True, text=True)
+            result = subprocess.run(
+                [
+                    "pip",
+                    "install",
+                    "--pre",
+                    "--upgrade",
+                    "ipex-llm[xpu]",
+                    "--extra-index-url",
+                    "https://pytorch-extension.intel.com/release-whl/stable/xpu/us/",
+                ],
+                capture_output=True,
+                text=True,
+            )
 
-            result = subprocess.run([
-                'pip', 'install', '--upgrade', 'transformers==4.43.3'
-            ], capture_output=True, text=True)
+            result = subprocess.run(
+                ["pip", "install", "--upgrade", "transformers==4.43.3"],
+                capture_output=True,
+                text=True,
+            )
 
         if _is_directml():
-            result = subprocess.run([
-                'conda', 'install', 'conda-forge::vs2015_runtime' , '-y'
-            ], capture_output=True, text=True)
+            result = subprocess.run(
+                ["conda", "install", "conda-forge::vs2015_runtime", "-y"],
+                capture_output=True,
+                text=True,
+            )
+
 
 class ELLMDevelopCommand(develop):
     def run(self):
@@ -76,21 +90,35 @@ class ELLMDevelopCommand(develop):
         print("is_ipex(): " + str(_is_ipex()))
         if _is_ipex():
             print("Install Ipex-LLM")
-            result = subprocess.run([
-                'pip', 'install', '--pre', '--upgrade', 'ipex-llm[xpu]',
-                '--extra-index-url', 'https://pytorch-extension.intel.com/release-whl/stable/xpu/us/'
-            ], capture_output=True, text=True)
-            
-            result = subprocess.run([
-                'pip', 'install', '--upgrade', 'transformers==4.43.3'
-            ], capture_output=True, text=True)
+            result = subprocess.run(
+                [
+                    "pip",
+                    "install",
+                    "--pre",
+                    "--upgrade",
+                    "ipex-llm[xpu]",
+                    "--extra-index-url",
+                    "https://pytorch-extension.intel.com/release-whl/stable/xpu/us/",
+                ],
+                capture_output=True,
+                text=True,
+            )
+
+            result = subprocess.run(
+                ["pip", "install", "--upgrade", "transformers==4.43.3"],
+                capture_output=True,
+                text=True,
+            )
 
         if _is_directml():
-            result = subprocess.run([
-                'conda', 'install', 'conda-forge::vs2015_runtime' , '-y'
-            ], capture_output=True, text=True)
-            
+            result = subprocess.run(
+                ["conda", "install", "conda-forge::vs2015_runtime", "-y"],
+                capture_output=True,
+                text=True,
+            )
+
             print(result)
+
 
 def get_path(*filepath) -> str:
     return os.path.join(ROOT_DIR, *filepath)
@@ -158,14 +186,18 @@ print(get_requirements().extend(_read_requirements("requirements-common.txt")))
 dependency_links = []
 extra_install_requires = []
 
-if(_is_directml() or _is_cuda() or _is_cpu()):
-    dependency_links.extend(["https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-genai/pypi/simple/"])
+if _is_directml() or _is_cuda() or _is_cpu():
+    dependency_links.extend(
+        [
+            "https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-genai/pypi/simple/"
+        ]
+    )
 # elif(_is_ipex()):
 #     dependency_links.extend(["https://pytorch-extension.intel.com/release-whl/stable/xpu/us/"])
-    # extra_install_requires.extend(["torch==2.1.0a0 @ https://pytorch-extension.intel.com/release-whl/stable/xpu/us/"])
-    # extra_install_requires.extend(["ipex-llm[xpu]==2.1.0b20240702 @ https://pytorch-extension.intel.com/release-whl/stable/xpu/us/"])
+# extra_install_requires.extend(["torch==2.1.0a0 @ https://pytorch-extension.intel.com/release-whl/stable/xpu/us/"])
+# extra_install_requires.extend(["ipex-llm[xpu]==2.1.0b20240702 @ https://pytorch-extension.intel.com/release-whl/stable/xpu/us/"])
 
-    # extra_install_requires = ['ipex-llm[xpu]==2.1.0b20240702 @ https://pytorch-extension.intel.com/release-whl/stable/xpu/us/']
+# extra_install_requires = ['ipex-llm[xpu]==2.1.0b20240702 @ https://pytorch-extension.intel.com/release-whl/stable/xpu/us/']
 
 setup(
     name="embeddedllm",
@@ -192,7 +224,8 @@ setup(
     ],
     install_requires=get_requirements()
     + _read_requirements("requirements-common.txt")
-    + _read_requirements("requirements-build.txt") + extra_install_requires,
+    + _read_requirements("requirements-build.txt")
+    + extra_install_requires,
     # Add other metadata and dependencies as needed
     extras_require={
         "lint": _read_requirements("requirements-lint.txt"),
@@ -209,7 +242,7 @@ setup(
         ],
     },
     cmdclass={
-        'install': ELLMInstallCommand,
-        'develop': ELLMDevelopCommand,
+        "install": ELLMInstallCommand,
+        "develop": ELLMDevelopCommand,
     },
 )

@@ -138,13 +138,20 @@ It is an interface that allows you to download and deploy OpenAI API compatible 
 5. Use it like `ellm_server`. `.\ellm_api_server.exe --model_path <path/to/model/weight>`.
 
 ## Prebuilt OpenAI API Compatible Windows Executable (Alpha)
+
 You can find the prebuilt OpenAI API Compatible Windows Executable in the Release page.
 
-*Powershell/Terminal Usage (Use it like `ellm_server`)*:
+_Powershell/Terminal Usage (Use it like `ellm_server`)_:
+
 ```powershell
 .\ellm_api_server.exe --model_path <path/to/model/weight>
-```
 
+# DirectML
+.\ellm_api_server.exe --model_path 'EmbeddedLLM_Phi-3-mini-4k-instruct-062024-onnx\onnx\directml\Phi-3-mini-4k-instruct-062024-int4' --port 5555
+
+# IPEX-LLM
+.\ellm_api_server.exe --model_path '.\meta-llama_Meta-Llama-3.1-8B-Instruct\'  --backend 'ipex' --device 'xpu' --port 5555 --served_model_name 'meta-llama_Meta/Llama-3.1-8B-Instruct'
+```
 
 ## Acknowledgements
 

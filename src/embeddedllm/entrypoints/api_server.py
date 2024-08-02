@@ -1,4 +1,5 @@
 import os
+
 os.environ["SYCL_CACHE_PERSISTENT"] = "1"
 os.environ["BIGDL_LLM_XMX_DISABLED"] = "1"
 from http import HTTPStatus
@@ -82,18 +83,19 @@ async def create_chat_completion(request: ChatCompletionRequest, raw_request: Re
 def main():
     global openai_chat_server
     import os
+
     os.environ["SYCL_CACHE_PERSISTENT"] = "1"
     os.environ["BIGDL_LLM_XMX_DISABLED"] = "1"
     import sys
 
-    if getattr(sys, 'frozen', False):
+    if getattr(sys, "frozen", False):
         # Running as compiled executable
         bundle_dir = sys._MEIPASS
     else:
         # Running in a normal Python environment
         bundle_dir = os.path.dirname(os.path.abspath(__file__))
 
-    os.environ['PATH'] = bundle_dir + os.pathsep + os.environ['PATH']
+    os.environ["PATH"] = bundle_dir + os.pathsep + os.environ["PATH"]
 
     print(f"PATH: {os.environ['PATH']}")
 
