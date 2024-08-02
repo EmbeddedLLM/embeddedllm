@@ -60,7 +60,7 @@ class ELLMInstallCommand(install):
                     "install",
                     "--pre",
                     "--upgrade",
-                    "ipex-llm[xpu]",
+                    "ipex-llm[xpu]==2.1.0b20240731",
                     "--extra-index-url",
                     "https://pytorch-extension.intel.com/release-whl/stable/xpu/us/",
                 ],
@@ -70,6 +70,18 @@ class ELLMInstallCommand(install):
 
             result = subprocess.run(
                 ["pip", "install", "--upgrade", "transformers==4.43.3"],
+                capture_output=True,
+                text=True,
+            )
+
+            result = subprocess.run(
+                ["pip", "uninstall", "numpy", "-y"],
+                capture_output=True,
+                text=True,
+            )
+
+            result = subprocess.run(
+                ["pip", "install", "numpy==1.26.4", "--no-cache"],
                 capture_output=True,
                 text=True,
             )
@@ -93,7 +105,7 @@ class ELLMDevelopCommand(develop):
                     "install",
                     "--pre",
                     "--upgrade",
-                    "ipex-llm[xpu]",
+                    "ipex-llm[xpu]==2.1.0b20240731",
                     "--extra-index-url",
                     "https://pytorch-extension.intel.com/release-whl/stable/xpu/us/",
                 ],
@@ -103,6 +115,18 @@ class ELLMDevelopCommand(develop):
 
             result = subprocess.run(
                 ["pip", "install", "--upgrade", "transformers==4.43.3"],
+                capture_output=True,
+                text=True,
+            )
+
+            result = subprocess.run(
+                ["pip", "uninstall", "numpy", "-y"],
+                capture_output=True,
+                text=True,
+            )
+
+            result = subprocess.run(
+                ["pip", "install", "numpy==1.26.4", "--no-cache"],
                 capture_output=True,
                 text=True,
             )
