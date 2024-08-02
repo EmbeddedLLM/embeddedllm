@@ -99,6 +99,21 @@ def main():
 
     print(f"PATH: {os.environ['PATH']}")
 
+    os.environ["SYCL_CACHE_PERSISTENT"] = "1"
+    os.environ["BIGDL_LLM_XMX_DISABLED"] = "1"
+    import sys
+
+    if getattr(sys, "frozen", False):
+        # Running as compiled executable
+        bundle_dir = sys._MEIPASS
+    else:
+        # Running in a normal Python environment
+        bundle_dir = os.path.dirname(os.path.abspath(__file__))
+
+    os.environ["PATH"] = bundle_dir + os.pathsep + os.environ["PATH"]
+
+    print(f"PATH: {os.environ['PATH']}")
+
     import uvicorn
 
     if os.name == "nt":

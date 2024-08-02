@@ -53,9 +53,7 @@ def _is_ipex() -> bool:
 class ELLMInstallCommand(install):
     def run(self):
         install.run(self)
-        print("is_ipex(): " + str(_is_ipex()))
         if _is_ipex():
-            print("Install Ipex-LLM")
             result = subprocess.run(
                 [
                     "pip",
@@ -87,7 +85,6 @@ class ELLMInstallCommand(install):
 class ELLMDevelopCommand(develop):
     def run(self):
         develop.run(self)
-        print("is_ipex(): " + str(_is_ipex()))
         if _is_ipex():
             print("Install Ipex-LLM")
             result = subprocess.run(
@@ -116,8 +113,6 @@ class ELLMDevelopCommand(develop):
                 capture_output=True,
                 text=True,
             )
-
-            print(result)
 
 
 def get_path(*filepath) -> str:
@@ -192,12 +187,6 @@ if _is_directml() or _is_cuda() or _is_cpu():
             "https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-genai/pypi/simple/"
         ]
     )
-# elif(_is_ipex()):
-#     dependency_links.extend(["https://pytorch-extension.intel.com/release-whl/stable/xpu/us/"])
-# extra_install_requires.extend(["torch==2.1.0a0 @ https://pytorch-extension.intel.com/release-whl/stable/xpu/us/"])
-# extra_install_requires.extend(["ipex-llm[xpu]==2.1.0b20240702 @ https://pytorch-extension.intel.com/release-whl/stable/xpu/us/"])
-
-# extra_install_requires = ['ipex-llm[xpu]==2.1.0b20240702 @ https://pytorch-extension.intel.com/release-whl/stable/xpu/us/']
 
 setup(
     name="embeddedllm",

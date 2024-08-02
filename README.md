@@ -119,7 +119,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 
 1.  `ellm_chatbot --port 7788 --host localhost --server_port <ellm_server_port> --server_host localhost`. **Note:** To find out more of the supported arguments. `ellm_chatbot --help`.
 
-        ![Chatbot Web UI](asset/ellm_chatbot_vid.webp)
+![asset/ellm_chatbot_vid.webp](asset/ellm_chatbot_vid.webp)
 
 ### Launch Model Management UI
 
@@ -127,7 +127,7 @@ It is an interface that allows you to download and deploy OpenAI API compatible 
 
 1.  `ellm_modelui --port 6678`. **Note:** To find out more of the supported arguments. `ellm_modelui --help`.
 
-        ![Model Management UI](asset/ellm_modelui.png)
+![Model Management UI](asset/ellm_modelui.png)
 
 ## Compile OpenAI-API Compatible Server into Windows Executable
 
