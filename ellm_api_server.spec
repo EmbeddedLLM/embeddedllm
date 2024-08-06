@@ -42,12 +42,6 @@ datas_list = [
 datas_list.extend(collect_data_files('torch', include_py_files=True))
 
 hiddenimports_list = ['multipart']
-# Add missing hidden imports
-#hiddenimports_list.extend([
-#    'torch', 'torchvision', 'intel_extension_for_pytorch',
-#    'intel_extension_for_pytorch.xpu', 'intel_extension_for_pytorch.xpu.fp8',
-#    'intel_extension_for_pytorch.nn.utils'
-#])
 
 pathex = []
 
@@ -60,6 +54,7 @@ def add_package(package_name):
 if backend in ('directml', 'cpu', 'cuda'):
     add_package('onnxruntime')
     add_package('onnxruntime_genai')
+    
 elif backend == 'ipex':
     print(f"Backend IPEX")
     add_package('ipex_llm')
@@ -70,6 +65,7 @@ elif backend == 'ipex':
     add_package('embeddedllm')
     add_package('numpy')
     binaries_list.append((f'{CONDA_PATH.parent}/Library/bin/*', '.'))
+
 elif backend == 'openvino':
     print(f"Backend OpenVino")
     add_package('onnx')

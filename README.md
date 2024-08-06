@@ -69,11 +69,13 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
      - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu]`
      - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]`
      - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop`
+     - **OpenVINO:** `$env:ELLM_TARGET_DEVICE='openvino'; pip install -e .[openvino]`
      - **With Web UI**:
        - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml,webui]`
        - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu,webui]`
        - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda,webui]`
        - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop; pip install -r requirements-webui.txt`
+       - **OpenVINO:** `$env:ELLM_TARGET_DEVICE='openvino'; pip install -e .[openvino,webui]`
 
 - **Linux**
 
@@ -88,11 +90,13 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
      - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu]`
      - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]`
      - **IPEX:** `ELLM_TARGET_DEVICE='ipex' python setup.py develop`
+     - **OpenVINO:** `ELLM_TARGET_DEVICE='openvino' pip install -e .[openvino]`
      - **With Web UI**:
        - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml,webui]`
        - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu,webui]`
        - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda,webui]`
-       - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop; pip install -r requirements-webui.txt`
+       - **IPEX:** `ELLM_TARGET_DEVICE='ipex' python setup.py develop; pip install -r requirements-webui.txt`
+       - **OpenVINO:** `ELLM_TARGET_DEVICE='openvino' pip install -e .[openvino,webui]`
 
 ### Launch OpenAI API Compatible Server
 
@@ -137,6 +141,21 @@ It is an interface that allows you to download and deploy OpenAI API compatible 
 4. You can find the executable in the `dist\ellm_api_server`.
 5. Use it like `ellm_server`. `.\ellm_api_server.exe --model_path <path/to/model/weight>`.
 
+   _Powershell/Terminal Usage_:
+
+   ```powershell
+   ellm_server --model_path <path/to/model/weight>
+
+   # DirectML
+   ellm_server --model_path 'EmbeddedLLM_Phi-3-mini-4k-instruct-062024-onnx\onnx\directml\Phi-3-mini-4k-instruct-062024-int4' --port 5555
+
+   # IPEX-LLM
+   ellm_server --model_path '.\meta-llama_Meta-Llama-3.1-8B-Instruct\'  --backend 'ipex' --device 'xpu' --port 5555 --served_model_name 'meta-llama_Meta/Llama-3.1-8B-Instruct'
+
+   # OpenVINO
+   ellm_server --model_path '.\meta-llama_Meta-Llama-3.1-8B-Instruct\'  --backend 'openvino' --device 'gpu' --port 5555 --served_model_name 'meta-llama_Meta/Llama-3.1-8B-Instruct'
+   ```
+
 ## Prebuilt OpenAI API Compatible Windows Executable (Alpha)
 
 You can find the prebuilt OpenAI API Compatible Windows Executable in the Release page.
@@ -151,6 +170,9 @@ _Powershell/Terminal Usage (Use it like `ellm_server`)_:
 
 # IPEX-LLM
 .\ellm_api_server.exe --model_path '.\meta-llama_Meta-Llama-3.1-8B-Instruct\'  --backend 'ipex' --device 'xpu' --port 5555 --served_model_name 'meta-llama_Meta/Llama-3.1-8B-Instruct'
+
+# OpenVINO
+.\ellm_api_server.exe --model_path '.\meta-llama_Meta-Llama-3.1-8B-Instruct\'  --backend 'openvino' --device 'gpu' --port 5555 --served_model_name 'meta-llama_Meta/Llama-3.1-8B-Instruct'
 ```
 
 ## Acknowledgements
