@@ -49,6 +49,7 @@ def _is_cuda() -> bool:
 def _is_ipex() -> bool:
     return ELLM_TARGET_DEVICE == "ipex"
 
+
 def _is_openvino() -> bool:
     return ELLM_TARGET_DEVICE == "openvino"
 
