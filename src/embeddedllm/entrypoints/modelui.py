@@ -142,7 +142,7 @@ dml_model_dict_list = {
     ),
     "EmbeddedLLM/mistralai_Mistral-7B-Instruct-v0.3-int4-onnx-directml": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/mistralai_Mistral-7B-Instruct-v0.3-int4-onnx-directml/tree/main",
-        repo_id="EmbeddedLLM/mistral-7b-instruct-v0.3-onnx",
+        repo_id="EmbeddedLLM/mistralai_Mistral-7B-Instruct-v0.3-int4-onnx-directml",
         model_name="mistralai_Mistral-7B-Instruct-v0.3-int4-onnx-directml",
         subfolder=".",
         repo_type="model",
