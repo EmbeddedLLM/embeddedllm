@@ -20,7 +20,7 @@ def get_embeddedllm_backend():
         version = importlib.metadata.version("embeddedllm")
 
         # Use regex to extract the backend
-        match = re.search(r"\+(directml|cpu|cuda|ipex)$", version)
+        match = re.search(r"\+(directml|cpu|cuda|ipex|openvino)$", version)
 
         if match:
             backend = match.group(1)
@@ -69,6 +69,20 @@ elif backend == 'ipex':
     add_package('trl')
     add_package('embeddedllm')
     add_package('numpy')
+    binaries_list.append((f'{CONDA_PATH.parent}/Library/bin/*', '.'))
+elif backend == 'openvino':
+    print(f"Backend OpenVino")
+    add_package('onnx')
+    add_package('torch')
+    add_package('torchvision')
+    add_package('optimum')
+    add_package('optimum.intel')
+    add_package('embeddedllm')
+    add_package('numpy')
+    add_package('openvino')
+    add_package('openvino-genai')
+    add_package('openvino-telemetry')
+    add_package('openvino-tokenizers')
     binaries_list.append((f'{CONDA_PATH.parent}/Library/bin/*', '.'))
 
 print(binaries_list)
