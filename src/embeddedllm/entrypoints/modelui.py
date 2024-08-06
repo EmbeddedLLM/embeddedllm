@@ -79,7 +79,7 @@ ipex_model_dict_list = {
         model_name="Phi-3-mini-128k-instruct",
         subfolder=".",
         repo_type="model",
-        context_length=4096,
+        context_length=131072,
     ),
     "microsoft/Phi-3-medium-4k-instruct": ModelCard(
         hf_url="https://huggingface.co/microsoft/Phi-3-medium-4k-instruct/tree/main",
@@ -95,7 +95,7 @@ ipex_model_dict_list = {
         model_name="Phi-3-medium-128k-instruct",
         subfolder=".",
         repo_type="model",
-        context_length=4096,
+        context_length=131072,
     ),
 }
 
@@ -114,7 +114,7 @@ dml_model_dict_list = {
         model_name="Phi-3-mini-128k-instruct-onnx-directml",
         subfolder=".",
         repo_type="model",
-        context_length=4096,
+        context_length=131072,
     ),
     "EmbeddedLLM/Phi-3-medium-4k-instruct-onnx-directml": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-medium-4k-instruct-onnx-directml/tree/main",
@@ -130,7 +130,7 @@ dml_model_dict_list = {
         model_name="Phi-3-medium-128k-instruct-onnx-directml",
         subfolder=".",
         repo_type="model",
-        context_length=4096,
+        context_length=131072,
     ),
     "EmbeddedLLM/Phi-3-mini-4k-instruct-062024-int4-onnx-directml": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-4k-instruct-062024-int4-onnx-directml/tree/main",
@@ -221,7 +221,7 @@ cpu_model_dict_list = {
         model_name="Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32",
         subfolder=".",
         repo_type="model",
-        context_length=4096,
+        context_length=131072,
     ),
     "EmbeddedLLM/Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4/tree/main",
@@ -229,7 +229,7 @@ cpu_model_dict_list = {
         model_name="Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4",
         subfolder=".",
         repo_type="model",
-        context_length=4096,
+        context_length=131072,
     ),
     "EmbeddedLLM/mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32-acc-level-4": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32-acc-level-4/tree/main",
