@@ -135,6 +135,8 @@ It is an interface that allows you to download and deploy OpenAI API compatible 
 
 ## Compile OpenAI-API Compatible Server into Windows Executable
 
+**NOTE:** OpenVINO packaging currently uses `torch==2.4.0`. It will not be able to run due to missing dependencies which is `libomp`. Make sure to install `libomp` and add the `libomp-xxxxxxx.dll` to `C:\\Windows\\System32`.
+
 1. Install `embeddedllm`.
 2. Install PyInstaller: `pip install pyinstaller==6.9.0`.
 3. Compile Windows Executable: `pyinstaller .\ellm_api_server.spec`.
