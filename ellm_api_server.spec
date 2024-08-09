@@ -36,11 +36,6 @@ backend = get_embeddedllm_backend()
 
 binaries_list = []
 
-binaries_list.extend([
-    (Path('C:\\Windows\\System32\\libomp140.x86_64.dll').as_posix(), '.'),
-    (Path('C:\\Windows\\System32\\libomp140d.x86_64.dll').as_posix(), '.'),
-])
-
 datas_list = [
     (Path("src/embeddedllm/entrypoints/api_server.py").resolve().as_posix(), 'embeddedllm/entrypoints'),
 ]
@@ -85,6 +80,10 @@ elif backend == 'openvino':
     add_package('openvino-telemetry')
     add_package('openvino-tokenizers')
     binaries_list.append((f'{CONDA_PATH.parent}/Library/bin/*', '.'))
+    binaries_list.extend([
+        (Path('C:\\Windows\\System32\\libomp140.x86_64.dll').as_posix(), '.'),
+        (Path('C:\\Windows\\System32\\libomp140d.x86_64.dll').as_posix(), '.'),
+    ])
 
 print(binaries_list)
 
