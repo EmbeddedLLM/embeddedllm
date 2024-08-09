@@ -43,11 +43,11 @@ class EmbeddedLLMEngine:
                 os.environ["BIGDL_LLM_XMX_DISABLED"] = "1"
             self.engine = IpexEngine(self.model_path, self.vision, self.device)
             logger.info(f"Initializing ipex-llm backend (XPU): IpexEngine")
-        elif self.backend == "openvino" and self.device == "gpu":
+        elif self.backend == "openvino":  # and self.device == "gpu":
             from embeddedllm.backend.openvino_engine import OpenVinoEngine
 
             assert (
-                self.device == "gpu"
+                self.device == "gpu" or self.device == "cpu"
             ), f"To run openvino on cpu, set `backend` to `openvino` and `device` to `cpu`. EmbeddedLLMEngine load model with openvino on Intel processor."
             self.engine = OpenVinoEngine(self.model_path, self.vision, self.device)
             logger.info(f"Initializing openvino backend (GPU): OpenVinoEngine")

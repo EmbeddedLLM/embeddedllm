@@ -129,6 +129,7 @@ class IpexEngine(BaseLLMEngine):
         }
         generation_options["max_length"] = self.max_model_len
         generation_options["input_ids"] = input_tokens.clone().to(self.device)
+        generation_options["max_new_tokens"] = max_tokens
         print(generation_options)
 
         token_list: List[int] = []

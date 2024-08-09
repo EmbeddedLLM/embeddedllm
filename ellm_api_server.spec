@@ -36,6 +36,11 @@ backend = get_embeddedllm_backend()
 
 binaries_list = []
 
+binaries_list.extend([
+    (Path('C:\\Windows\\System32\\libomp140.x86_64.dll').as_posix(), '.'),
+    (Path('C:\\Windows\\System32\\libomp140d.x86_64.dll').as_posix(), '.'),
+])
+
 datas_list = [
     (Path("src/embeddedllm/entrypoints/api_server.py").resolve().as_posix(), 'embeddedllm/entrypoints'),
 ]
@@ -54,7 +59,7 @@ def add_package(package_name):
 if backend in ('directml', 'cpu', 'cuda'):
     add_package('onnxruntime')
     add_package('onnxruntime_genai')
-    
+
 elif backend == 'ipex':
     print(f"Backend IPEX")
     add_package('ipex_llm')
