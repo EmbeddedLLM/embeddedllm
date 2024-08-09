@@ -20,7 +20,7 @@ def get_embeddedllm_backend():
         version = importlib.metadata.version("embeddedllm")
 
         # Use regex to extract the backend
-        match = re.search(r"\+(directml|cpu|cuda|ipex)$", version)
+        match = re.search(r"\+(directml|cpu|cuda|ipex|openvino)$", version)
 
         if match:
             backend = match.group(1)
@@ -36,18 +36,17 @@ backend = get_embeddedllm_backend()
 
 binaries_list = []
 
+binaries_list.extend([
+    (Path('C:\\Windows\\System32\\libomp140.x86_64.dll').as_posix(), '.'),
+    (Path('C:\\Windows\\System32\\libomp140d.x86_64.dll').as_posix(), '.'),
+])
+
 datas_list = [
     (Path("src/embeddedllm/entrypoints/api_server.py").resolve().as_posix(), 'embeddedllm/entrypoints'),
 ]
 datas_list.extend(collect_data_files('torch', include_py_files=True))
 
 hiddenimports_list = ['multipart']
-# Add missing hidden imports
-#hiddenimports_list.extend([
-#    'torch', 'torchvision', 'intel_extension_for_pytorch',
-#    'intel_extension_for_pytorch.xpu', 'intel_extension_for_pytorch.xpu.fp8',
-#    'intel_extension_for_pytorch.nn.utils'
-#])
 
 pathex = []
 
@@ -60,6 +59,7 @@ def add_package(package_name):
 if backend in ('directml', 'cpu', 'cuda'):
     add_package('onnxruntime')
     add_package('onnxruntime_genai')
+
 elif backend == 'ipex':
     print(f"Backend IPEX")
     add_package('ipex_llm')
@@ -69,6 +69,21 @@ elif backend == 'ipex':
     add_package('trl')
     add_package('embeddedllm')
     add_package('numpy')
+    binaries_list.append((f'{CONDA_PATH.parent}/Library/bin/*', '.'))
+
+elif backend == 'openvino':
+    print(f"Backend OpenVino")
+    add_package('onnx')
+    add_package('torch')
+    add_package('torchvision')
+    add_package('optimum')
+    add_package('optimum.intel')
+    add_package('embeddedllm')
+    add_package('numpy')
+    add_package('openvino')
+    add_package('openvino-genai')
+    add_package('openvino-telemetry')
+    add_package('openvino-tokenizers')
     binaries_list.append((f'{CONDA_PATH.parent}/Library/bin/*', '.'))
 
 print(binaries_list)

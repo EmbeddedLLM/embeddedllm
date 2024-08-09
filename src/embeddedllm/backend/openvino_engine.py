@@ -8,8 +8,6 @@ from loguru import logger
 from PIL import Image
 from transformers import (
     AutoConfig,
-    AutoImageProcessor,
-    PretrainedConfig,
     PreTrainedTokenizer,
     PreTrainedTokenizerFast,
     TextIteratorStreamer,
@@ -17,7 +15,7 @@ from transformers import (
 
 from threading import Thread
 
-from ipex_llm.transformers import AutoModelForCausalLM
+from optimum.intel import OVModelForCausalLM, OVWeightQuantizationConfig
 
 from embeddedllm.inputs import PromptInputs
 from embeddedllm.protocol import CompletionOutput, RequestOutput
@@ -27,8 +25,8 @@ from embeddedllm.backend.base_engine import BaseLLMEngine, _get_and_verify_max_l
 RECORD_TIMING = True
 
 
-class IpexEngine(BaseLLMEngine):
-    def __init__(self, model_path: str, vision: bool, device: str = "xpu"):
+class OpenVinoEngine(BaseLLMEngine):
+    def __init__(self, model_path: str, vision: bool, device: str = "gpu"):
         self.model_path = model_path
         self.model_config: AutoConfig = AutoConfig.from_pretrained(
             self.model_path, trust_remote_code=True
@@ -43,7 +41,7 @@ class IpexEngine(BaseLLMEngine):
             sliding_window_len=self.get_hf_config_sliding_window(),
         )
 
-        logger.info("Model Context Lenght: " + str(self.max_model_len))
+        logger.info("Model Context Length: " + str(self.max_model_len))
 
         try:
             logger.info("Attempt to load fast tokenizer")
@@ -52,12 +50,27 @@ class IpexEngine(BaseLLMEngine):
             logger.info("Attempt to load slower tokenizer")
             self.tokenizer = PreTrainedTokenizer.from_pretrained(self.model_path)
 
-        self.model = AutoModelForCausalLM.from_pretrained(
-            model_path, trust_remote_code=True, load_in_4bit=True
-        ).to(self.device)
-        # self.model = AutoModelForCausalLM.from_pretrained(
-        #     model_path, trust_remote_code=True
-        # ).to(self.device)
+        try:
+            self.model = OVModelForCausalLM.from_pretrained(
+                model_path, trust_remote_code=True, export=False, device=self.device
+            )
+        except Exception as e:
+            model = OVModelForCausalLM.from_pretrained(
+                model_path,
+                trust_remote_code=True,
+                export=True,
+                quantization_config=OVWeightQuantizationConfig(
+                    **{
+                        "bits": 4,
+                        "ratio": 1.0,
+                        "sym": True,
+                        "group_size": 128,
+                        "all_layers": None,
+                    }
+                ),
+            )
+            self.model = model.to(self.device)
+
         logger.info("Model loaded")
         self.tokenizer_stream = TextIteratorStreamer(
             self.tokenizer, skip_prompt=True, skip_special_tokens=True
@@ -128,7 +141,8 @@ class IpexEngine(BaseLLMEngine):
             if hasattr(sampling_params, name)
         }
         generation_options["max_length"] = self.max_model_len
-        generation_options["input_ids"] = input_tokens.clone().to(self.device)
+        generation_options["input_ids"] = input_tokens.clone()
+        # generation_options["input_ids"] = input_tokens.clone().to(self.device)
         generation_options["max_new_tokens"] = max_tokens
         print(generation_options)
 
