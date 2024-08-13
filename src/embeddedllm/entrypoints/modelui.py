@@ -64,6 +64,7 @@ class ModelCard(BaseModel):
     context_length: int
     size: Optional[int] = 0
 
+
 ipex_model_dict_list = {
     "microsoft/Phi-3-mini-4k-instruct": ModelCard(
         hf_url="https://huggingface.co/microsoft/Phi-3-mini-4k-instruct/tree/main/",
@@ -437,7 +438,9 @@ def deploy_model(engine_type, model_name, port_number):
 
     snapshot_path = snapshot_download(
         repo_id=llm_model_card.repo_id,
-        allow_patterns=f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None,
+        allow_patterns=(
+            f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
+        ),
         repo_type="model",
     )
 
@@ -446,14 +449,14 @@ def deploy_model(engine_type, model_name, port_number):
     else:
         model_path = snapshot_path
 
-    print("Model path:",model_path)
+    print("Model path:", model_path)
 
-    if engine_type == 'Ipex':
-        device = 'xpu'
-    
+    if engine_type == "Ipex":
+        device = "xpu"
+
     else:
-        device = 'cpu'
-    
+        device = "cpu"
+
     deployed_model.process = subprocess.Popen(
         [
             "ellm_server",
@@ -476,7 +479,7 @@ def deploy_model(engine_type, model_name, port_number):
         # ping the server to see if it is up.
         if check_health(f"http://localhost:{port_number}/health"):
             break
-    
+
     deployment_message = f"""
     <div style="padding: 10px; background-color: #58DE3A; border-radius: 5px;">
         <h2 style="color: #2D2363;">Deployment Status:</h2>
@@ -523,7 +526,9 @@ def download_model(engine_type, model_name):
     yield "Downloading ..."
     snapshot_path = snapshot_download(
         repo_id=llm_model_card.repo_id,
-        allow_patterns=f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None,
+        allow_patterns=(
+            f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
+        ),
         repo_type="model",
     )
     yield snapshot_path
@@ -561,7 +566,7 @@ def main():
             default_value = "Ipex"
         selected_engine_type = gr.Dropdown(
             choices=["DirectML", "Ipex", "CPU"],
-            value = default_value,
+            value=default_value,
             multiselect=False,
             label="LLM Engine",
             show_label=True,
