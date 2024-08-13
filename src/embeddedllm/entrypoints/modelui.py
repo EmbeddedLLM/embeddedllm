@@ -441,32 +441,49 @@ def deploy_model(engine_type, model_name, port_number):
         repo_type="model",
     )
 
-    model_path = os.path.join(snapshot_path, llm_model_card.subfolder)
+    if llm_model_card.subfolder != ".":
+        model_path = os.path.join(snapshot_path, llm_model_card.subfolder)
+    else:
+        model_path = snapshot_path
 
+    print("Model path:",model_path)
+
+    if engine_type == 'Ipex':
+        device = 'xpu'
+    
+    else:
+        device = 'cpu'
+    
     deployed_model.process = subprocess.Popen(
         [
             "ellm_server",
             "--model_path",
             model_path,
+            "--backend",
+            backend,
+            "--device",
+            device,
             "--port",
             f"{port_number}",
-            "--served_model_name",
-            model_name,
+            # "--served_model_name",
+            # model_name
         ]
     )
+
     deployed_model.model_name = model_name
 
     while True:
         # ping the server to see if it is up.
         if check_health(f"http://localhost:{port_number}/health"):
             break
-
+    
     deployment_message = f"""
     <div style="padding: 10px; background-color: #58DE3A; border-radius: 5px;">
         <h2 style="color: #2D2363;">Deployment Status:</h2>
         <p style="color: #2D2363;"><strong>Model:</strong> {model_name}</p>
         <p style="color: #2D2363;"><strong>Engine:</strong> {engine_type}</p>
         <p style="color: #2D2363;"><strong>Port:</strong> {port_number}</p>
+        <p style="color: #2D2363;"><strong>Model Path:</strong> {model_path}</p>
     </div>
     """
 
