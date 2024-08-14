@@ -28,9 +28,9 @@ class Config(BaseSettings):
     )
     port: int = Field(default=6979, description="Server port.")
     host: str = Field(default="0.0.0.0", description="Server host.")
-    device: str = Field(default="cpu", description="Device type: `cpu`, `xpu`")
+    device: str = Field(default="cpu", description="Device type: `cpu`, `xpu`, `gpu`")
     backend: str = Field(
-        default="directml", description="Backend engine: `cpu`, `ipex` and `directml`"
+        default="directml", description="Backend engine: `cpu`, `ipex`, `openvino` and `directml`"
     )
     response_role: str = Field(default="assistant", description="Server response role.")
     uvicorn_log_level: str = Field(
