@@ -20,7 +20,7 @@ def get_embeddedllm_backend():
         version = importlib.metadata.version("embeddedllm")
 
         # Use regex to extract the backend
-        match = re.search(r"\+(directml|cpu|cuda|ipex)$", version)
+        match = re.search(r"\+(directml|cpu|cuda|ipex|openvino)$", version)
 
         if match:
             backend = match.group(1)
@@ -64,6 +64,73 @@ class ModelCard(BaseModel):
     context_length: int
     size: Optional[int] = 0
 
+
+openvino_model_dict_list = {
+    # "OpenVINO/Phi-3-mini-128k-instruct-int4-ov": ModelCard(
+    #     hf_url="https://huggingface.co/OpenVINO/Phi-3-mini-128k-instruct-int4-ov/tree/main/",
+    #     repo_id="OpenVINO/Phi-3-mini-128k-instruct-int4-ov",
+    #     model_name="Phi-3-mini-128k-instruct-int4-ov",
+    #     subfolder=".",
+    #     repo_type="model",
+    #     context_length=131072,
+    # ),
+    "OpenVINO/Phi-3-mini-128k-instruct-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/Phi-3-mini-128k-instruct-int8-ov/tree/main/",
+        repo_id="OpenVINO/Phi-3-mini-128k-instruct-int8-ov",
+        model_name="Phi-3-mini-128k-instruct-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+    # "OpenVINO/Phi-3-mini-4k-instruct-int4-ov": ModelCard(
+    #     hf_url="https://huggingface.co/OpenVINO/Phi-3-mini-4k-instruct-int4-ov/tree/main/",
+    #     repo_id="OpenVINO/Phi-3-mini-4k-instruct-int4-ov",
+    #     model_name="Phi-3-mini-4k-instruct-int4-ov",
+    #     subfolder=".",
+    #     repo_type="model",
+    #     context_length=4096,
+    # ),
+    "OpenVINO/Phi-3-mini-4k-instruct-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/Phi-3-mini-4k-instruct-int8-ov/tree/main/",
+        repo_id="OpenVINO/Phi-3-mini-4k-instruct-int8-ov",
+        model_name="Phi-3-mini-4k-instruct-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=4096,
+    ),
+    # "OpenVINO/Phi-3-medium-4k-instruct-int4-ov": ModelCard(
+    #     hf_url="https://huggingface.co/OpenVINO/Phi-3-medium-4k-instruct-int4-ov/tree/main/",
+    #     repo_id="OpenVINO/Phi-3-medium-4k-instruct-int4-ov",
+    #     model_name="Phi-3-medium-4k-instruct-int4-ov",
+    #     subfolder=".",
+    #     repo_type="model",
+    #     context_length=4096,
+    # ),
+    "OpenVINO/Phi-3-medium-4k-instruct-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/Phi-3-medium-4k-instruct-int8-ov/tree/main/",
+        repo_id="OpenVINO/Phi-3-medium-4k-instruct-int8-ov",
+        model_name="Phi-3-medium-4k-instruct-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=4096,
+    ),
+    "OpenVINO/open_llama_7b_v2-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/open_llama_7b_v2-int8-ov/tree/main/",
+        repo_id="OpenVINO/open_llama_7b_v2-int8-ov",
+        model_name="open_llama_7b_v2-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=2048,
+    ),
+    "OpenVINO/open_llama_3b_v2-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/open_llama_3b_v2-int8-ov/tree/main/",
+        repo_id="OpenVINO/open_llama_3b_v2-int8-ov",
+        model_name="open_llama_3b_v2-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=2048,
+    ),
+}
 
 ipex_model_dict_list = {
     "microsoft/Phi-3-mini-4k-instruct": ModelCard(
@@ -319,6 +386,11 @@ for k, v in ipex_model_dict_list.items():
         repo_id=v.repo_id, path_in_repo=v.subfolder, repo_type=v.repo_type
     )
 
+for k, v in openvino_model_dict_list.items():
+    v.size = compute_memory_size(
+        repo_id=v.repo_id, path_in_repo=v.subfolder, repo_type=v.repo_type
+    )
+
 
 def convert_to_dataframe(model_dict_list):
     # Create lists to store the data
@@ -409,6 +481,9 @@ def update_model_list(engine_type):
     elif engine_type == "Ipex":
         models = sorted(list(ipex_model_dict_list.keys()))
         models_pandas = convert_to_dataframe(ipex_model_dict_list)
+    elif engine_type == 'OpenVino':
+        models = sorted(list(openvino_model_dict_list.keys()))
+        models_pandas = convert_to_dataframe(openvino_model_dict_list)
     else:
         models = sorted(list(cpu_model_dict_list.keys()))
         models_pandas = convert_to_dataframe(cpu_model_dict_list)
@@ -433,6 +508,8 @@ def deploy_model(engine_type, model_name, port_number):
         llm_model_card = dml_model_dict_list[model_name]
     elif engine_type == "Ipex":
         llm_model_card = ipex_model_dict_list[model_name]
+    elif engine_type == "OpenVino":
+        llm_model_card = openvino_model_dict_list[model_name]
     else:
         llm_model_card = cpu_model_dict_list[model_name]
 
@@ -453,7 +530,8 @@ def deploy_model(engine_type, model_name, port_number):
 
     if engine_type == "Ipex":
         device = "xpu"
-
+    elif engine_type == "OpenVino":
+        device = "gpu"
     else:
         device = "cpu"
 
@@ -516,6 +594,8 @@ def download_model(engine_type, model_name):
         llm_model_card = dml_model_dict_list[model_name]
     elif engine_type == "Ipex":
         llm_model_card = ipex_model_dict_list[model_name]
+    elif engine_type == "OpenVino":
+        llm_model_card = openvino_model_dict_list[model_name]
     else:
         llm_model_card = cpu_model_dict_list[model_name]
 
@@ -564,8 +644,10 @@ def main():
             default_value = "DirectML"
         elif backend == "ipex":
             default_value = "Ipex"
+        elif backend == "openvino":
+            default_value = "OpenVino"
         selected_engine_type = gr.Dropdown(
-            choices=["DirectML", "Ipex", "CPU"],
+            choices=["DirectML", "Ipex", "OpenVino", "CPU"],
             value=default_value,
             multiselect=False,
             label="LLM Engine",
