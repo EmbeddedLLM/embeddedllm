@@ -1,4 +1,5 @@
 # Benchmark
+Allow users to test on themselves to get the benchmark of model(s) on different backend. It will analyse the Token In / Out throughput for you in a statistical manner
 
 ## Benchmark a Model
 To benchmark a model, run this
