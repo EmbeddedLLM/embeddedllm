@@ -22,6 +22,8 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
     # Add the log file to the logger (it will append if the file already exists)
     logger.add(log_file, mode='a')
 
+    encode_bias = 0
+    output_token_bias = 0
     # need different parameter for cpu and directml
     if backend == "cpu":
         device="cpu"
@@ -29,6 +31,8 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
         device="xpu"
     elif backend == "openvino":
         device="gpu"
+        encode_bias = 2
+        output_token_bias = 1
     elif backend == "directml":
         device = ""
 
@@ -48,20 +52,22 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
     with open(file_path, 'r') as file:
         prompt_text = file.read()
 
-    input_tokens = model.tokenizer.encode(prompt_text)[:input_token_length-1]
+    input_tokens = model.tokenizer.encode(prompt_text)[:(input_token_length - encode_bias)]
     input_text = model.tokenizer.decode(input_tokens)
     print(input_text)
     input_tokens = model.tokenizer.encode(input_text)
-    print(len(input_tokens))
+    
+    print("input_tokens:",len(input_tokens))
+    print("input_token_length:",input_token_length)
 
-    assert input_token_length-1 == len(input_tokens)
+    assert input_token_length == len(input_tokens)
 
     PromptInputs = {
         "prompt": input_text
     }
 
     sampling_params_config = sampling_params.SamplingParams(
-        max_tokens=output_token_length,
+        max_tokens=(output_token_length - output_token_bias),
         top_p=0.1,
         top_k=1,
         temperature=1,

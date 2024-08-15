@@ -3,32 +3,32 @@ import subprocess
 # Define the models
 model_names = [
     # model names
-
+    "Phi-3-mini-4k-instruct-int8-ov"
 ]
 
 # Define the model paths
 model_paths = [
     # path to model in order to model names / model repo id
-
+    "OpenVINO/Phi-3-mini-4k-instruct-int8-ov"
 ]
 
 # Define the token length
 token_in_out = [
-    (1024, 1024),
-    (1024, 512),
-    (1024, 256),
-    (1024, 128),
-    (512, 1024),
-    (512, 512),
-    (512, 256),
-    (512, 128),
-    (256, 1024),
-    (256, 512),
-    (256, 256),
-    (256, 128),
-    (128, 1024),
-    (128, 512),
-    (128, 256),
+    # (1024, 1024),
+    # (1024, 512),
+    # (1024, 256),
+    # (1024, 128),
+    # (512, 1024),
+    # (512, 512),
+    # (512, 256),
+    # (512, 128),
+    # (256, 1024),
+    # (256, 512),
+    # (256, 256),
+    # (256, 128),
+    # (128, 1024),
+    # (128, 512),
+    # (128, 256),
     (128, 128),
 ]
 
@@ -36,7 +36,7 @@ token_in_out = [
 # backend = "cpu"
 # backend = "directml"
 # backend = "ipex"
-# backend = "openvino"
+backend = "openvino"
 
 # Number of loops
 loop_count = 20
