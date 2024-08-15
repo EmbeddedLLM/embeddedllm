@@ -23,6 +23,7 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
     logger.add(log_file, mode='a')
 
     encode_bias = 0
+    prompt_bias = 0
     output_token_bias = 0
     # need different parameter for cpu and directml
     if backend == "cpu":
@@ -35,6 +36,8 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
         output_token_bias = 1
     elif backend == "directml":
         device = ""
+        encode_bias = 1
+        prompt_bias = 1
 
     model = engine.EmbeddedLLMEngine(model_path=model_path, vision=False, device=device, backend=backend)
 
@@ -57,10 +60,10 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
     print(input_text)
     input_tokens = model.tokenizer.encode(input_text)
     
-    print("input_tokens:",len(input_tokens))
+    print("input_tokens:",(prompt_bias + len(input_tokens)))
     print("input_token_length:",input_token_length)
 
-    assert input_token_length == len(input_tokens)
+    assert input_token_length == (prompt_bias + len(input_tokens))
 
     PromptInputs = {
         "prompt": input_text
