@@ -1,14 +1,18 @@
 import subprocess
 
-# Define the models and token lengths
+# Define the models
 model_names = [
     # model names
+
 ]
 
+# Define the model paths
 model_paths = [
     # path to model in order to model names / model repo id
+
 ]
 
+# Define the token length
 token_in_out = [
     (1024, 1024),
     (1024, 512),

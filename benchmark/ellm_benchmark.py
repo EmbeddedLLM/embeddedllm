@@ -99,7 +99,7 @@ def main():
     parser = argparse.ArgumentParser(description="Benchmark EmbeddedLLM models.")
     parser.add_argument('--backend', type=str, required=True, choices=['cpu', 'directml', 'openvino', 'ipex'], help='Backend to use (cpu, ipex, openvino or directml)')
     parser.add_argument('--model_name', type=str, required=True, help='Name of the model')
-    parser.add_argument('--model_path', type=str, required=True, help='Path to the model')
+    parser.add_argument('--model_path', type=str, required=True, help='Path to the model or model repo id')
     parser.add_argument('--token_in', type=int, required=True, help='Number of input tokens (max 2048)')
     parser.add_argument('--token_out', type=int, required=True, help='Number of output tokens')
 
