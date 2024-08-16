@@ -8,9 +8,11 @@ To benchmark a model, run this
 * --model_path `Path to Model` | `Model Repo ID`
 * --token_in `Number of Input Tokens (Max 2048)`
 * --token_out `Number of Output Tokens`
+* --input_token_bias `Adjust the input token`
+* --output_token_bias `Adjust the output token`
 
 ```shell
-python ellm_benchmark.py --backend <cpu | ipex | openvino | directml> --model_name <Name of the Model> --model_path <Path to Model | Model Repo ID> --token_in <Number of Input Tokens (Max 2048)> --token_out <Number of Output Tokens>
+python ellm_benchmark.py --backend <cpu | ipex | openvino | directml> --model_name <Name of the Model> --model_path <Path to Model | Model Repo ID> --token_in <Number of Input Tokens (Max 2048)> --token_out <Number of Output Tokens> --input_token_bias <int value> --output_token_bias <int value>
 ```
 
 
@@ -57,6 +59,10 @@ backend = "openvino"
 
 # Number of loops
 loop_count = 20
+
+# input and output token bias
+input_token_bias = 0
+output_token_bias = 0
 ```
 ```shell
 python loop_ellm_benchmark.py
