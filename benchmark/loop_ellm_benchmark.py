@@ -41,6 +41,10 @@ token_in_out = [
 # Number of loops
 loop_count = 20
 
+# input and output token bias
+input_token_bias = 0
+output_token_bias = 0
+
 # Path to the ellm_benchmark.py script
 ellm_benchmark_script = "ellm_benchmark.py"
 
@@ -54,7 +58,9 @@ for model_name, model_path in zip(model_names, model_paths):
                 "--model_name", model_name,
                 "--model_path", model_path,
                 "--token_in", str(input_token_length),
-                "--token_out", str(output_token_length)
+                "--token_out", str(output_token_length),
+                "--input_token_bias", str(input_token_bias),
+                "--output_token_bias", str(output_token_bias)
             ]
 
             # Execute the command
