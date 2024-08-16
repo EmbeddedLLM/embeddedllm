@@ -473,8 +473,8 @@ def deploy_model(engine_type, model_name, port_number):
             device,
             "--port",
             f"{port_number}",
-            # "--served_model_name",
-            # model_name
+            "--served_model_name",
+            model_name
         ]
     )
 
