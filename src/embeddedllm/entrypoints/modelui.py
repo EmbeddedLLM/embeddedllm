@@ -651,6 +651,8 @@ def main():
             default_value = "DirectML"
         elif backend == "ipex":
             default_value = "Ipex"
+        elif backend == "openvino":
+            default_value = "OpenVino"
 
         default_choices.append(default_value)
 
