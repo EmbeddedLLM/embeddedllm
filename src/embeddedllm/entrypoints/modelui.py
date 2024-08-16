@@ -559,13 +559,19 @@ def main():
         with gr.Accordion("See More Model Details", open=False):
             model_info_pandas_frame = gr.Dataframe(value=None)
 
-        default_value = "CPU"  # Default value
+        # Default is CPU
+        default_value = "CPU"  
+        default_choices = ["CPU"]
+
         if backend == "directml":
             default_value = "DirectML"
         elif backend == "ipex":
             default_value = "Ipex"
+
+        default_choices.append(default_value)
+
         selected_engine_type = gr.Dropdown(
-            choices=["DirectML", "Ipex", "CPU"],
+            choices=default_choices,
             value=default_value,
             multiselect=False,
             label="LLM Engine",
