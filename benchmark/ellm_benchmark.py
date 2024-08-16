@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 from embeddedllm import engine
 from embeddedllm import sampling_params
 
-async def benchmark(input_token_length, output_token_length, model_path, model_name, backend):
+async def benchmark(input_token_length, output_token_length, model_path, model_name, backend, input_token_bias=0, output_token_bias=0):
     # Create the profile_model_timing directory if it doesn't exist
     log_dir = "profile_model_timing"
     os.makedirs(log_dir, exist_ok=True)
@@ -22,9 +22,6 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
     # Add the log file to the logger (it will append if the file already exists)
     logger.add(log_file, mode='a')
 
-    encode_bias = 0
-    prompt_bias = 0
-    output_token_bias = 0
     # need different parameter for cpu and directml
     if backend == "cpu":
         device="cpu"
@@ -32,12 +29,8 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
         device="xpu"
     elif backend == "openvino":
         device="gpu"
-        encode_bias = 2
-        output_token_bias = 1
     elif backend == "directml":
         device = ""
-        encode_bias = 1
-        prompt_bias = 1
 
     model = engine.EmbeddedLLMEngine(model_path=model_path, vision=False, device=device, backend=backend)
 
@@ -55,22 +48,17 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
     with open(file_path, 'r') as file:
         prompt_text = file.read()
 
-    input_tokens = model.tokenizer.encode(prompt_text)[:(input_token_length - encode_bias)]
+    input_tokens = model.tokenizer.encode(prompt_text)[:(input_token_length + input_token_bias)]
     input_text = model.tokenizer.decode(input_tokens)
     print(input_text)
     input_tokens = model.tokenizer.encode(input_text)
-    
-    print("input_tokens:",(prompt_bias + len(input_tokens)))
-    print("input_token_length:",input_token_length)
-
-    assert input_token_length == (prompt_bias + len(input_tokens))
 
     PromptInputs = {
         "prompt": input_text
     }
 
     sampling_params_config = sampling_params.SamplingParams(
-        max_tokens=(output_token_length - output_token_bias),
+        max_tokens=(output_token_length + output_token_bias),
         top_p=0.1,
         top_k=1,
         temperature=1,
@@ -111,6 +99,8 @@ def main():
     parser.add_argument('--model_path', type=str, required=True, help='Path to the model or model repo id')
     parser.add_argument('--token_in', type=int, required=True, help='Number of input tokens (max 2048)')
     parser.add_argument('--token_out', type=int, required=True, help='Number of output tokens')
+    parser.add_argument('--input_token_bias', type=int, required=False, help='Adjust the input token length')
+    parser.add_argument('--output_token_bias', type=int, required=False, help='Adjust the output token length')
 
     args = parser.parse_args()
 
@@ -120,7 +110,7 @@ def main():
         args.token_in = 2048
 
     # Run the async function using asyncio.run()
-    asyncio.run(benchmark(args.token_in, args.token_out, args.model_path, args.model_name, args.backend))
+    asyncio.run(benchmark(args.token_in, args.token_out, args.model_path, args.model_name, args.backend, args.input_token_bias, args.output_token_bias))
 
 if __name__ == "__main__":
     main()
