@@ -521,6 +521,8 @@ def download_model(engine_type, model_name):
         llm_model_card = dml_model_dict_list[model_name]
     elif engine_type == "Ipex":
         llm_model_card = ipex_model_dict_list[model_name]
+    elif engine_type == "CPU" and backend == "ipex":
+        llm_model_card = ipex_model_dict_list[model_name]
     else:
         llm_model_card = cpu_model_dict_list[model_name]
 
