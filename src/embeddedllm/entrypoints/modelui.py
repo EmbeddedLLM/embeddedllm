@@ -409,6 +409,9 @@ def update_model_list(engine_type):
     elif engine_type == "Ipex":
         models = sorted(list(ipex_model_dict_list.keys()))
         models_pandas = convert_to_dataframe(ipex_model_dict_list)
+    elif engine_type == "CPU" and backend == "ipex":
+        models = sorted(list(ipex_model_dict_list.keys()))
+        models_pandas = convert_to_dataframe(ipex_model_dict_list)
     else:
         models = sorted(list(cpu_model_dict_list.keys()))
         models_pandas = convert_to_dataframe(cpu_model_dict_list)
@@ -432,6 +435,8 @@ def deploy_model(engine_type, model_name, port_number):
     if engine_type == "DirectML":
         llm_model_card = dml_model_dict_list[model_name]
     elif engine_type == "Ipex":
+        llm_model_card = ipex_model_dict_list[model_name]
+    elif engine_type == "CPU" and backend == "ipex":
         llm_model_card = ipex_model_dict_list[model_name]
     else:
         llm_model_card = cpu_model_dict_list[model_name]
