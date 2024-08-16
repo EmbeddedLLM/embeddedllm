@@ -266,7 +266,7 @@ dml_model_dict_list = {
     ),
 }
 
-cpu_model_dict_list = {
+onnx_cpu_model_dict_list = {
     "EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32/tree/main",
         repo_id="EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32",
@@ -371,7 +371,7 @@ def compute_memory_size(repo_id, path_in_repo, repo_type: str = "model"):
     return bytes_to_gb(total_size_bytes)
 
 
-for k, v in cpu_model_dict_list.items():
+for k, v in onnx_cpu_model_dict_list.items():
     v.size = compute_memory_size(
         repo_id=v.repo_id, path_in_repo=v.subfolder, repo_type=v.repo_type
     )
@@ -478,15 +478,15 @@ def update_model_list(engine_type):
     if engine_type == "DirectML":
         models = sorted(list(dml_model_dict_list.keys()))
         models_pandas = convert_to_dataframe(dml_model_dict_list)
-    elif engine_type == "Ipex":
+    elif backend == "ipex":
         models = sorted(list(ipex_model_dict_list.keys()))
         models_pandas = convert_to_dataframe(ipex_model_dict_list)
-    elif engine_type == "CPU" and backend == "ipex":
-        models = sorted(list(ipex_model_dict_list.keys()))
-        models_pandas = convert_to_dataframe(ipex_model_dict_list)
+    elif backend == "openvino":
+        models = sorted(list(openvino_model_dict_list.keys()))
+        models_pandas = convert_to_dataframe(openvino_model_dict_list)
     else:
-        models = sorted(list(cpu_model_dict_list.keys()))
-        models_pandas = convert_to_dataframe(cpu_model_dict_list)
+        models = sorted(list(onnx_cpu_model_dict_list.keys()))
+        models_pandas = convert_to_dataframe(onnx_cpu_model_dict_list)
 
     return gr.Dropdown(choices=models, value=models[0] if models else None), gr.Dataframe(
         value=models_pandas if len(models_pandas) > 0 else None, datatype="markdown"
@@ -506,14 +506,12 @@ def deploy_model(engine_type, model_name, port_number):
 
     if engine_type == "DirectML":
         llm_model_card = dml_model_dict_list[model_name]
-    elif engine_type == "Ipex":
+    elif backend == "ipex":
         llm_model_card = ipex_model_dict_list[model_name]
-    elif engine_type == "CPU" and backend == "ipex":
-        llm_model_card = ipex_model_dict_list[model_name]
-    elif engine_type == "OpenVino":
+    elif backend == "openvino":
         llm_model_card = openvino_model_dict_list[model_name]
     else:
-        llm_model_card = cpu_model_dict_list[model_name]
+        llm_model_card = onnx_cpu_model_dict_list[model_name]
 
     snapshot_path = snapshot_download(
         repo_id=llm_model_card.repo_id,
@@ -594,14 +592,12 @@ def download_model(engine_type, model_name):
 
     if engine_type == "DirectML":
         llm_model_card = dml_model_dict_list[model_name]
-    elif engine_type == "Ipex":
+    elif backend == "ipex":
         llm_model_card = ipex_model_dict_list[model_name]
-    elif engine_type == "CPU" and backend == "ipex":
-        llm_model_card = ipex_model_dict_list[model_name]
-    elif engine_type == "OpenVino":
+    elif backend == "openvino":
         llm_model_card = openvino_model_dict_list[model_name]
     else:
-        llm_model_card = cpu_model_dict_list[model_name]
+        llm_model_card = onnx_cpu_model_dict_list[model_name]
 
     # Handle model_name if it's a list
     if isinstance(model_name, list):
