@@ -510,6 +510,8 @@ def deploy_model(engine_type, model_name, port_number):
         llm_model_card = ipex_model_dict_list[model_name]
     elif engine_type == "CPU" and backend == "ipex":
         llm_model_card = ipex_model_dict_list[model_name]
+    elif engine_type == "OpenVino":
+        llm_model_card = openvino_model_dict_list[model_name]
     else:
         llm_model_card = cpu_model_dict_list[model_name]
 
@@ -593,6 +595,8 @@ def download_model(engine_type, model_name):
     if engine_type == "DirectML":
         llm_model_card = dml_model_dict_list[model_name]
     elif engine_type == "Ipex":
+        llm_model_card = ipex_model_dict_list[model_name]
+    elif engine_type == "CPU" and backend == "ipex":
         llm_model_card = ipex_model_dict_list[model_name]
     elif engine_type == "OpenVino":
         llm_model_card = openvino_model_dict_list[model_name]
