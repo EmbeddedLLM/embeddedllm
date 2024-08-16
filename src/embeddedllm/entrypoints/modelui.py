@@ -66,18 +66,26 @@ class ModelCard(BaseModel):
 
 
 openvino_model_dict_list = {
-    # "OpenVINO/Phi-3-mini-128k-instruct-int4-ov": ModelCard(
-    #     hf_url="https://huggingface.co/OpenVINO/Phi-3-mini-128k-instruct-int4-ov/tree/main/",
-    #     repo_id="OpenVINO/Phi-3-mini-128k-instruct-int4-ov",
-    #     model_name="Phi-3-mini-128k-instruct-int4-ov",
-    #     subfolder=".",
-    #     repo_type="model",
-    #     context_length=131072,
-    # ),
+    "EmbeddedLLM/Phi-3-mini-128k-instruct-int4-ov-model": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-128k-instruct-int4-ov-model/tree/main/",
+        repo_id="EmbeddedLLM/Phi-3-mini-128k-instruct-int4-ov-model",
+        model_name="Phi-3-mini-128k-instruct-int4-ov-model",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
     "OpenVINO/Phi-3-mini-128k-instruct-int8-ov": ModelCard(
         hf_url="https://huggingface.co/OpenVINO/Phi-3-mini-128k-instruct-int8-ov/tree/main/",
         repo_id="OpenVINO/Phi-3-mini-128k-instruct-int8-ov",
         model_name="Phi-3-mini-128k-instruct-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+    "EmbeddedLLM/Phi-3-medium-128k-instruct-int4-sym-ov": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-medium-128k-instruct-int4-sym-ov/tree/main/",
+        repo_id="EmbeddedLLM/Phi-3-medium-128k-instruct-int4-sym-ov",
+        model_name="Phi-3-medium-128k-instruct-int4-sym-ov",
         subfolder=".",
         repo_type="model",
         context_length=131072,
