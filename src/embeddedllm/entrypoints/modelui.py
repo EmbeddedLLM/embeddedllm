@@ -523,9 +523,6 @@ def deploy_model(engine_type, model_name, port_number):
         allow_patterns=(
             f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
         ),
-        allow_patterns=(
-            f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
-        ),
         repo_type="model",
     )
 
@@ -618,9 +615,6 @@ def download_model(engine_type, model_name):
         allow_patterns=(
             f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
         ),
-        allow_patterns=(
-            f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
-        ),
         repo_type="model",
     )
     yield snapshot_path
@@ -665,8 +659,6 @@ def main():
         default_choices.append(default_value)
 
         selected_engine_type = gr.Dropdown(
-            choices=default_choices,
-            value=default_value,
             choices=default_choices,
             value=default_value,
             multiselect=False,
