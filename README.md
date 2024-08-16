@@ -7,7 +7,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 | Model architectures   | Gemma <br/> Llama \* <br/> Mistral + <br/>Phi <br/> |                   |                |
 | Platform              | Linux <br/> Windows                                 |                   |                |
 | Architecture          | x86 <br/> x64 <br/>                                 | Arm64             |                |
-| Hardware Acceleration | CUDA<br/>DirectML<br/>IpexLLM                       | QNN <br/> ROCm    | OpenVINO       |
+| Hardware Acceleration | CUDA<br/>DirectML<br/>IpexLLM<br/>OpenVINO          | QNN <br/> ROCm    |                |
 
 \* The Llama model architecture supports similar model families such as CodeLlama, Vicuna, Yi, and more.
 
