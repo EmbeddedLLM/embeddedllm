@@ -80,7 +80,7 @@ class EmbeddedLLMEngine:
 
         else:
             raise ValueError(
-                f"EmbeddedLLMEngine only supports `cpu`, `ipex`, `cuda` and `directml`."
+                f"EmbeddedLLMEngine only supports `cpu`, `ipex`, `cuda`, `openvino` and `directml`."
             )
         self.tokenizer = self.engine.tokenizer
 
