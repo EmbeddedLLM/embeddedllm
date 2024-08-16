@@ -24,6 +24,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
   - [Onnxruntime DirectML Models](./docs/model/onnxruntime_directml_models.md)
   - [Onnxruntime CPU Models](./docs/model/onnxruntime_cpu_models.md)
   - [Ipex-LLM Models](./docs/model/ipex_models.md)
+  - [OpenVINO-LLM Models](./docs/model/openvino_models.md)
 - [Getting Started](#getting-started)
   - [Installation From Source](#installation)
   - [Launch OpenAI API Compatible Server](#launch-openai-api-compatible-server)
