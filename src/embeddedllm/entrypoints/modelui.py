@@ -197,9 +197,77 @@ dml_model_dict_list = {
         repo_id="EmbeddedLLM/Phi-3-medium-4k-instruct-onnx-directml",
         model_name="Phi-3-medium-4k-instruct-onnx-directml",
         subfolder=".",
+        hf_url="https://huggingface.co/microsoft/Phi-3-mini-4k-instruct/tree/main/",
+        repo_id="microsoft/Phi-3-mini-4k-instruct",
+        model_name="Phi-3-mini-4k-instruct",
+        subfolder=".",
         repo_type="model",
         context_length=4096,
     ),
+    "microsoft/Phi-3-mini-128k-instruct": ModelCard(
+        hf_url="https://huggingface.co/microsoft/Phi-3-mini-128k-instruct/tree/main",
+        repo_id="microsoft/Phi-3-mini-128k-instruct",
+        model_name="Phi-3-mini-128k-instruct",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+    "microsoft/Phi-3-medium-4k-instruct": ModelCard(
+        hf_url="https://huggingface.co/microsoft/Phi-3-medium-4k-instruct/tree/main",
+        repo_id="microsoft/Phi-3-medium-4k-instruct",
+        model_name="Phi-3-medium-4k-instruct",
+        subfolder=".",
+        repo_type="model",
+        context_length=4096,
+    ),
+    "microsoft/Phi-3-medium-128k-instruct": ModelCard(
+        hf_url="https://huggingface.co/microsoft/Phi-3-medium-128k-instruct/tree/main",
+        repo_id="microsoft/Phi-3-medium-128k-instruct",
+        model_name="Phi-3-medium-128k-instruct",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+}
+
+dml_model_dict_list = {
+    "EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-directml": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-directml/tree/main",
+        repo_id="EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-directml",
+        model_name="Phi-3-mini-4k-instruct-onnx-directml",
+        subfolder=".",
+        repo_type="model",
+        context_length=4096,
+    ),
+    "EmbeddedLLM/Phi-3-mini-128k-instruct-onnx-directml": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-128k-instruct-onnx-directml/tree/main",
+        repo_id="EmbeddedLLM/Phi-3-mini-128k-instruct-onnx-directml",
+        model_name="Phi-3-mini-128k-instruct-onnx-directml",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+    "EmbeddedLLM/Phi-3-medium-4k-instruct-onnx-directml": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-medium-4k-instruct-onnx-directml/tree/main",
+        repo_id="EmbeddedLLM/Phi-3-medium-4k-instruct-onnx-directml",
+        model_name="Phi-3-medium-4k-instruct-onnx-directml",
+        subfolder=".",
+        repo_type="model",
+        context_length=4096,
+    ),
+    "EmbeddedLLM/Phi-3-medium-128k-instruct-onnx-directml": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-medium-128k-instruct-onnx-directml/tree/main",
+        repo_id="EmbeddedLLM/Phi-3-medium-128k-instruct-onnx-directml",
+        model_name="Phi-3-medium-128k-instruct-onnx-directml",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+    "EmbeddedLLM/Phi-3-mini-4k-instruct-062024-int4-onnx-directml": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-4k-instruct-062024-int4-onnx-directml/tree/main",
+        repo_id="EmbeddedLLM/Phi-3-mini-4k-instruct-062024-int4-onnx-directml",
+        model_name="Phi-3-mini-4k-instruct-062024-int4-onnx-directml",
+        subfolder=".",
     "EmbeddedLLM/Phi-3-medium-128k-instruct-onnx-directml": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-medium-128k-instruct-onnx-directml/tree/main",
         repo_id="EmbeddedLLM/Phi-3-medium-128k-instruct-onnx-directml",
@@ -221,6 +289,11 @@ dml_model_dict_list = {
         repo_id="EmbeddedLLM/mistralai_Mistral-7B-Instruct-v0.3-int4-onnx-directml",
         model_name="mistralai_Mistral-7B-Instruct-v0.3-int4-onnx-directml",
         subfolder=".",
+    "EmbeddedLLM/mistralai_Mistral-7B-Instruct-v0.3-int4-onnx-directml": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/mistralai_Mistral-7B-Instruct-v0.3-int4-onnx-directml/tree/main",
+        repo_id="EmbeddedLLM/mistralai_Mistral-7B-Instruct-v0.3-int4-onnx-directml",
+        model_name="mistralai_Mistral-7B-Instruct-v0.3-int4-onnx-directml",
+        subfolder=".",
         repo_type="model",
         context_length=32768,
     ),
@@ -229,9 +302,19 @@ dml_model_dict_list = {
         repo_id="EmbeddedLLM/gemma-2b-it-int4-onnx-directml",
         model_name="gemma-2b-it-int4-onnx-directml",
         subfolder=".",
+    "EmbeddedLLM/gemma-2b-it-int4-onnx-directml": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/gemma-2b-it-int4-onnx-directml/tree/main",
+        repo_id="EmbeddedLLM/gemma-2b-it-int4-onnx-directml",
+        model_name="gemma-2b-it-int4-onnx-directml",
+        subfolder=".",
         repo_type="model",
         context_length=8192,
     ),
+    "EmbeddedLLM/gemma-7b-it-int4-onnx-directml": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/gemma-7b-it-int4-onnx-directml/tree/main",
+        repo_id="EmbeddedLLM/gemma-7b-it-int4-onnx-directml",
+        model_name="gemma-7b-it-int4-onnx-directml",
+        subfolder=".",
     "EmbeddedLLM/gemma-7b-it-int4-onnx-directml": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/gemma-7b-it-int4-onnx-directml/tree/main",
         repo_id="EmbeddedLLM/gemma-7b-it-int4-onnx-directml",
@@ -253,9 +336,19 @@ dml_model_dict_list = {
         repo_id="EmbeddedLLM/Starling-LM-7b-beta-int4-onnx-directml",
         model_name="Starling-LM-7b-beta-int4-onnx-directml",
         subfolder=".",
+    "EmbeddedLLM/Starling-LM-7b-beta-int4-onnx-directml": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Starling-LM-7b-beta-int4-onnx-directml/tree/main",
+        repo_id="EmbeddedLLM/Starling-LM-7b-beta-int4-onnx-directml",
+        model_name="Starling-LM-7b-beta-int4-onnx-directml",
+        subfolder=".",
         repo_type="model",
         context_length=8192,
     ),
+    "EmbeddedLLM/openchat-3.6-8b-20240522-int4-onnx-directml": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/openchat-3.6-8b-20240522-int4-onnx-directml/tree/main",
+        repo_id="EmbeddedLLM/openchat-3.6-8b-20240522-int4-onnx-directml",
+        model_name="openchat-3.6-8b-20240522-int4-onnx-directml",
+        subfolder=".",
     "EmbeddedLLM/openchat-3.6-8b-20240522-int4-onnx-directml": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/openchat-3.6-8b-20240522-int4-onnx-directml/tree/main",
         repo_id="EmbeddedLLM/openchat-3.6-8b-20240522-int4-onnx-directml",
@@ -269,11 +362,30 @@ dml_model_dict_list = {
         repo_id="EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-int4-onnx-directml",
         model_name="01-ai_Yi-1.5-6B-Chat-int4-onnx-directml",
         subfolder=".",
+    "EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-int4-onnx-directml": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-int4-onnx-directml/tree/main",
+        repo_id="EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-int4-onnx-directml",
+        model_name="01-ai_Yi-1.5-6B-Chat-int4-onnx-directml",
+        subfolder=".",
         repo_type="model",
         context_length=4096,
     ),
 }
 
+onnx_cpu_model_dict_list = {
+    "EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32/tree/main",
+        repo_id="EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32",
+        model_name="Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32",
+        subfolder=".",
+        repo_type="model",
+        context_length=4096,
+    ),
+    "EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4/tree/main",
+        repo_id="EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4",
+        model_name="Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4",
+        subfolder=".",
 onnx_cpu_model_dict_list = {
     "EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-cpu-int4-rtn-block-32/tree/main",
@@ -312,9 +424,35 @@ onnx_cpu_model_dict_list = {
         repo_id="EmbeddedLLM/mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32-acc-level-4",
         model_name="mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32-acc-level-4",
         subfolder=".",
+    "EmbeddedLLM/Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32/tree/main",
+        repo_id="EmbeddedLLM/Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32",
+        model_name="Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+    "EmbeddedLLM/Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4/tree/main",
+        repo_id="EmbeddedLLM/Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4",
+        model_name="Phi-3-mini-128k-instruct-onnx-cpu-int4-rtn-block-32-acc-level-4",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+    "EmbeddedLLM/mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32-acc-level-4": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32-acc-level-4/tree/main",
+        repo_id="EmbeddedLLM/mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32-acc-level-4",
+        model_name="mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32-acc-level-4",
+        subfolder=".",
         repo_type="model",
         context_length=32768,
     ),
+    "EmbeddedLLM/mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32/tree/main",
+        repo_id="EmbeddedLLM/mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32",
+        model_name="mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32",
+        subfolder=".",
     "EmbeddedLLM/mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32/tree/main",
         repo_id="EmbeddedLLM/mistral-7b-instruct-v0.3-onnx-cpu-int4-rtn-block-32",
@@ -328,9 +466,19 @@ onnx_cpu_model_dict_list = {
         repo_id="EmbeddedLLM/openchat-3.6-8b-20240522-onnx-cpu-int4-rtn-block-32-acc-level-4",
         model_name="openchat-3.6-8b-20240522-onnx-cpu-int4-rtn-block-32-acc-level-4",
         subfolder=".",
+    "EmbeddedLLM/openchat-3.6-8b-20240522-onnx-cpu-int4-rtn-block-32-acc-level-4": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/openchat-3.6-8b-20240522-onnx-cpu-int4-rtn-block-32-acc-level-4/tree/main",
+        repo_id="EmbeddedLLM/openchat-3.6-8b-20240522-onnx-cpu-int4-rtn-block-32-acc-level-4",
+        model_name="openchat-3.6-8b-20240522-onnx-cpu-int4-rtn-block-32-acc-level-4",
+        subfolder=".",
         repo_type="model",
         context_length=8192,
     ),
+    "EmbeddedLLM/openchat-3.6-8b-20240522-onnx-cpu-int4-rtn-block-32": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/openchat-3.6-8b-20240522-onnx-cpu-int4-rtn-block-32/tree/main",
+        repo_id="EmbeddedLLM/openchat-3.6-8b-20240522-onnx-cpu-int4-rtn-block-32",
+        model_name="openchat-3.6-8b-20240522-onnx-cpu-int4-rtn-block-32",
+        subfolder=".",
     "EmbeddedLLM/openchat-3.6-8b-20240522-onnx-cpu-int4-rtn-block-32": ModelCard(
         hf_url="https://huggingface.co/EmbeddedLLM/openchat-3.6-8b-20240522-onnx-cpu-int4-rtn-block-32/tree/main",
         repo_id="EmbeddedLLM/openchat-3.6-8b-20240522-onnx-cpu-int4-rtn-block-32",
@@ -380,6 +528,7 @@ def compute_memory_size(repo_id, path_in_repo, repo_type: str = "model"):
 
 
 for k, v in onnx_cpu_model_dict_list.items():
+for k, v in onnx_cpu_model_dict_list.items():
     v.size = compute_memory_size(
         repo_id=v.repo_id, path_in_repo=v.subfolder, repo_type=v.repo_type
     )
@@ -401,6 +550,7 @@ for k, v in openvino_model_dict_list.items():
 
 
 def convert_to_dataframe(model_dict_list):
+def convert_to_dataframe(model_dict_list):
     # Create lists to store the data
     model_names = []
     hf_urls = []
@@ -412,6 +562,7 @@ def convert_to_dataframe(model_dict_list):
     context_lengths = []
 
     # Iterate through the dictionary and extract the data
+    for key, model_card in model_dict_list.items():
     for key, model_card in model_dict_list.items():
         model_names.append(key)
         hf_urls.append(model_card.hf_url)
@@ -495,6 +646,8 @@ def update_model_list(engine_type):
     else:
         models = sorted(list(onnx_cpu_model_dict_list.keys()))
         models_pandas = convert_to_dataframe(onnx_cpu_model_dict_list)
+        models = sorted(list(onnx_cpu_model_dict_list.keys()))
+        models_pandas = convert_to_dataframe(onnx_cpu_model_dict_list)
 
     return gr.Dropdown(choices=models, value=models[0] if models else None), gr.Dataframe(
         value=models_pandas if len(models_pandas) > 0 else None, datatype="markdown"
@@ -520,9 +673,13 @@ def deploy_model(engine_type, model_name, port_number):
         llm_model_card = openvino_model_dict_list[model_name]
     else:
         llm_model_card = onnx_cpu_model_dict_list[model_name]
+        llm_model_card = onnx_cpu_model_dict_list[model_name]
 
     snapshot_path = snapshot_download(
         repo_id=llm_model_card.repo_id,
+        allow_patterns=(
+            f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
+        ),
         allow_patterns=(
             f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
         ),
@@ -552,12 +709,18 @@ def deploy_model(engine_type, model_name, port_number):
             backend,
             "--device",
             device,
+            "--backend",
+            backend,
+            "--device",
+            device,
             "--port",
             f"{port_number}",
             "--served_model_name",
             model_name
+            model_name
         ]
     )
+
 
     deployed_model.model_name = model_name
 
@@ -572,6 +735,7 @@ def deploy_model(engine_type, model_name, port_number):
         <p style="color: #2D2363;"><strong>Model:</strong> {model_name}</p>
         <p style="color: #2D2363;"><strong>Engine:</strong> {engine_type}</p>
         <p style="color: #2D2363;"><strong>Port:</strong> {port_number}</p>
+        <p style="color: #2D2363;"><strong>Model Path:</strong> {model_path}</p>
         <p style="color: #2D2363;"><strong>Model Path:</strong> {model_path}</p>
     </div>
     """
@@ -606,6 +770,7 @@ def download_model(engine_type, model_name):
         llm_model_card = openvino_model_dict_list[model_name]
     else:
         llm_model_card = onnx_cpu_model_dict_list[model_name]
+        llm_model_card = onnx_cpu_model_dict_list[model_name]
 
     # Handle model_name if it's a list
     if isinstance(model_name, list):
@@ -614,6 +779,9 @@ def download_model(engine_type, model_name):
     yield "Downloading ..."
     snapshot_path = snapshot_download(
         repo_id=llm_model_card.repo_id,
+        allow_patterns=(
+            f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
+        ),
         allow_patterns=(
             f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
         ),
@@ -661,6 +829,8 @@ def main():
         default_choices.append(default_value)
 
         selected_engine_type = gr.Dropdown(
+            choices=default_choices,
+            value=default_value,
             choices=default_choices,
             value=default_value,
             multiselect=False,
