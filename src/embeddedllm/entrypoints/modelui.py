@@ -481,9 +481,9 @@ def update_model_list(engine_type):
     elif engine_type == "Ipex":
         models = sorted(list(ipex_model_dict_list.keys()))
         models_pandas = convert_to_dataframe(ipex_model_dict_list)
-    elif engine_type == 'OpenVino':
-        models = sorted(list(openvino_model_dict_list.keys()))
-        models_pandas = convert_to_dataframe(openvino_model_dict_list)
+    elif engine_type == "CPU" and backend == "ipex":
+        models = sorted(list(ipex_model_dict_list.keys()))
+        models_pandas = convert_to_dataframe(ipex_model_dict_list)
     else:
         models = sorted(list(cpu_model_dict_list.keys()))
         models_pandas = convert_to_dataframe(cpu_model_dict_list)
@@ -508,8 +508,8 @@ def deploy_model(engine_type, model_name, port_number):
         llm_model_card = dml_model_dict_list[model_name]
     elif engine_type == "Ipex":
         llm_model_card = ipex_model_dict_list[model_name]
-    elif engine_type == "OpenVino":
-        llm_model_card = openvino_model_dict_list[model_name]
+    elif engine_type == "CPU" and backend == "ipex":
+        llm_model_card = ipex_model_dict_list[model_name]
     else:
         llm_model_card = cpu_model_dict_list[model_name]
 
@@ -546,8 +546,8 @@ def deploy_model(engine_type, model_name, port_number):
             device,
             "--port",
             f"{port_number}",
-            # "--served_model_name",
-            # model_name
+            "--served_model_name",
+            model_name
         ]
     )
 
@@ -639,15 +639,19 @@ def main():
         with gr.Accordion("See More Model Details", open=False):
             model_info_pandas_frame = gr.Dataframe(value=None)
 
-        default_value = "CPU"  # Default value
+        # Default is CPU
+        default_value = "CPU"  
+        default_choices = ["CPU"]
+
         if backend == "directml":
             default_value = "DirectML"
         elif backend == "ipex":
             default_value = "Ipex"
-        elif backend == "openvino":
-            default_value = "OpenVino"
+
+        default_choices.append(default_value)
+
         selected_engine_type = gr.Dropdown(
-            choices=["DirectML", "Ipex", "OpenVino", "CPU"],
+            choices=default_choices,
             value=default_value,
             multiselect=False,
             label="LLM Engine",
