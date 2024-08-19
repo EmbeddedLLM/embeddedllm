@@ -518,19 +518,20 @@ def deploy_model(engine_type, model_name, port_number):
     else:
         llm_model_card = onnx_cpu_model_dict_list[model_name]
 
-    snapshot_path = snapshot_download(
-        repo_id=llm_model_card.repo_id,
-        allow_patterns=(
-            f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
-        ),
-        repo_type="model",
-    )
+    # snapshot_path = snapshot_download(
+    #     repo_id=llm_model_card.repo_id,
+    #     allow_patterns=(
+    #         f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
+    #     ),
+    #     repo_type="model",
+    # )
 
-    if llm_model_card.subfolder != ".":
-        model_path = os.path.join(snapshot_path, llm_model_card.subfolder)
-    else:
-        model_path = snapshot_path
-
+    # if llm_model_card.subfolder != ".":
+    #     model_path = os.path.join(snapshot_path, llm_model_card.subfolder)
+    # else:
+    #     model_path = snapshot_path
+    
+    model_path = llm_model_card.repo_id
     print("Model path:", model_path)
 
     if engine_type == "Ipex":
@@ -570,7 +571,6 @@ def deploy_model(engine_type, model_name, port_number):
         <p style="color: #2D2363;"><strong>Model:</strong> {model_name}</p>
         <p style="color: #2D2363;"><strong>Engine:</strong> {engine_type}</p>
         <p style="color: #2D2363;"><strong>Port:</strong> {port_number}</p>
-        <p style="color: #2D2363;"><strong>Model Path:</strong> {model_path}</p>
     </div>
     """
 
