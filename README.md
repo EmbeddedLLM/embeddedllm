@@ -107,7 +107,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 
 ### Launch Chatbot Web UI
 
-1.  `ellm_chatbot --port 7788 --host localhost --server_port <ellm_server_port> --server_host localhost`. **Note:** To find out more of the supported arguments. `ellm_chatbot --help`.
+1.  `ellm_chatbot --port 7788 --host localhost --server_port <ellm_server_port> --server_host localhost --model_name <served_model_name>`. **Note:** To find out more of the supported arguments. `ellm_chatbot --help`.
 
 ![asset/ellm_chatbot_vid.webp](asset/ellm_chatbot_vid.webp)
 
