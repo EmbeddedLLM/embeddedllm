@@ -20,7 +20,7 @@ def get_embeddedllm_backend():
         version = importlib.metadata.version("embeddedllm")
 
         # Use regex to extract the backend
-        match = re.search(r"\+(directml|cpu|cuda|ipex)$", version)
+        match = re.search(r"\+(directml|cpu|cuda|ipex|openvino)$", version)
 
         if match:
             backend = match.group(1)
@@ -64,6 +64,201 @@ class ModelCard(BaseModel):
     context_length: int
     size: Optional[int] = 0
 
+
+openvino_model_dict_list = {
+    "EmbeddedLLM/Meta-Llama-3.1-8B-Instruct-int4-sym-ov": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Meta-Llama-3.1-8B-Instruct-int4-sym-ov/tree/main/",
+        repo_id="EmbeddedLLM/Meta-Llama-3.1-8B-Instruct-int4-sym-ov",
+        model_name="Meta-Llama-3.1-8B-Instruct-int4-sym-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+    "EmbeddedLLM/Phi-3-mini-4k-instruct-int4-sym-ov": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-4k-instruct-int4-sym-ov/tree/main/",
+        repo_id="EmbeddedLLM/Phi-3-mini-4k-instruct-int4-sym-ov",
+        model_name="Phi-3-mini-4k-instruct-int4-sym-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=4096,
+    ),
+    "OpenVINO/Phi-3-mini-4k-instruct-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/Phi-3-mini-4k-instruct-int8-ov/tree/main/",
+        repo_id="OpenVINO/Phi-3-mini-4k-instruct-int8-ov",
+        model_name="Phi-3-mini-4k-instruct-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=4096,
+    ),
+    "EmbeddedLLM/Phi-3-mini-128k-instruct-int4-ov-model": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-mini-128k-instruct-int4-ov-model/tree/main/",
+        repo_id="EmbeddedLLM/Phi-3-mini-128k-instruct-int4-ov-model",
+        model_name="Phi-3-mini-128k-instruct-int4-ov-model",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+    "OpenVINO/Phi-3-mini-128k-instruct-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/Phi-3-mini-128k-instruct-int8-ov/tree/main/",
+        repo_id="OpenVINO/Phi-3-mini-128k-instruct-int8-ov",
+        model_name="Phi-3-mini-128k-instruct-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+    "EmbeddedLLM/Phi-3-medium-4k-instruct-int4-sym-ov": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-medium-4k-instruct-int4-sym-ov/tree/main/",
+        repo_id="EmbeddedLLM/Phi-3-medium-4k-instruct-int4-sym-ov",
+        model_name="Phi-3-medium-4k-instruct-int4-sym-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=4096,
+    ),
+    "OpenVINO/Phi-3-medium-4k-instruct-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/Phi-3-medium-4k-instruct-int8-ov/tree/main/",
+        repo_id="OpenVINO/Phi-3-medium-4k-instruct-int8-ov",
+        model_name="Phi-3-medium-4k-instruct-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=4096,
+    ),
+    "EmbeddedLLM/Phi-3-medium-128k-instruct-int4-sym-ov": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Phi-3-medium-128k-instruct-int4-sym-ov/tree/main/",
+        repo_id="EmbeddedLLM/Phi-3-medium-128k-instruct-int4-sym-ov",
+        model_name="Phi-3-medium-128k-instruct-int4-sym-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+    "EmbeddedLLM/Qwen2-7B-Instruct-int4-sym-ov": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Qwen2-7B-Instruct-int4-sym-ov/tree/main/",
+        repo_id="EmbeddedLLM/Qwen2-7B-Instruct-int4-sym-ov",
+        model_name="Qwen2-7B-Instruct-int4-sym-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+    "OpenVINO/Mistral-7B-Instruct-v0.2-int4-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/Mistral-7B-Instruct-v0.2-int4-ov/tree/main/",
+        repo_id="OpenVINO/Mistral-7B-Instruct-v0.2-int4-ov",
+        model_name="Mistral-7B-Instruct-v0.2-int4-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=32768,
+    ),
+    "OpenVINO/Mistral-7B-Instruct-v0.2-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/Mistral-7B-Instruct-v0.2-int8-ov/tree/main/",
+        repo_id="OpenVINO/Mistral-7B-Instruct-v0.2-int8-ov",
+        model_name="Mistral-7B-Instruct-v0.2-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=32768,
+    ),
+    "EmbeddedLLM/Mistral-7B-Instruct-v0.3-int4-sym-ov": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/Mistral-7B-Instruct-v0.3-int4-sym-ov/tree/main/",
+        repo_id="EmbeddedLLM/Mistral-7B-Instruct-v0.3-int4-sym-ov",
+        model_name="Mistral-7B-Instruct-v0.3-int4-sym-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=32768,
+    ),
+    "OpenVINO/open_llama_3b_v2-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/open_llama_3b_v2-int8-ov/tree/main/",
+        repo_id="OpenVINO/open_llama_3b_v2-int8-ov",
+        model_name="open_llama_3b_v2-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=2048,
+    ),
+    "OpenVINO/open_llama_7b_v2-int4-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/open_llama_7b_v2-int4-ov/tree/main/",
+        repo_id="OpenVINO/open_llama_7b_v2-int4-ov",
+        model_name="open_llama_7b_v2-int4-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=2048,
+    ),
+    "OpenVINO/open_llama_7b_v2-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/open_llama_7b_v2-int8-ov/tree/main/",
+        repo_id="OpenVINO/open_llama_7b_v2-int8-ov",
+        model_name="open_llama_7b_v2-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=2048,
+    ),
+    "OpenVINO/TinyLlama-1.1B-Chat-v1.0-int4-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/TinyLlama-1.1B-Chat-v1.0-int4-ov/tree/main/",
+        repo_id="OpenVINO/TinyLlama-1.1B-Chat-v1.0-int4-ov",
+        model_name="TinyLlama-1.1B-Chat-v1.0-int4-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=2048,
+    ),
+    "OpenVINO/TinyLlama-1.1B-Chat-v1.0-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/TinyLlama-1.1B-Chat-v1.0-int8-ov/tree/main/",
+        repo_id="OpenVINO/TinyLlama-1.1B-Chat-v1.0-int8-ov",
+        model_name="TinyLlama-1.1B-Chat-v1.0-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=2048,
+    ),
+    "EmbeddedLLM/neural-chat-7b-v1-1-int4-sym-ov": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/neural-chat-7b-v1-1-int4-sym-ov/tree/main/",
+        repo_id="EmbeddedLLM/neural-chat-7b-v1-1-int4-sym-ov",
+        model_name="neural-chat-7b-v1-1-int4-sym-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=8192,
+    ),
+    "OpenVINO/neural-chat-7b-v1-1-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/neural-chat-7b-v1-1-int8-ov/tree/main/",
+        repo_id="OpenVINO/neural-chat-7b-v1-1-int8-ov",
+        model_name="neural-chat-7b-v1-1-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=8192,
+    ),
+    "OpenVINO/starcoder2-15b-int4-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/starcoder2-15b-int4-ov/tree/main/",
+        repo_id="OpenVINO/starcoder2-15b-int4-ov",
+        model_name="starcoder2-15b-int4-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=16384,
+    ),
+    "OpenVINO/starcoder2-15b-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/starcoder2-15b-int8-ov/tree/main/",
+        repo_id="OpenVINO/starcoder2-15b-int8-ov",
+        model_name="starcoder2-15b-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=16384,
+    ),
+    "OpenVINO/persimmon-8b-chat-int4-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/persimmon-8b-chat-int4-ov/tree/main/",
+        repo_id="OpenVINO/persimmon-8b-chat-int4-ov",
+        model_name="persimmon-8b-chat-int4-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=16384,
+    ),
+    "OpenVINO/persimmon-8b-chat-int8-ov": ModelCard(
+        hf_url="https://huggingface.co/OpenVINO/persimmon-8b-chat-int8-ov/tree/main/",
+        repo_id="OpenVINO/persimmon-8b-chat-int8-ov",
+        model_name="persimmon-8b-chat-int8-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=16384,
+    ),
+    "EmbeddedLLM/RedPajama-INCITE-Instruct-3B-v1-int4-sym-ov": ModelCard(
+        hf_url="https://huggingface.co/EmbeddedLLM/RedPajama-INCITE-Instruct-3B-v1-int4-sym-ov/tree/main/",
+        repo_id="EmbeddedLLM/RedPajama-INCITE-Instruct-3B-v1-int4-sym-ov",
+        model_name="RedPajama-INCITE-Instruct-3B-v1-int4-sym-ov",
+        subfolder=".",
+        repo_type="model",
+        context_length=2048,
+    ),
+}
 
 ipex_model_dict_list = {
     "microsoft/Phi-3-mini-4k-instruct": ModelCard(
@@ -274,7 +469,6 @@ onnx_cpu_model_dict_list = {
     # ),
 }
 
-
 def bytes_to_gb(bytes_value):
     """
     Convert bytes to gigabytes.
@@ -303,7 +497,6 @@ def compute_memory_size(repo_id, path_in_repo, repo_type: str = "model"):
 
     return bytes_to_gb(total_size_bytes)
 
-
 for k, v in onnx_cpu_model_dict_list.items():
     v.size = compute_memory_size(
         repo_id=v.repo_id, path_in_repo=v.subfolder, repo_type=v.repo_type
@@ -319,6 +512,10 @@ for k, v in ipex_model_dict_list.items():
         repo_id=v.repo_id, path_in_repo=v.subfolder, repo_type=v.repo_type
     )
 
+for k, v in openvino_model_dict_list.items():
+    v.size = compute_memory_size(
+        repo_id=v.repo_id, path_in_repo=v.subfolder, repo_type=v.repo_type
+    )
 
 def convert_to_dataframe(model_dict_list):
     # Create lists to store the data
@@ -409,6 +606,9 @@ def update_model_list(engine_type):
     elif backend == "ipex":
         models = sorted(list(ipex_model_dict_list.keys()))
         models_pandas = convert_to_dataframe(ipex_model_dict_list)
+    elif backend == "openvino":
+        models = sorted(list(openvino_model_dict_list.keys()))
+        models_pandas = convert_to_dataframe(openvino_model_dict_list)
     else:
         models = sorted(list(onnx_cpu_model_dict_list.keys()))
         models_pandas = convert_to_dataframe(onnx_cpu_model_dict_list)
@@ -433,27 +633,31 @@ def deploy_model(engine_type, model_name, port_number):
         llm_model_card = dml_model_dict_list[model_name]
     elif backend == "ipex":
         llm_model_card = ipex_model_dict_list[model_name]
+    elif backend == "openvino":
+        llm_model_card = openvino_model_dict_list[model_name]
     else:
         llm_model_card = onnx_cpu_model_dict_list[model_name]
 
-    snapshot_path = snapshot_download(
-        repo_id=llm_model_card.repo_id,
-        allow_patterns=(
-            f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
-        ),
-        repo_type="model",
-    )
+    # snapshot_path = snapshot_download(
+    #     repo_id=llm_model_card.repo_id,
+    #     allow_patterns=(
+    #         f"{llm_model_card.subfolder}/*" if llm_model_card.subfolder != "." else None
+    #     ),
+    #     repo_type="model",
+    # )
 
-    if llm_model_card.subfolder != ".":
-        model_path = os.path.join(snapshot_path, llm_model_card.subfolder)
-    else:
-        model_path = snapshot_path
-
+    # if llm_model_card.subfolder != ".":
+    #     model_path = os.path.join(snapshot_path, llm_model_card.subfolder)
+    # else:
+    #     model_path = snapshot_path
+    
+    model_path = llm_model_card.repo_id
     print("Model path:", model_path)
 
     if engine_type == "Ipex":
         device = "xpu"
-
+    elif engine_type == "OpenVino":
+        device = "gpu"
     else:
         device = "cpu"
 
@@ -473,6 +677,7 @@ def deploy_model(engine_type, model_name, port_number):
         ]
     )
 
+
     deployed_model.model_name = model_name
 
     while True:
@@ -486,7 +691,6 @@ def deploy_model(engine_type, model_name, port_number):
         <p style="color: #2D2363;"><strong>Model:</strong> {model_name}</p>
         <p style="color: #2D2363;"><strong>Engine:</strong> {engine_type}</p>
         <p style="color: #2D2363;"><strong>Port:</strong> {port_number}</p>
-        <p style="color: #2D2363;"><strong>Model Path:</strong> {model_path}</p>
     </div>
     """
 
@@ -516,6 +720,8 @@ def download_model(engine_type, model_name):
         llm_model_card = dml_model_dict_list[model_name]
     elif backend == "ipex":
         llm_model_card = ipex_model_dict_list[model_name]
+    elif backend == "openvino":
+        llm_model_card = openvino_model_dict_list[model_name]
     else:
         llm_model_card = onnx_cpu_model_dict_list[model_name]
 
@@ -567,6 +773,8 @@ def main():
             default_value = "DirectML"
         elif backend == "ipex":
             default_value = "Ipex"
+        elif backend == "openvino":
+            default_value = "OpenVino"
 
         default_choices.append(default_value)
 
