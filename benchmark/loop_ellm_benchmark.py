@@ -37,9 +37,10 @@ token_in_out = [
 # backend = "directml"
 # backend = "ipex"
 # backend = "openvino"
+# backend = "npu"
 
 # Number of loops
-loop_count = 20
+loop_count = 3
 
 # input and output token bias
 input_token_bias = 0
@@ -60,7 +61,8 @@ for model_name, model_path in zip(model_names, model_paths):
                 "--token_in", str(input_token_length),
                 "--token_out", str(output_token_length),
                 "--input_token_bias", str(input_token_bias),
-                "--output_token_bias", str(output_token_bias)
+                "--output_token_bias", str(output_token_bias),
+                "--loop_count", str(loop_count)
             ]
 
             # Execute the command

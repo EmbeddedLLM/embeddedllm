@@ -12,28 +12,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 from embeddedllm import engine
 from embeddedllm import sampling_params
 
-async def benchmark(input_token_length, output_token_length, model_path, model_name, backend, input_token_bias=0, output_token_bias=0):
-    # Create the profile_model_timing directory if it doesn't exist
-    log_dir = "profile_model_timing"
-    os.makedirs(log_dir, exist_ok=True)
-
-    log_file = os.path.join(log_dir, f'profile_model_timing_{model_name}_{input_token_length}_{output_token_length}.log')
-
-    # Add the log file to the logger (it will append if the file already exists)
-    logger.add(log_file, mode='a')
-
-    # need different parameter for cpu and directml
-    if backend == "cpu":
-        device="cpu"
-    elif backend == "ipex":
-        device="xpu"
-    elif backend == "openvino":
-        device="gpu"
-    elif backend == "directml":
-        device = ""
-
-    model = engine.EmbeddedLLMEngine(model_path=model_path, vision=False, device=device, backend=backend)
-
+async def benchmark(model, input_token_length, output_token_length, model_name, input_token_bias=0, output_token_bias=0):
+    
     logger.info(f"Model: {model_name}")
 
     model.tokenizer.chat_template = "{% for message in messages %}{{  message['content']}}{% endfor %}"  # Override
@@ -89,28 +69,64 @@ async def benchmark(input_token_length, output_token_length, model_path, model_n
     average_tps = (input_token_length + output_token_length) / total_time_taken
     logger.info("Average tps: "+ str(average_tps))
 
-    # Remove the logger to close the log file
-    logger.remove()
+    
 
 def main():
     parser = argparse.ArgumentParser(description="Benchmark EmbeddedLLM models.")
-    parser.add_argument('--backend', type=str, required=True, choices=['cpu', 'directml', 'openvino', 'ipex'], help='Backend to use (cpu, ipex, openvino or directml)')
+    parser.add_argument('--backend', type=str, required=True, choices=['cpu', 'npu', 'directml', 'openvino', 'ipex'], help='Backend to use (cpu, npu, ipex, openvino or directml)')
     parser.add_argument('--model_name', type=str, required=True, help='Name of the model')
     parser.add_argument('--model_path', type=str, required=True, help='Path to the model or model repo id')
     parser.add_argument('--token_in', type=int, required=True, help='Number of input tokens (max 2048)')
     parser.add_argument('--token_out', type=int, required=True, help='Number of output tokens')
     parser.add_argument('--input_token_bias', type=int, required=False, help='Adjust the input token length')
     parser.add_argument('--output_token_bias', type=int, required=False, help='Adjust the output token length')
+    parser.add_argument('--loop_count', type=int, required=False, help='Adjust the loop count')
 
     args = parser.parse_args()
+
+    backend = args.backend
+    model_path = args.model_path
+    model_name = args.model_name
+    token_in = args.token_in
+    token_out = args.token_out
+    input_token_bias = args.input_token_bias
+    output_token_bias = args.output_token_bias
+    loop_count = args.loop_count
 
     # Cap the input tokens to 2048
     if args.token_in > 2048:
         print("Input tokens capped to 2048.")
         args.token_in = 2048
 
-    # Run the async function using asyncio.run()
-    asyncio.run(benchmark(args.token_in, args.token_out, args.model_path, args.model_name, args.backend, args.input_token_bias, args.output_token_bias))
+    # Create the profile_model_timing directory if it doesn't exist
+    log_dir = "profile_model_timing"
+    os.makedirs(log_dir, exist_ok=True)
+
+    log_file = os.path.join(log_dir, f'profile_model_timing_{model_name}_{token_in}_{token_out}.log')
+
+    # Add the log file to the logger
+    logger.add(log_file, mode='w')
+
+    # need different parameter for cpu and directml
+    if backend == "cpu":
+        device="cpu"
+    elif backend == "npu":
+        device="npu"
+    elif backend == "ipex":
+        device="xpu"
+    elif backend == "openvino":
+        device="gpu"
+    elif backend == "directml":
+        device = ""
+
+    model = engine.EmbeddedLLMEngine(model_path=model_path, vision=False, device=device, backend=backend)
+
+    for _ in range(loop_count):
+        # Run the async function using asyncio.run()
+        asyncio.run(benchmark(model, token_in, token_out, model_name, input_token_bias, output_token_bias))
+
+    # Remove the logger to close the log file
+    logger.remove()
 
 if __name__ == "__main__":
     main()
