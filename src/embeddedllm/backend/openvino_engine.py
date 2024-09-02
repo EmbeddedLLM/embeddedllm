@@ -1,13 +1,19 @@
 import contextlib
+from io import BytesIO
 import time
+import requests
+import os
+from PIL import Image 
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import AsyncIterator, List, Optional
+from huggingface_hub import snapshot_download
 
 from loguru import logger
 from PIL import Image
 from transformers import (
     AutoConfig,
+    AutoProcessor,
     PreTrainedTokenizer,
     PreTrainedTokenizerFast,
     TextIteratorStreamer,
@@ -16,7 +22,7 @@ from transformers import (
 from threading import Thread
 
 from optimum.intel import OVModelForCausalLM, OVWeightQuantizationConfig
-
+from embeddedllm.backend.ov_phi3_vision import OvPhi3Vision
 from embeddedllm.inputs import PromptInputs
 from embeddedllm.protocol import CompletionOutput, RequestOutput
 from embeddedllm.sampling_params import SamplingParams
@@ -27,11 +33,14 @@ RECORD_TIMING = True
 
 class OpenVinoEngine(BaseLLMEngine):
     def __init__(self, model_path: str, vision: bool, device: str = "gpu"):
+        self.vision = vision
         self.model_path = model_path
-        self.model_config: AutoConfig = AutoConfig.from_pretrained(
-            self.model_path, trust_remote_code=True
-        )
         self.device = device
+
+        self.model_config: AutoConfig = AutoConfig.from_pretrained(
+            self.model_path, 
+            trust_remote_code=True
+        )
 
         # model_config is to find out the max length of the model
         self.max_model_len = _get_and_verify_max_len(
@@ -40,51 +49,76 @@ class OpenVinoEngine(BaseLLMEngine):
             disable_sliding_window=False,
             sliding_window_len=self.get_hf_config_sliding_window(),
         )
-
         logger.info("Model Context Length: " + str(self.max_model_len))
-
+        
         try:
             logger.info("Attempt to load fast tokenizer")
             self.tokenizer = PreTrainedTokenizerFast.from_pretrained(self.model_path)
         except Exception:
             logger.info("Attempt to load slower tokenizer")
             self.tokenizer = PreTrainedTokenizer.from_pretrained(self.model_path)
-
-        try:
-            self.model = OVModelForCausalLM.from_pretrained(
-                model_path, trust_remote_code=True, export=False, device=self.device
-            )
-        except Exception as e:
-            model = OVModelForCausalLM.from_pretrained(
-                model_path,
-                trust_remote_code=True,
-                export=True,
-                quantization_config=OVWeightQuantizationConfig(
-                    **{
-                        "bits": 4,
-                        "ratio": 1.0,
-                        "sym": True,
-                        "group_size": 128,
-                        "all_layers": None,
-                    }
-                ),
-            )
-            self.model = model.to(self.device)
-
-        logger.info("Model loaded")
         self.tokenizer_stream = TextIteratorStreamer(
-            self.tokenizer, skip_prompt=True, skip_special_tokens=True
+            self.tokenizer, 
+            skip_prompt=True, 
+            skip_special_tokens=True
         )
         logger.info("Tokenizer created")
+            
+        # non vision
+        if not vision:
+            try:
+                self.model = OVModelForCausalLM.from_pretrained(
+                    self.model_path, 
+                    trust_remote_code=True, 
+                    export=False, 
+                    device=self.device
+                )
+            except Exception as e:
+                model = OVModelForCausalLM.from_pretrained(
+                    self.model_path,
+                    trust_remote_code=True,
+                    export=True,
+                    quantization_config=OVWeightQuantizationConfig(
+                        **{
+                            "bits": 4,
+                            "ratio": 1.0,
+                            "sym": True,
+                            "group_size": 128,
+                            "all_layers": None,
+                        }
+                    ),
+                )
+                self.model = model.to(self.device)
 
-        self.vision = vision
+            logger.info("Model loaded")
 
-        # if self.vision:
-        #     self.onnx_processor = self.model.create_multimodal_processor()
-        #     self.processor = AutoImageProcessor.from_pretrained(
-        #         self.model_path, trust_remote_code=True
-        #     )
-        #     print(dir(self.processor))
+        # vision
+        elif self.vision:
+            logger.info("Your model is a vision model")
+            
+            # snapshot_download vision model if model path provided
+            if not os.path.exists(model_path):
+                snapshot_path = snapshot_download(
+                    repo_id=model_path,
+                    allow_patterns=None,
+                    repo_type="model",
+                )
+                self.model_path = snapshot_path
+            
+            # it is case sensitive, only receive all char captilized only
+            self.model = OvPhi3Vision(
+                self.model_path, 
+                self.device.upper()
+            ) 
+            logger.info("Model loaded")
+            
+            self.processor = AutoProcessor.from_pretrained(
+                self.model_path, 
+                trust_remote_code=True
+            )
+            logger.info("Processor loaded")
+            print("processor directory: ",dir(self.processor))
+
 
     async def generate_vision(
         self,
@@ -93,7 +127,81 @@ class OpenVinoEngine(BaseLLMEngine):
         request_id: str,
         stream: bool = True,
     ) -> AsyncIterator[RequestOutput]:
-        raise NotImplementedError(f"`generate_vision` yet to be implemented.")
+        # only work if vision is set to True
+        if not self.vision:
+            raise ValueError("Your model is not a vision model. Please set vision=True when initializing the engine.")
+
+        prompt_text = inputs['prompt']
+        input_tokens = self.tokenizer.encode(prompt_text)
+        file_data = inputs["multi_modal_data"][0]["image_pixel_data"]
+        mime_type = inputs["multi_modal_data"][0]["mime_type"]
+        print(f"Detected MIME type: {mime_type}")
+
+        assert "image" in mime_type
+        
+        image = Image.open(BytesIO(file_data))
+        
+        messages = [
+            {'role': 'user', 'content': f'<|image_1|>\n{prompt_text}'}
+        ]
+        prompt = self.processor.tokenizer.apply_chat_template(
+            messages, 
+            tokenize=False, 
+            add_generation_prompt=True
+        )
+        print("Prompt: ",prompt)
+
+        try:
+            inputs = self.processor(prompt, [image], return_tensors="pt")
+            print(f"Processed inputs")
+        except Exception as e:
+            print(f"Error processing inputs: {e}")
+
+
+        token_list: List[int] = []
+        output_text: str = ""
+        
+        try:
+            generation_options = {
+                'max_new_tokens': sampling_params.max_new_tokens,
+                'do_sample': False,
+            }
+            token_list = self.model.generate(
+                **inputs, 
+                eos_token_id=self.processor.tokenizer.eos_token_id, 
+                **generation_options
+            )
+            print(f"Generated token list")
+        except Exception as e:
+            print(f"Error during token generation: {e}")
+        
+        # Decode each element in the response
+        try:
+            decoded_text = [self.processor.tokenizer.decode(ids, skip_special_tokens=True) for ids in token_list]
+            print(f"Decoded text: {decoded_text}")
+        except Exception as e:
+            print(f"Error decoding text: {e}")
+        
+        # Join the decoded text if needed
+        output_text = ' '.join(decoded_text).strip()
+        print(output_text)
+        
+        yield RequestOutput(
+            request_id=request_id,
+            prompt=inputs,
+            prompt_token_ids=input_tokens,
+            finished=True,
+            outputs=[
+                CompletionOutput(
+                    index=0,
+                    text=output_text,
+                    token_ids=token_list,
+                    cumulative_logprob=-1.0,
+                    finish_reason="stop",
+                )
+            ],
+        )
+
 
     async def generate(
         self,
