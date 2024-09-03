@@ -54,6 +54,10 @@ def _is_openvino() -> bool:
     return ELLM_TARGET_DEVICE == "openvino"
 
 
+def _is_npu() -> bool:
+    return ELLM_TARGET_DEVICE == "npu"
+
+
 class ELLMInstallCommand(install):
     def run(self):
         install.run(self)
@@ -186,6 +190,8 @@ def get_requirements() -> List[str]:
         requirements = _read_requirements("requirements-ipex.txt")
     elif _is_openvino():
         requirements = _read_requirements("requirements-openvino.txt")
+    elif _is_npu():
+        requirements = _read_requirements("requirements-npu.txt")
     else:
         raise ValueError("Unsupported platform, please use CUDA, ROCm, Neuron, or CPU.")
     return requirements
@@ -204,6 +210,8 @@ def get_ellm_version() -> str:
         version += "+ipex"
     elif _is_openvino():
         version += "+openvino"
+    elif _is_npu():
+        version += "+npu"
     else:
         raise RuntimeError("Unknown runtime environment")
 
@@ -256,6 +264,7 @@ setup(
         "cuda": ["onnxruntime-genai-cuda==0.3.0rc2"],
         "ipex": [],
         "openvino": [],
+        "npu": [],
     },
     dependency_links=dependency_links,
     entry_points={

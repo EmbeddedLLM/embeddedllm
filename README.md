@@ -35,6 +35,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
   * Onnxruntime CPU Models [Link](./docs/model/onnxruntime_cpu_models.md)
   * Ipex-LLM Models [Link](./docs/model/ipex_models.md)
   * OpenVINO-LLM Models [Link](./docs/model/openvino_models.md)
+  * NPU-LLM Models [Link](./docs/model/npu_models.md)
 
 ## Getting Started
 
@@ -56,12 +57,14 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
      - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]`
      - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop`
      - **OpenVINO:** `$env:ELLM_TARGET_DEVICE='openvino'; pip install -e .[openvino]`
+     - **NPU:** `$env:ELLM_TARGET_DEVICE='npu'; pip install -e .[npu]`
      - **With Web UI**:
        - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml,webui]`
        - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu,webui]`
        - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda,webui]`
        - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop; pip install -r requirements-webui.txt`
        - **OpenVINO:** `$env:ELLM_TARGET_DEVICE='openvino'; pip install -e .[openvino,webui]`
+       - **NPU:** `$env:ELLM_TARGET_DEVICE='npu'; pip install -e .[npu,webui]`
 
 - **Linux**
 
@@ -77,12 +80,14 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
      - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]`
      - **IPEX:** `ELLM_TARGET_DEVICE='ipex' python setup.py develop`
      - **OpenVINO:** `ELLM_TARGET_DEVICE='openvino' pip install -e .[openvino]`
+     - **NPU:** `ELLM_TARGET_DEVICE='npu' pip install -e .[npu]`
      - **With Web UI**:
        - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml,webui]`
        - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu,webui]`
        - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda,webui]`
        - **IPEX:** `ELLM_TARGET_DEVICE='ipex' python setup.py develop; pip install -r requirements-webui.txt`
        - **OpenVINO:** `ELLM_TARGET_DEVICE='openvino' pip install -e .[openvino,webui]`
+       - **NPU:** `ELLM_TARGET_DEVICE='npu' pip install -e .[npu,webui]`
 
 ### Launch OpenAI API Compatible Server
 
@@ -161,6 +166,9 @@ _Powershell/Terminal Usage (Use it like `ellm_server`)_:
 
 # OpenVINO
 .\ellm_api_server.exe --model_path '.\meta-llama_Meta-Llama-3.1-8B-Instruct\'  --backend 'openvino' --device 'gpu' --port 5555 --served_model_name 'meta-llama_Meta/Llama-3.1-8B-Instruct'
+
+# NPU
+.\ellm_api_server.exe --model_path 'microsoft/Phi-3-mini-4k-instruct'  --backend 'npu' --device 'npu' --port 5555 --served_model_name 'microsoft/Phi-3-mini-4k-instruct'
 ```
 
 ## Acknowledgements

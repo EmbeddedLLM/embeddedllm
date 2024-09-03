@@ -1,0 +1,3 @@
+intel-npu-acceleration-library
+torch>=2.4
+transformers>=4.42
