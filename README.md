@@ -149,7 +149,7 @@ It is an interface that allows you to download and deploy OpenAI API compatible 
    ellm_server --model_path '.\meta-llama_Meta-Llama-3.1-8B-Instruct\'  --backend 'openvino' --device 'gpu' --port 5555 --served_model_name 'meta-llama_Meta/Llama-3.1-8B-Instruct'
 
    # NPU
-   ellm_server --model_path 'microsoft/Phi-3-mini-4k-instruct'  --backend 'openvino' --device 'gpu' --port 5555 --served_model_name 'microsoft/Phi-3-mini-4k-instruct'
+   ellm_server --model_path 'microsoft/Phi-3-mini-4k-instruct'  --backend 'npu' --device 'npu' --port 5555 --served_model_name 'microsoft/Phi-3-mini-4k-instruct'
    ```
 
 ## Prebuilt OpenAI API Compatible Windows Executable (Alpha)
