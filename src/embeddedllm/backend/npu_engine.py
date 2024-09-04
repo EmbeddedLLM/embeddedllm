@@ -26,7 +26,7 @@ RECORD_TIMING = True
 
 
 class NPUEngine(BaseLLMEngine):
-    def _init_(self, model_path: str, vision: bool, device: str = "npu"):
+    def __init__(self, model_path: str, vision: bool, device: str = "npu"):
         self.model_path = model_path
         self.model_config: AutoConfig = AutoConfig.from_pretrained(
             self.model_path, trust_remote_code=True
