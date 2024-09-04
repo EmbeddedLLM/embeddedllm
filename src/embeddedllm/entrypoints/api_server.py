@@ -19,7 +19,7 @@ from embeddedllm.protocol import (  # noqa: E501
 
 app = FastAPI()
 
-openai_chat_server: OpenAPIChatServer
+openai_chat_server: OpenAPIChatServer = None
 
 
 class Config(BaseSettings):
@@ -53,6 +53,26 @@ async def validation_exception_handler(_, exc):
     return JSONResponse(err.model_dump(), status_code=HTTPStatus.BAD_REQUEST)
 
 
+def get_chat_server():
+    global openai_chat_server
+    if openai_chat_server is None:
+        openai_chat_server = OpenAPIChatServer(
+            config.model_path,
+            served_model_name=config.served_model_name,
+            device=config.device,
+            backend=config.backend,
+            response_role=config.response_role,
+            vision=config.vision,
+        )
+    return openai_chat_server
+
+
+@app.on_event("startup")
+async def startup_event():
+    # Initialize the chat server only once
+    get_chat_server()
+
+
 @app.get("/health")
 async def health() -> Response:
     """Health check."""
@@ -81,7 +101,6 @@ async def create_chat_completion(request: ChatCompletionRequest, raw_request: Re
 
 
 def main():
-    global openai_chat_server
     import os
 
     os.environ["SYCL_CACHE_PERSISTENT"] = "1"
@@ -111,17 +130,13 @@ def main():
     else:
         print("The system is not Windows.")
 
-    openai_chat_server = OpenAPIChatServer(
-        config.model_path,
-        served_model_name=config.served_model_name,
-        device=config.device,
-        backend=config.backend,
-        response_role=config.response_role,
-        vision=config.vision,
-    )
-
     uvicorn.run(
-        app, host=config.host, port=config.port, log_level=config.uvicorn_log_level, loop="asyncio"
+        "embeddedllm.entrypoints.api_server:app",
+        host=config.host, 
+        port=config.port, 
+        log_level=config.uvicorn_log_level, 
+        loop="asyncio", 
+        workers=2  # Specify the number of threading
     )
 
 
