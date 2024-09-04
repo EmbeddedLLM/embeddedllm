@@ -701,7 +701,7 @@ def deploy_model(engine_type, model_name, port_number):
 
     if engine_type == "NPU":
         device = "npu"
-    if engine_type == "Ipex":
+    elif engine_type == "Ipex":
         device = "xpu"
     elif engine_type == "OpenVino":
         device = "gpu"
