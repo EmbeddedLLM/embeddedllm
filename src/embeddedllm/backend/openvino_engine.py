@@ -1,7 +1,6 @@
 import contextlib
 from io import BytesIO
 import time
-import requests
 import os
 from PIL import Image 
 from pathlib import Path
@@ -140,6 +139,14 @@ class OpenVinoEngine(BaseLLMEngine):
         assert "image" in mime_type
         
         image = Image.open(BytesIO(file_data))
+        input_token_length = self.processor.calc_num_image_tokens(image)[0]
+        max_tokens = sampling_params.max_tokens
+
+        assert input_token_length is not None
+
+        if input_token_length + max_tokens > self.max_model_len:
+            raise ValueError("Exceed Context Length")
+
         
         messages = [
             {'role': 'user', 'content': f'<|image_1|>\n{prompt_text}'}
@@ -163,7 +170,7 @@ class OpenVinoEngine(BaseLLMEngine):
         
         try:
             generation_options = {
-                'max_new_tokens': sampling_params.max_new_tokens,
+                'max_new_tokens': max_tokens,
                 'do_sample': False,
             }
             token_list = self.model.generate(

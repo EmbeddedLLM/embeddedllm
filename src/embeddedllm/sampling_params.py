@@ -87,7 +87,6 @@ class SamplingParams:
         ignore_eos: Whether to ignore the EOS token and continue generating
             tokens after the EOS token is generated.
         max_tokens: Maximum number of tokens to generate per output sequence.
-        max_new_tokens: Maximum number of new tokens to generate per output sequence. (similar to max_tokens)
         min_tokens: Minimum number of tokens to generate per output sequence
             before EOS or stop_token_ids can be generated
         logprobs: Number of log probabilities to return per output token.
@@ -129,7 +128,6 @@ class SamplingParams:
         include_stop_str_in_output: bool = False,
         ignore_eos: bool = False,
         max_tokens: Optional[int] = 16,
-        max_new_tokens: Optional[int] = 16,
         min_tokens: int = 0,
         logprobs: Optional[int] = None,
         prompt_logprobs: Optional[int] = None,
@@ -167,7 +165,6 @@ class SamplingParams:
             self.stop_token_ids = list(stop_token_ids)
         self.ignore_eos = ignore_eos
         self.max_tokens = max_tokens
-        self.max_new_tokens = max_new_tokens
         self.min_tokens = min_tokens
         self.logprobs = logprobs
         self.prompt_logprobs = prompt_logprobs
@@ -235,8 +232,6 @@ class SamplingParams:
             raise ValueError("min_p must be in [0, 1], got " f"{self.min_p}.")
         if self.max_tokens is not None and self.max_tokens < 1:
             raise ValueError(f"max_tokens must be at least 1, got {self.max_tokens}.")
-        if self.max_new_tokens is not None and self.max_new_tokens < 1:
-            raise ValueError(f"max_new_tokens must be at least 1, got {self.max_new_tokens}.")
         if self.min_tokens < 0:
             raise ValueError(
                 f"min_tokens must be greater than or equal to 0, " f"got {self.min_tokens}."
@@ -245,11 +240,6 @@ class SamplingParams:
             raise ValueError(
                 f"min_tokens must be less than or equal to "
                 f"max_tokens={self.max_tokens}, got {self.min_tokens}."
-            )
-        if self.max_new_tokens is not None and self.min_tokens > self.max_new_tokens:
-            raise ValueError(
-                f"min_tokens must be less than or equal to "
-                f"max_new_tokens={self.max_new_tokens}, got {self.min_tokens}."
             )
         if self.logprobs is not None and self.logprobs < 0:
             raise ValueError(f"logprobs must be non-negative, got {self.logprobs}.")
@@ -358,7 +348,6 @@ class SamplingParams:
             f"include_stop_str_in_output={self.include_stop_str_in_output}, "
             f"ignore_eos={self.ignore_eos}, "
             f"max_tokens={self.max_tokens}, "
-            f"max_new_tokens={self.max_new_tokens}, "
             f"min_tokens={self.min_tokens}, "
             f"logprobs={self.logprobs}, "
             f"prompt_logprobs={self.prompt_logprobs}, "
