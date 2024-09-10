@@ -13,6 +13,7 @@ from PIL import Image
 from transformers import (
     AutoConfig,
     AutoProcessor,
+    TextStreamer,
     PreTrainedTokenizer,
     PreTrainedTokenizerFast,
     TextIteratorStreamer,
@@ -56,15 +57,15 @@ class OpenVinoEngine(BaseLLMEngine):
         except Exception:
             logger.info("Attempt to load slower tokenizer")
             self.tokenizer = PreTrainedTokenizer.from_pretrained(self.model_path)
-        self.tokenizer_stream = TextIteratorStreamer(
-            self.tokenizer, 
-            skip_prompt=True, 
-            skip_special_tokens=True
-        )
         logger.info("Tokenizer created")
             
         # non vision
         if not vision:
+            self.tokenizer_stream = TextIteratorStreamer(
+                self.tokenizer, 
+                skip_prompt=True, 
+                skip_special_tokens=True
+            )
             try:
                 self.model = OVModelForCausalLM.from_pretrained(
                     self.model_path, 
@@ -117,6 +118,14 @@ class OpenVinoEngine(BaseLLMEngine):
             )
             logger.info("Processor loaded")
             print("processor directory: ",dir(self.processor))
+            self.tokenizer_stream = TextIteratorStreamer(
+                self.processor,
+                **{
+                    "skip_special_tokens": True,
+                    "skip_prompt": True,
+                    "clean_up_tokenization_spaces": False,
+                },
+            )
 
 
     async def generate_vision(
@@ -139,7 +148,14 @@ class OpenVinoEngine(BaseLLMEngine):
         assert "image" in mime_type
         
         image = Image.open(BytesIO(file_data))
-        input_token_length = self.processor.calc_num_image_tokens(image)[0]
+        image_token_length = self.processor.calc_num_image_tokens(image)[0]
+        prompt_token_length = len(self.tokenizer.encode(prompt_text, return_tensors="pt")[0])
+
+        input_token_length = image_token_length + prompt_token_length
+
+        # logger.debug(f"Prompt token length: {prompt_token_length}")
+        # logger.debug(f"Image token length: {image_token_length}")
+
         max_tokens = sampling_params.max_tokens
 
         assert input_token_length is not None
@@ -147,7 +163,6 @@ class OpenVinoEngine(BaseLLMEngine):
         if input_token_length + max_tokens > self.max_model_len:
             raise ValueError("Exceed Context Length")
 
-        
         messages = [
             {'role': 'user', 'content': f'<|image_1|>\n{prompt_text}'}
         ]
@@ -156,58 +171,148 @@ class OpenVinoEngine(BaseLLMEngine):
             tokenize=False, 
             add_generation_prompt=True
         )
-        print("Prompt: ",prompt)
+        # print("Prompt: ", prompt)
 
-        try:
-            inputs = self.processor(prompt, [image], return_tensors="pt")
-            print(f"Processed inputs")
-        except Exception as e:
-            print(f"Error processing inputs: {e}")
+        inputs = self.processor(prompt, [image], return_tensors="pt")
 
+        generation_options = {
+            'max_new_tokens': max_tokens,
+            'do_sample': False,
+        }
 
         token_list: List[int] = []
         output_text: str = ""
-        
-        try:
-            generation_options = {
-                'max_new_tokens': max_tokens,
-                'do_sample': False,
-            }
-            token_list = self.model.generate(
-                **inputs, 
-                eos_token_id=self.processor.tokenizer.eos_token_id, 
-                **generation_options
-            )
-            print(f"Generated token list")
-        except Exception as e:
-            print(f"Error during token generation: {e}")
-        
-        # Decode each element in the response
-        try:
-            decoded_text = [self.processor.tokenizer.decode(ids, skip_special_tokens=True) for ids in token_list]
-            print(f"Decoded text: {decoded_text}")
-        except Exception as e:
-            print(f"Error decoding text: {e}")
-        
-        # Join the decoded text if needed
-        output_text = ' '.join(decoded_text).strip()
-        print(output_text)
-        
-        yield RequestOutput(
-            request_id=request_id,
-            prompt=inputs,
-            prompt_token_ids=input_tokens,
-            finished=True,
-            outputs=[
-                CompletionOutput(
-                    index=0,
-                    text=output_text,
-                    token_ids=token_list,
-                    cumulative_logprob=-1.0,
-                    finish_reason="stop",
+        if stream:
+            generation_options["streamer"] = self.tokenizer_stream
+            # Include the inputs in the generation_options
+            generation_kwargs = {**inputs, **generation_options}
+            
+            if RECORD_TIMING:
+                started_timestamp = time.time()
+                first_token_timestamp = 0
+                first = True
+                new_tokens = []
+
+            try:
+                thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
+                thread.start()
+                output_text = ""
+                first = True
+                for new_text in self.tokenizer_stream:
+                    if new_text == "":
+                        continue
+                    if RECORD_TIMING:
+                        if first:
+                            first_token_timestamp = time.time()
+                            first = False
+                    output_text += new_text
+                    token_list = self.processor.tokenizer.encode(output_text, return_tensors="pt")
+
+                    yield RequestOutput(
+                        request_id=request_id,
+                        prompt=inputs,
+                        prompt_token_ids=input_tokens,
+                        finished=False,
+                        outputs=[
+                            CompletionOutput(
+                                index=0,
+                                text=output_text,
+                                token_ids=token_list[0],
+                                cumulative_logprob=-1.0,
+                            )
+                        ],
+                    )
+
+                    if RECORD_TIMING:
+                        new_tokens = token_list[0]
+
+                yield RequestOutput(
+                    request_id=request_id,
+                    prompt=inputs,
+                    prompt_token_ids=input_tokens,
+                    finished=True,
+                    outputs=[
+                        CompletionOutput(
+                            index=0,
+                            text=output_text,
+                            token_ids=token_list[0],
+                            cumulative_logprob=-1.0,
+                            finish_reason="stop",
+                        )
+                    ],
                 )
-            ],
-        )
+
+                if RECORD_TIMING:
+                    prompt_time = first_token_timestamp - started_timestamp
+                    run_time = time.time() - first_token_timestamp
+                    logger.info(
+                        f"Prompt length: {len(input_tokens)}, New tokens: {len(new_tokens)}, Time to first: {(prompt_time):.2f}s, Prompt tokens per second: {len(input_tokens)/prompt_time:.2f} tps, New tokens per second: {len(new_tokens)/run_time:.2f} tps"
+                    )
+
+            except Exception as e:
+                logger.error(str(e))
+
+                error_output = RequestOutput(
+                    prompt=inputs,
+                    prompt_token_ids=input_tokens,
+                    finished=True,
+                    request_id=request_id,
+                    outputs=[
+                        CompletionOutput(
+                            index=0,
+                            text=output_text,
+                            token_ids=token_list,
+                            cumulative_logprob=-1.0,
+                            finish_reason="error",
+                            stop_reason=str(e),
+                        )
+                    ],
+                )
+                yield error_output
+
+        else:
+            try:
+                token_list = self.model.generate(**inputs, **generation_options)[0]
+                output_text = self.processor.tokenizer.decode(
+                    token_list, skip_special_tokens=True
+                )
+
+                yield RequestOutput(
+                    request_id=request_id,
+                    prompt=inputs,
+                    prompt_token_ids=input_tokens,
+                    finished=True,
+                    outputs=[
+                        CompletionOutput(
+                            index=0,
+                            text=output_text,
+                            token_ids=token_list,
+                            cumulative_logprob=-1.0,
+                            finish_reason="stop",
+                        )
+                    ],
+                )
+
+            except Exception as e:
+                logger.error(str(e))
+
+                error_output = RequestOutput(
+                    prompt=inputs,
+                    prompt_token_ids=input_tokens,
+                    finished=True,
+                    request_id=request_id,
+                    outputs=[
+                        CompletionOutput(
+                            index=0,
+                            text=output_text,
+                            token_ids=token_list,
+                            cumulative_logprob=-1.0,
+                            finish_reason="error",
+                            stop_reason=str(e),
+                        )
+                    ],
+                )
+                yield error_output
 
 
     async def generate(
