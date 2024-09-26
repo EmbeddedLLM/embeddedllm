@@ -90,6 +90,12 @@ class ELLMInstallCommand(install):
                 text=True,
             )
 
+            result = subprocess.run(
+                ["pip", "install", "importlib-metadata"],
+                capture_output=True,
+                text=True,
+            )
+
         if _is_directml():
             result = subprocess.run(
                 ["conda", "install", "conda-forge::vs2015_runtime", "-y"],
@@ -131,6 +137,12 @@ class ELLMDevelopCommand(develop):
 
             result = subprocess.run(
                 ["pip", "install", "numpy==1.26.4", "--no-cache"],
+                capture_output=True,
+                text=True,
+            )
+
+            result = subprocess.run(
+                ["pip", "install", "importlib-metadata"],
                 capture_output=True,
                 text=True,
             )
