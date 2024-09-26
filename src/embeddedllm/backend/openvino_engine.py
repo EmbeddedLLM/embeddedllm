@@ -105,28 +105,32 @@ class OpenVinoEngine(BaseLLMEngine):
                 )
                 self.model_path = snapshot_path
             
-            # it is case sensitive, only receive all char captilized only
-            self.model = OvPhi3Vision(
-                self.model_path, 
-                self.device.upper()
-            ) 
-            logger.info("Model loaded")
-            
-            self.processor = AutoProcessor.from_pretrained(
-                self.model_path, 
-                trust_remote_code=True
-            )
-            logger.info("Processor loaded")
-            print("processor directory: ",dir(self.processor))
-            self.tokenizer_stream = TextIteratorStreamer(
-                self.processor,
-                **{
-                    "skip_special_tokens": True,
-                    "skip_prompt": True,
-                    "clean_up_tokenization_spaces": False,
-                },
-            )
-
+            try:
+                # it is case sensitive, only receive all char captilized only
+                self.model = OvPhi3Vision(
+                    self.model_path, 
+                    self.device.upper()
+                ) 
+                logger.info("Model loaded")
+                
+                self.processor = AutoProcessor.from_pretrained(
+                    self.model_path, 
+                    trust_remote_code=True
+                )
+                logger.info("Processor loaded")
+                print("processor directory: ",dir(self.processor))
+                self.tokenizer_stream = TextIteratorStreamer(
+                    self.processor,
+                    **{
+                        "skip_special_tokens": True,
+                        "skip_prompt": True,
+                        "clean_up_tokenization_spaces": False,
+                    },
+                )
+                
+            except Exception as e:
+                logger.error("EmbeddedLLM Engine only support Phi 3 Vision Model.")            
+                exit()
 
     async def generate_vision(
         self,
