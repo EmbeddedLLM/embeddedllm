@@ -48,7 +48,7 @@ class OnnxruntimeEngine(BaseLLMEngine):
                 allow_patterns=None,
                 repo_type="model",
             )
-            model_path = snapshot_path
+            self.model_path = snapshot_path
 
         self.model_config = AutoConfig.from_pretrained(self.model_path, trust_remote_code=True)
         self.device = device
