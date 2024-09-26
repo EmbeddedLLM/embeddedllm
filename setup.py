@@ -115,7 +115,7 @@ class ELLMDevelopCommand(develop):
                     "install",
                     "--pre",
                     "--upgrade",
-                    "ipex-llm[xpu]==2.1.0b20240731",
+                    "ipex-llm[xpu]==2.2.0b20240925",
                     "--extra-index-url",
                     "https://pytorch-extension.intel.com/release-whl/stable/xpu/us/",
                 ],
