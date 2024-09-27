@@ -70,7 +70,7 @@ class OnnxruntimeEngine(BaseLLMEngine):
             logger.info("Attempt to load slower tokenizer")
             self.tokenizer = PreTrainedTokenizer.from_pretrained(self.model_path)
 
-        self.model = og.Model(model_path)
+        self.model = og.Model(self.model_path)
         logger.info("Model loaded")
         self.onnx_tokenizer = og.Tokenizer(self.model)
         self.onnx_tokenizer_stream = self.onnx_tokenizer.create_stream()
