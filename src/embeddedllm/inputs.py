@@ -23,13 +23,13 @@ class ImagePixelData(TypedDict):
 
 # https://github.com/vllm-project/vllm/pull/4028
 @overload
-def parse_and_batch_prompt(prompt: Union[str, List[str]]) -> Sequence[ParsedText]:
-    ...
+def parse_and_batch_prompt(prompt: Union[str, List[str]]) -> Sequence[ParsedText]: ...
 
 
 @overload
-def parse_and_batch_prompt(prompt: Union[List[int], List[List[int]]]) -> Sequence[ParsedTokens]:
-    ...
+def parse_and_batch_prompt(
+    prompt: Union[List[int], List[List[int]]]
+) -> Sequence[ParsedTokens]: ...
 
 
 def parse_and_batch_prompt(

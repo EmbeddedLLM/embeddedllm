@@ -50,7 +50,7 @@ class EmbeddedLLMEngine:
                 self.device == "gpu" or self.device == "cpu"
             ), f"To run openvino on cpu, set `backend` to `openvino` and `device` to `cpu`. EmbeddedLLMEngine load model with openvino on Intel processor."
             self.engine = OpenVinoEngine(self.model_path, self.vision, self.device)
-            logger.info(f"Initializing openvino backend (GPU): OpenVinoEngine")
+            logger.info(f"Initializing openvino backend ({self.device.upper()}): OpenVinoEngine")
         elif self.backend in ("directml", "cuda"):
             from embeddedllm.backend.onnxruntime_engine import OnnxruntimeEngine
 
@@ -80,7 +80,7 @@ class EmbeddedLLMEngine:
 
         else:
             raise ValueError(
-                f"EmbeddedLLMEngine only supports `cpu`, `ipex`, `cuda` and `directml`."
+                f"EmbeddedLLMEngine only supports `cpu`, `ipex`, `cuda`, `openvino` and `directml`."
             )
         self.tokenizer = self.engine.tokenizer
 

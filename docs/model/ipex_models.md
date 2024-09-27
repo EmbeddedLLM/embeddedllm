@@ -1,11 +1,18 @@
 # Model Powered by Ipex-LLM
 
 ## Verified Models
+Verified models can be found from EmbeddedLLM IpexLLM model collections
+* EmbeddedLLM IpexLLM Model collections: [link](https://huggingface.co/collections/EmbeddedLLM/ipex-llm-genai-66c85eadb05bb4dedd5e70ca)
+
 | Model | Model Link |
 | --- | --- |
-| Phi-3 | [link](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct) |
+| Phi-3-mini-4k-instruct | [link](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct) |
+| Phi-3-mini-128k-instruct | [link](https://huggingface.co/microsoft/Phi-3-mini-128k-instruct) |
+| Phi-3-medium-4k-instruct | [link](https://huggingface.co/microsoft/Phi-3-medium-4k-instruct) |
+| Phi-3-medium-128k-instruct | [link](https://huggingface.co/microsoft/Phi-3-medium-128k-instruct) |
 
 ## Supported Models by Ipex-LLM
+Unverified models, but supported by Upstream IpexLLM could be found in the following model collections.
 
 | Model | Model Link |
 | --- | --- |
@@ -64,6 +71,8 @@
 
 Resources from: https://github.com/intel-analytics/ipex-llm/
 
+## Contribution
+We welcome contributions to the verified model list.
 
 ## Qwen2 Model (Experimental)
 1. Upgrade `transformers`. `pip install --upgrade transformers~=4.42.3`.

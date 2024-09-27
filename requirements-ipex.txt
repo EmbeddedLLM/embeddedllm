@@ -1,5 +1,5 @@
 trl
-huggingface-hub~=0.24.3
+huggingface-hub>=0.24.3,<0.26.0
 fsspec~=2024.5.0
 transformers>=4.43.3
 importlib-metadata

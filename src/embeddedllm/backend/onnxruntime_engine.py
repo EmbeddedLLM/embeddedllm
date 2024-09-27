@@ -1,9 +1,11 @@
 # from embeddedllm.transformers_utils.image_processing_phi3v import Phi3VImageProcessor
 import contextlib
 import time
+import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import AsyncIterator, List, Optional
+from huggingface_hub import snapshot_download
 
 import onnxruntime_genai as og
 from loguru import logger
@@ -39,6 +41,15 @@ def onnx_generator_context(model, params):
 class OnnxruntimeEngine(BaseLLMEngine):
     def __init__(self, model_path: str, vision: bool, device: str = "cpu"):
         self.model_path = model_path
+
+        if not os.path.exists(model_path):
+            snapshot_path = snapshot_download(
+                repo_id=model_path,
+                allow_patterns=None,
+                repo_type="model",
+            )
+            self.model_path = snapshot_path
+
         self.model_config = AutoConfig.from_pretrained(self.model_path, trust_remote_code=True)
         self.device = device
 
@@ -59,7 +70,7 @@ class OnnxruntimeEngine(BaseLLMEngine):
             logger.info("Attempt to load slower tokenizer")
             self.tokenizer = PreTrainedTokenizer.from_pretrained(self.model_path)
 
-        self.model = og.Model(model_path)
+        self.model = og.Model(self.model_path)
         logger.info("Model loaded")
         self.onnx_tokenizer = og.Tokenizer(self.model)
         self.onnx_tokenizer_stream = self.onnx_tokenizer.create_stream()
