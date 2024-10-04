@@ -60,11 +60,17 @@ class EmbeddedLLMEngine:
         elif self.backend == "npu":
             assert self.device == "npu", f"To run npu backend, device must be npu."
             processor = get_processor_type()
-            assert processor == "Intel", f"Only support intel NPU"
-            from embeddedllm.backend.npu_engine import NPUEngine
+            if(processor == "Intel"):
+                from embeddedllm.backend.intel_npu_engine import NPUEngine
+                
+                self.engine = NPUEngine(self.model_path, self.vision, self.device)
+                logger.info(f"Initializing Intel npu backend (NPU): NPUEngine")
+                
+            elif(processor == "AMD"):
+                raise SystemError(f"NPU support on AMD platform is not supported yet.")
             
-            self.engine = NPUEngine(self.model_path, self.vision, self.device)
-            logger.info(f"Initializing npu backend (NPU): NPUEngine")
+            else:
+                raise SystemError(f"Unknown processor is not supported.")
         
         elif self.backend == "cpu":
             assert self.device == "cpu", f"To run `cpu` backend, `device` must be `cpu`."
