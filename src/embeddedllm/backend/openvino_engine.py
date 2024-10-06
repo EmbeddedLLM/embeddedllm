@@ -22,7 +22,7 @@ from transformers import (
 from threading import Thread
 
 from optimum.intel import OVModelForCausalLM, OVWeightQuantizationConfig
-from embeddedllm.backend.ov_phi3_vision import OvPhi3Vision
+from embeddedllm.multimodal_models.openvino.ov_phi3_vision import OvPhi3Vision
 from embeddedllm.inputs import PromptInputs
 from embeddedllm.protocol import CompletionOutput, RequestOutput
 from embeddedllm.sampling_params import SamplingParams

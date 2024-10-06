@@ -21,6 +21,8 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 ## Table Content
 
 - [Supported Models](#supported-models-quick-start)
+  - [Onnxruntime Models](./docs/model/onnxruntime_models.md)
+  - [Ipex-LLM Models](./docs/model/ipex_models.md)
 - [Getting Started](#getting-started)
   - [Installation From Source](#installation)
   - [Launch OpenAI API Compatible Server](#launch-openai-api-compatible-server)
@@ -36,6 +38,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
   * Ipex-LLM Models [Link](./docs/model/ipex_models.md)
   * OpenVINO-LLM Models [Link](./docs/model/openvino_models.md)
   * NPU-LLM Models [Link](./docs/model/npu_models.md)
+
 
 ## Getting Started
 
@@ -112,7 +115,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 
 ### Launch Chatbot Web UI
 
-1.  `ellm_chatbot --port 7788 --host localhost --server_port <ellm_server_port> --server_host localhost --model_name <served_model_name>`. **Note:** To find out more of the supported arguments. `ellm_chatbot --help`.
+1.  `ellm_chatbot --port 7788 --host localhost --server_port <ellm_server_port> --server_host localhost --model_name <model_name>`. **Note:** To find out more of the supported arguments. `ellm_chatbot --help`.
 
 ![asset/ellm_chatbot_vid.webp](asset/ellm_chatbot_vid.webp)
 
@@ -140,7 +143,7 @@ It is an interface that allows you to download and deploy OpenAI API compatible 
    ellm_server --model_path <path/to/model/weight>
 
    # DirectML
-   ellm_server --model_path 'EmbeddedLLM_Phi-3-mini-4k-instruct-062024-onnx\onnx\directml\Phi-3-mini-4k-instruct-062024-int4' --port 5555
+   ellm_server --model_path 'EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-directml' --port 5555
 
    # IPEX-LLM
    ellm_server --model_path '.\meta-llama_Meta-Llama-3.1-8B-Instruct\'  --backend 'ipex' --device 'xpu' --port 5555 --served_model_name 'meta-llama_Meta/Llama-3.1-8B-Instruct'
@@ -162,7 +165,7 @@ _Powershell/Terminal Usage (Use it like `ellm_server`)_:
 .\ellm_api_server.exe --model_path <path/to/model/weight>
 
 # DirectML
-.\ellm_api_server.exe --model_path 'EmbeddedLLM_Phi-3-mini-4k-instruct-062024-onnx\onnx\directml\Phi-3-mini-4k-instruct-062024-int4' --port 5555
+.\ellm_api_server.exe --model_path 'EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-directml' --port 5555
 
 # IPEX-LLM
 .\ellm_api_server.exe --model_path '.\meta-llama_Meta-Llama-3.1-8B-Instruct\'  --backend 'ipex' --device 'xpu' --port 5555 --served_model_name 'meta-llama_Meta/Llama-3.1-8B-Instruct'
