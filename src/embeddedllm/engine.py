@@ -56,6 +56,22 @@ class EmbeddedLLMEngine:
 
             self.engine = OnnxruntimeEngine(self.model_path, self.vision, self.device)
             logger.info(f"Initializing onnxruntime backend ({backend.upper()}): OnnxruntimeEngine")
+            
+        elif self.backend == "npu":
+            assert self.device == "npu", f"To run npu backend, device must be npu."
+            processor = get_processor_type()
+            if(processor == "Intel"):
+                from embeddedllm.backend.intel_npu_engine import NPUEngine
+                
+                self.engine = NPUEngine(self.model_path, self.vision, self.device)
+                logger.info(f"Initializing Intel npu backend (NPU): NPUEngine")
+                
+            elif(processor == "AMD"):
+                raise SystemError(f"NPU support on AMD platform is not supported yet.")
+            
+            else:
+                raise SystemError(f"Unknown processor is not supported.")
+        
         elif self.backend == "cpu":
             assert self.device == "cpu", f"To run `cpu` backend, `device` must be `cpu`."
             processor = get_processor_type()
@@ -80,7 +96,7 @@ class EmbeddedLLMEngine:
 
         else:
             raise ValueError(
-                f"EmbeddedLLMEngine only supports `cpu`, `ipex`, `cuda`, `openvino` and `directml`."
+                f"EmbeddedLLMEngine only supports `cpu`, `npu`, `ipex`, `cuda`, `openvino` and `directml`."
             )
         self.tokenizer = self.engine.tokenizer
 

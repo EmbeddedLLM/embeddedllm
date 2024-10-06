@@ -20,7 +20,7 @@ def get_embeddedllm_backend():
         version = importlib.metadata.version("embeddedllm")
 
         # Use regex to extract the backend
-        match = re.search(r"\+(directml|cpu|cuda|ipex|openvino)$", version)
+        match = re.search(r"\+(directml|npu|cpu|cuda|ipex|openvino)$", version)
 
         if match:
             backend = match.group(1)
@@ -257,6 +257,41 @@ openvino_model_dict_list = {
         subfolder=".",
         repo_type="model",
         context_length=2048,
+    ),
+}
+
+npu_model_dict_list = {
+    "microsoft/Phi-3-mini-4k-instruct": ModelCard(
+        hf_url="https://huggingface.co/microsoft/Phi-3-mini-4k-instruct/tree/main/",
+        repo_id="microsoft/Phi-3-mini-4k-instruct",
+        model_name="Phi-3-mini-4k-instruct",
+        subfolder=".",
+        repo_type="model",
+        context_length=4096,
+    ),
+    "microsoft/Phi-3-mini-128k-instruct": ModelCard(
+        hf_url="https://huggingface.co/microsoft/Phi-3-mini-128k-instruct/tree/main",
+        repo_id="microsoft/Phi-3-mini-128k-instruct",
+        model_name="Phi-3-mini-128k-instruct",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
+    ),
+    "microsoft/Phi-3-medium-4k-instruct": ModelCard(
+        hf_url="https://huggingface.co/microsoft/Phi-3-medium-4k-instruct/tree/main",
+        repo_id="microsoft/Phi-3-medium-4k-instruct",
+        model_name="Phi-3-medium-4k-instruct",
+        subfolder=".",
+        repo_type="model",
+        context_length=4096,
+    ),
+    "microsoft/Phi-3-medium-128k-instruct": ModelCard(
+        hf_url="https://huggingface.co/microsoft/Phi-3-medium-128k-instruct/tree/main",
+        repo_id="microsoft/Phi-3-medium-128k-instruct",
+        model_name="Phi-3-medium-128k-instruct",
+        subfolder=".",
+        repo_type="model",
+        context_length=131072,
     ),
 }
 
@@ -507,6 +542,11 @@ for k, v in dml_model_dict_list.items():
         repo_id=v.repo_id, path_in_repo=v.subfolder, repo_type=v.repo_type
     )
 
+for k, v in npu_model_dict_list.items():
+    v.size = compute_memory_size(
+        repo_id=v.repo_id, path_in_repo=v.subfolder, repo_type=v.repo_type
+    )
+
 for k, v in ipex_model_dict_list.items():
     v.size = compute_memory_size(
         repo_id=v.repo_id, path_in_repo=v.subfolder, repo_type=v.repo_type
@@ -603,6 +643,9 @@ def update_model_list(engine_type):
     if engine_type == "DirectML":
         models = sorted(list(dml_model_dict_list.keys()))
         models_pandas = convert_to_dataframe(dml_model_dict_list)
+    elif backend == "npu":
+        models = sorted(list(npu_model_dict_list.keys()))
+        models_pandas = convert_to_dataframe(npu_model_dict_list)
     elif backend == "ipex":
         models = sorted(list(ipex_model_dict_list.keys()))
         models_pandas = convert_to_dataframe(ipex_model_dict_list)
@@ -631,6 +674,8 @@ def deploy_model(engine_type, model_name, port_number):
 
     if engine_type == "DirectML":
         llm_model_card = dml_model_dict_list[model_name]
+    elif backend == "npu":
+        llm_model_card = npu_model_dict_list[model_name]
     elif backend == "ipex":
         llm_model_card = ipex_model_dict_list[model_name]
     elif backend == "openvino":
@@ -654,7 +699,9 @@ def deploy_model(engine_type, model_name, port_number):
     model_path = llm_model_card.repo_id
     print("Model path:", model_path)
 
-    if engine_type == "Ipex":
+    if engine_type == "NPU":
+        device = "npu"
+    elif engine_type == "Ipex":
         device = "xpu"
     elif engine_type == "OpenVino":
         device = "gpu"
@@ -718,6 +765,8 @@ def download_model(engine_type, model_name):
 
     if engine_type == "DirectML":
         llm_model_card = dml_model_dict_list[model_name]
+    elif backend == "npu":
+        llm_model_card = npu_model_dict_list[model_name]
     elif backend == "ipex":
         llm_model_card = ipex_model_dict_list[model_name]
     elif backend == "openvino":
@@ -771,6 +820,8 @@ def main():
 
         if backend == "directml":
             default_value = "DirectML"
+        elif backend == "npu":
+            default_value = "NPU"
         elif backend == "ipex":
             default_value = "Ipex"
         elif backend == "openvino":

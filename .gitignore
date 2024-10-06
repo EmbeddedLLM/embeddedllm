@@ -12,3 +12,7 @@ scripts/*.sh
 **/dist
 **/build
 *.log
+benchmark/
+modelTest/
+nc_workspace/
+debug_openai_history.txt

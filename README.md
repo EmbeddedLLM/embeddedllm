@@ -7,7 +7,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 | Model architectures   | Gemma <br/> Llama \* <br/> Mistral + <br/>Phi <br/> |                   |                |
 | Platform              | Linux <br/> Windows                                 |                   |                |
 | Architecture          | x86 <br/> x64 <br/>                                 | Arm64             |                |
-| Hardware Acceleration | CUDA<br/>DirectML<br/>IpexLLM                       | QNN <br/> ROCm    | OpenVINO       |
+| Hardware Acceleration | CUDA<br/>DirectML<br/>IpexLLM<br/>OpenVINO          | QNN <br/> ROCm    |                |
 
 \* The Llama model architecture supports similar model families such as CodeLlama, Vicuna, Yi, and more.
 
@@ -33,22 +33,12 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 - [Acknowledgements](#acknowledgements)
 
 ## Supported Models (Quick Start)
+  * Onnxruntime DirectML Models [Link](./docs/model/onnxruntime_directml_models.md)
+  * Onnxruntime CPU Models [Link](./docs/model/onnxruntime_cpu_models.md)
+  * Ipex-LLM Models [Link](./docs/model/ipex_models.md)
+  * OpenVINO-LLM Models [Link](./docs/model/openvino_models.md)
+  * NPU-LLM Models [Link](./docs/model/npu_models.md)
 
-| Models | Parameters | Context Length | Link |
-| --- | --- | --- | --- |
-| Gemma-2b-Instruct v1 | 2B | 8192 | [EmbeddedLLM/gemma-2b-it-onnx](https://huggingface.co/EmbeddedLLM/gemma-2b-it-onnx) |
-| Llama-2-7b-chat | 7B | 4096 | [EmbeddedLLM/llama-2-7b-chat-int4-onnx-directml](https://huggingface.co/EmbeddedLLM/llama-2-7b-chat-int4-onnx-directml) |
-| Llama-2-13b-chat | 13B | 4096 | [EmbeddedLLM/llama-2-13b-chat-int4-onnx-directml](https://huggingface.co/EmbeddedLLM/llama-2-13b-chat-int4-onnx-directml) |
-| Llama-3-8b-chat | 8B | 8192 | [EmbeddedLLM/mistral-7b-instruct-v0.3-onnx](https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx) |
-| Mistral-7b-v0.3-instruct | 7B | 32768 | [EmbeddedLLM/mistral-7b-instruct-v0.3-onnx](https://huggingface.co/EmbeddedLLM/mistral-7b-instruct-v0.3-onnx) |
-| Phi-3-mini-4k-instruct-062024 | 3.8B | 4096 | [EmbeddedLLM/Phi-3-mini-4k-instruct-062024-onnx](https://huggingface.co/EmbeddedLLM/Phi-3-mini-4k-instruct-062024-onnx/tree/main/onnx/directml/Phi-3-mini-4k-instruct-062024-int4) |
-| Phi3-mini-4k-instruct | 3.8B | 4096 | [microsoft/Phi-3-mini-4k-instruct-onnx](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-onnx) |
-| Phi3-mini-128k-instruct | 3.8B | 128k | [microsoft/Phi-3-mini-128k-instruct-onnx](https://huggingface.co/microsoft/Phi-3-mini-128k-instruct-onnx) |
-| Phi3-medium-4k-instruct | 17B | 4096 | [microsoft/Phi-3-medium-4k-instruct-onnx-directml](https://huggingface.co/microsoft/Phi-3-medium-4k-instruct-onnx-directml) |
-| Phi3-medium-128k-instruct | 17B | 128k | [microsoft/Phi-3-medium-128k-instruct-onnx-directml](https://huggingface.co/microsoft/Phi-3-medium-128k-instruct-onnx-directml) |
-| Openchat-3.6-8b | 8B | 8192 | [EmbeddedLLM/openchat-3.6-8b-20240522-onnx](https://huggingface.co/EmbeddedLLM/openchat-3.6-8b-20240522-onnx) |
-| Yi-1.5-6b-chat | 6B | 32k | [EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-onnx](https://huggingface.co/EmbeddedLLM/01-ai_Yi-1.5-6B-Chat-onnx) |
-| Phi-3-vision-128k-instruct |  | 128k | [EmbeddedLLM/Phi-3-vision-128k-instruct-onnx](https://huggingface.co/EmbeddedLLM/Phi-3-vision-128k-instruct-onnx/tree/main/onnx/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4) |
 
 ## Getting Started
 
@@ -70,12 +60,14 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
      - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda]`
      - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop`
      - **OpenVINO:** `$env:ELLM_TARGET_DEVICE='openvino'; pip install -e .[openvino]`
+     - **NPU:** `$env:ELLM_TARGET_DEVICE='npu'; pip install -e .[npu]`
      - **With Web UI**:
        - **DirectML:** `$env:ELLM_TARGET_DEVICE='directml'; pip install -e .[directml,webui]`
        - **CPU:** `$env:ELLM_TARGET_DEVICE='cpu'; pip install -e .[cpu,webui]`
        - **CUDA:** `$env:ELLM_TARGET_DEVICE='cuda'; pip install -e .[cuda,webui]`
        - **IPEX:** `$env:ELLM_TARGET_DEVICE='ipex'; python setup.py develop; pip install -r requirements-webui.txt`
        - **OpenVINO:** `$env:ELLM_TARGET_DEVICE='openvino'; pip install -e .[openvino,webui]`
+       - **NPU:** `$env:ELLM_TARGET_DEVICE='npu'; pip install -e .[npu,webui]`
 
 - **Linux**
 
@@ -91,12 +83,14 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
      - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda]`
      - **IPEX:** `ELLM_TARGET_DEVICE='ipex' python setup.py develop`
      - **OpenVINO:** `ELLM_TARGET_DEVICE='openvino' pip install -e .[openvino]`
+     - **NPU:** `ELLM_TARGET_DEVICE='npu' pip install -e .[npu]`
      - **With Web UI**:
        - **DirectML:** `ELLM_TARGET_DEVICE='directml' pip install -e .[directml,webui]`
        - **CPU:** `ELLM_TARGET_DEVICE='cpu' pip install -e .[cpu,webui]`
        - **CUDA:** `ELLM_TARGET_DEVICE='cuda' pip install -e .[cuda,webui]`
        - **IPEX:** `ELLM_TARGET_DEVICE='ipex' python setup.py develop; pip install -r requirements-webui.txt`
        - **OpenVINO:** `ELLM_TARGET_DEVICE='openvino' pip install -e .[openvino,webui]`
+       - **NPU:** `ELLM_TARGET_DEVICE='npu' pip install -e .[npu,webui]`
 
 ### Launch OpenAI API Compatible Server
 
@@ -121,7 +115,7 @@ Run local LLMs on iGPU, APU and CPU (AMD , Intel, and Qualcomm (Coming Soon)). E
 
 ### Launch Chatbot Web UI
 
-1.  `ellm_chatbot --port 7788 --host localhost --server_port <ellm_server_port> --server_host localhost`. **Note:** To find out more of the supported arguments. `ellm_chatbot --help`.
+1.  `ellm_chatbot --port 7788 --host localhost --server_port <ellm_server_port> --server_host localhost --model_name <model_name>`. **Note:** To find out more of the supported arguments. `ellm_chatbot --help`.
 
 ![asset/ellm_chatbot_vid.webp](asset/ellm_chatbot_vid.webp)
 
@@ -156,6 +150,9 @@ It is an interface that allows you to download and deploy OpenAI API compatible 
 
    # OpenVINO
    ellm_server --model_path '.\meta-llama_Meta-Llama-3.1-8B-Instruct\'  --backend 'openvino' --device 'gpu' --port 5555 --served_model_name 'meta-llama_Meta/Llama-3.1-8B-Instruct'
+
+   # NPU
+   ellm_server --model_path 'microsoft/Phi-3-mini-4k-instruct'  --backend 'npu' --device 'npu' --port 5555 --served_model_name 'microsoft/Phi-3-mini-4k-instruct'
    ```
 
 ## Prebuilt OpenAI API Compatible Windows Executable (Alpha)
@@ -168,13 +165,16 @@ _Powershell/Terminal Usage (Use it like `ellm_server`)_:
 .\ellm_api_server.exe --model_path <path/to/model/weight>
 
 # DirectML
-.\ellm_api_server.exe --model_path 'EmbeddedLLM_Phi-3-mini-4k-instruct-062024-onnx\onnx\directml\Phi-3-mini-4k-instruct-062024-int4' --port 5555
+.\ellm_api_server.exe --model_path 'EmbeddedLLM/Phi-3-mini-4k-instruct-onnx-directml' --port 5555
 
 # IPEX-LLM
 .\ellm_api_server.exe --model_path '.\meta-llama_Meta-Llama-3.1-8B-Instruct\'  --backend 'ipex' --device 'xpu' --port 5555 --served_model_name 'meta-llama_Meta/Llama-3.1-8B-Instruct'
 
 # OpenVINO
 .\ellm_api_server.exe --model_path '.\meta-llama_Meta-Llama-3.1-8B-Instruct\'  --backend 'openvino' --device 'gpu' --port 5555 --served_model_name 'meta-llama_Meta/Llama-3.1-8B-Instruct'
+
+# NPU
+.\ellm_api_server.exe --model_path 'microsoft/Phi-3-mini-4k-instruct'  --backend 'npu' --device 'npu' --port 5555 --served_model_name 'microsoft/Phi-3-mini-4k-instruct'
 ```
 
 ## Acknowledgements
